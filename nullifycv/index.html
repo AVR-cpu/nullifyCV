@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NullifyCV — Privacy-First Resume De-Identifier</title>
+  <meta name="description" content="Remove PII from resumes for blind hiring. 100% client-side processing — your files never leave your browser. Free GDPR-compliant redaction tool.">
+  <meta name="keywords" content="resume redaction, blind hiring, remove PII from resume, GDPR hiring, de-identify CV, nullify CV">
+  <meta property="og:title" content="NullifyCV — Privacy-First Resume De-Identifier">
+  <meta property="og:description" content="Remove bias-causing PII from resumes for blind hiring. Files never leave your browser.">
+  <meta property="og:url" content="https://nullifycv.com">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://nullifycv.com">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z' fill='%231e4d35'/><rect x='11' y='9' width='10' height='13' rx='1.5' fill='white'/><line x1='13' y1='14' x2='19' y2='14' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='17' x2='19' y2='17' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='20' x2='16.5' y2='20' stroke='%231e4d35' stroke-width='1.3'/></svg>">
+  <!-- Structured data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "NullifyCV",
+    "url": "https://nullifycv.com",
+    "description": "Privacy-first resume de-identifier for blind hiring. 100% client-side processing.",
+    "applicationCategory": "BusinessApplication",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": ["Client-side PDF processing", "DOCX redaction", "GDPR compliance support", "Blind hiring workflow"]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── TOP BAR ─────────────────────────────────────────────────────────────── -->
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <path d="M11 9.5l3-3.5h5l2 3.5" fill="none" stroke="#7aaa8a" stroke-width="1.2"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a href="/about.html">How it works</a>
+    <a href="https://github.com/yourusername/nullifycv" target="_blank" rel="noopener">GitHub</a>
+    <a href="/pro.html" class="nav-pro">Pro →</a>
+  </nav>
+  <div class="offline-pill" aria-live="polite">
+    <span class="pulse" aria-hidden="true"></span>
+    <span>Processing locally — no uploads</span>
+  </div>
+</header>
+
+<!-- ── AD: LEADERBOARD ────────────────────────────────────────────────────── -->
+<div class="ad-leaderboard" aria-label="Advertisement">
+  <p class="ad-label">sponsored</p>
+  <div class="ad-unit-leader">
+    <!-- Replace with your Carbon Ads / Ethical Ads script tag -->
+    <span class="ad-placeholder">728×90 · Contextual ad — ATS / HR / compliance advertisers · $12–18 CPM · No cookies</span>
+  </div>
+</div>
+
+<!-- ── MAIN LAYOUT ────────────────────────────────────────────────────────── -->
+<div class="layout">
+  <main class="main-col" id="main-content">
+
+    <div class="page-head">
+      <h1 class="page-title">Nullify the bias.<br><span>Keep the talent.</span></h1>
+      <p class="page-sub">Client-side PII redaction for blind hiring — files never leave your browser.</p>
+    </div>
+
+    <!-- Mode tabs -->
+    <p class="slabel">Redaction mode</p>
+    <div class="tabs" role="tablist" aria-label="Redaction mode">
+      <button class="tab on" role="tab" aria-selected="true"  onclick="setMode('standard',this)">Standard PII</button>
+      <button class="tab"    role="tab" aria-selected="false" onclick="setMode('bias',this)">Bias strip</button>
+      <button class="tab"    role="tab" aria-selected="false" onclick="setMode('client',this)">Client sub.</button>
+      <button class="tab"    role="tab" aria-selected="false" onclick="setMode('eeoc',this)">EEOC</button>
+    </div>
+
+    <!-- Redaction targets -->
+    <p class="slabel">Redaction targets</p>
+    <div class="tgrid" id="tgrid">
+      <div class="tcard on" data-key="name"     onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Full name</div><div class="tdesc">First, middle, last</div></div></div>
+      <div class="tcard on" data-key="contact"  onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Contact info</div><div class="tdesc">Email, phone, address</div></div></div>
+      <div class="tcard on" data-key="location" onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Location / zip</div><div class="tdesc">Demographic proxy</div></div></div>
+      <div class="tcard on" data-key="gradyear" onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Graduation year</div><div class="tdesc">Age proxy</div></div></div>
+      <div class="tcard"    data-key="school"   onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias</div></div></div>
+      <div class="tcard"    data-key="pronouns" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they in bio</div></div></div>
+      <div class="tcard"    data-key="urls"     onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links</div></div></div>
+      <div class="tcard"    data-key="metadata" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX props</div></div></div>
+    </div>
+
+    <!-- File loaded state -->
+    <div class="frow" id="frow" aria-live="polite">
+      <div class="fext" id="fext" aria-hidden="true">PDF</div>
+      <div class="fmeta">
+        <div class="fname" id="fname">—</div>
+        <div class="fsize" id="fsize">—</div>
+      </div>
+      <button class="fclr" onclick="clearFile()" aria-label="Remove file">×</button>
+    </div>
+
+    <!-- Drop zone -->
+    <div class="drop" id="drop"
+         onclick="document.getElementById('fi').click()"
+         ondragover="dov(event)" ondrop="ddr(event)"
+         ondragleave="this.classList.remove('over')"
+         role="button" tabindex="0" aria-label="Upload resume — click or drag and drop"
+         onkeydown="if(event.key==='Enter'||event.key===' ')document.getElementById('fi').click()">
+      <div class="drop-icon" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect x="8" y="4" width="24" height="32" rx="3" stroke="#7aaa8a" stroke-width="1.8"/>
+          <path d="M8 10l8-6h8l8 6" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+          <line x1="13" y1="18" x2="27" y2="18" stroke="#7aaa8a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="13" y1="22" x2="27" y2="22" stroke="#7aaa8a" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="13" y1="26" x2="21" y2="26" stroke="#7aaa8a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="drop-title">Drop your CV here</div>
+      <div class="drop-sub">PDF or DOCX · Processed locally via pdf-lib &amp; mammoth.js</div>
+      <input type="file" id="fi" style="display:none" accept=".pdf,.docx,.doc" onchange="fsel(event)" aria-hidden="true">
+    </div>
+
+    <!-- Error -->
+    <div class="errbox" id="err" role="alert" aria-live="assertive"></div>
+
+    <!-- Status strip -->
+    <div class="sstrip" id="ss" role="status" aria-live="polite">
+      <div class="spin" id="spin" aria-hidden="true"></div>
+      <span id="stxt">Loading...</span>
+      <div class="pbar-wrap" aria-hidden="true"><div class="pbar" id="pbar"></div></div>
+    </div>
+
+    <!-- Text preview -->
+    <div class="preview" id="prev" aria-label="Redacted text preview">
+      <div class="prev-lbl">Extracted text — nullified spans shown</div>
+      <div class="prev-body" id="prevbody" aria-live="polite"></div>
+    </div>
+
+    <!-- PII list -->
+    <div class="piiwrap" id="piiwrap" aria-label="Detected PII items">
+      <div class="pii-hdr">
+        <span class="pii-title">PII nullified — confirm before download</span>
+        <span class="pii-ct" id="piict" aria-live="polite">0 items</span>
+      </div>
+      <div class="pii-list" id="piil" role="list"></div>
+    </div>
+
+    <!-- Network monitor -->
+    <div class="nm" id="nm" aria-label="Network activity monitor">
+      <div class="nm-h">// network monitor · nullifycv.com</div>
+      <div class="nm-ok">✓ pdf-lib: loaded from CDN once, then cached</div>
+      <div class="nm-ok">✓ mammoth.js: loaded from CDN once, then cached</div>
+      <div class="nm-no">✗ file data: never transmitted — Blob URL only</div>
+      <div class="nm-ok">✓ redaction engine: runs in JS thread, zero network calls</div>
+      <div class="nm-dim">— 0 bytes of document data transmitted</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="arow">
+      <button class="btn-main" id="pbtn" onclick="go()" disabled aria-label="Process and download redacted file">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1L1 4v3c0 3.3 2.5 6.1 6 7 3.5-.9 6-3.7 6-7V4L7 1z" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M4.5 7l1.5 1.5 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Nullify &amp; Download
+      </button>
+      <button class="btn-sec" onclick="dlAudit()" aria-label="Download audit log as JSON">Audit log</button>
+      <button class="btn-sec" onclick="document.getElementById('nm').classList.toggle('show')" aria-label="Toggle network monitor">Network log</button>
+    </div>
+
+    <!-- ── AD: POST-DOWNLOAD ─────────────────────────────────────────────── -->
+    <div class="post-ad" id="pad" aria-label="Advertisement">
+      <p class="ad-label">sponsored · contextual — no tracking · shown after download</p>
+      <div class="post-ad-inner">
+        <div class="pad-logo" aria-hidden="true">W</div>
+        <div>
+          <div class="pad-hl">Workable ATS — built for bias-free hiring</div>
+          <div class="pad-body">Send nullified candidates to your panel. EEOC reporting built in.</div>
+        </div>
+        <button class="pad-cta" onclick="window.open('https://workable.com','_blank')">Try free →</button>
+      </div>
+      <p class="pad-ok" id="padok"></p>
+    </div>
+
+    <!-- Trust section -->
+    <section class="trust-section" aria-label="Privacy and trust information">
+      <h2 class="trust-heading">How the privacy works</h2>
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1L2 4.5v5C2 14.5 5.5 18.5 10 19.5c4.5-1 8-5 8-10v-5L10 1z" fill="#eef5f1" stroke="#2d6b4a" stroke-width="1.3"/></svg>
+          </div>
+          <h3>Files never leave your device</h3>
+          <p>pdf-lib and mammoth.js run entirely in your browser's memory. There is no server receiving your documents — not even ours.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="10" rx="2" stroke="#2d6b4a" stroke-width="1.3"/><path d="M7 8V6a3 3 0 016 0v2" stroke="#2d6b4a" stroke-width="1.3"/></svg>
+          </div>
+          <h3>Open source &amp; auditable</h3>
+          <p>Every line of code that handles your documents is public on GitHub. You can verify the privacy claims yourself — no trust required.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="3" stroke="#2d6b4a" stroke-width="1.3"/><path d="M6 10l2.5 2.5L14 7" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <h3>GDPR-consistent workflow</h3>
+          <p>Supports data minimisation under GDPR Article 5(1)(c), purpose limitation under Article 5(1)(b), and EEOC blind review documentation requirements.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#2d6b4a" stroke-width="1.3"/><path d="M7 10l2 2 4-4" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Ad scripts are isolated</h3>
+          <p>A strict Content Security Policy separates the ad layer from the document processing layer. Ad networks cannot access your file data.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────────────────────── -->
+  <aside class="side-col" aria-label="Sidebar">
+
+    <!-- AD: Sidebar 300x250 -->
+    <div class="ad-side" aria-label="Advertisement">
+      <p class="ad-label">sponsored</p>
+      <!-- Replace with Carbon Ads / Ethical Ads embed -->
+      <div class="ad-placeholder-side">
+        <div class="ad-fake-logo" aria-hidden="true"></div>
+        <div class="ad-fake-hl">Run compliant blind interviews</div>
+        <div class="ad-fake-body">Structured scoring. Bias audit reports. Works with nullified CVs.</div>
+        <button class="ad-fake-cta">Get a demo</button>
+        <p class="ad-cpm">300×250 · $18–22 CPM · Contextual, no cookies</p>
+      </div>
+    </div>
+
+    <!-- Trust box -->
+    <div class="trust-box">
+      <strong>Privacy architecture</strong>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>pdf-lib processes files in memory</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>mammoth.js extracts DOCX locally</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Zero server endpoints</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Ad scripts CSP-isolated</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Open source on GitHub</span></div>
+    </div>
+
+    <!-- AD: Sidebar 2 -->
+    <div class="ad-side2" aria-label="Advertisement">
+      <p class="ad-label">sponsored</p>
+      <div class="ad-fake-hl2">Checkr Background</div>
+      <div class="ad-fake-body2">Fast, FCRA-compliant checks.</div>
+      <button class="ad-fake-cta2">Learn more</button>
+      <p class="ad-cpm">160×100 · $14 CPM</p>
+    </div>
+
+    <!-- Pro upsell -->
+    <div class="pro-box">
+      <div class="pro-badge">Pro</div>
+      <strong>Need batch processing?</strong>
+      <p>Process 200 files at once, save redaction profiles, and export GDPR-annotated audit logs for your DPO.</p>
+      <a href="/pro.html" class="pro-cta">See Pro plan — $9/mo</a>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span aria-hidden="true">·</span>
+  <a href="/privacy.html">Privacy policy</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://github.com/yourusername/nullifycv" target="_blank" rel="noopener">Open source on GitHub</a>
+  <span aria-hidden="true">·</span>
+  <a href="/about.html">How it works</a>
+  <span aria-hidden="true">·</span>
+  <span class="foot-mono">pdf-lib 1.17.1 · mammoth 1.6.0</span>
+  <span aria-hidden="true">·</span>
+  <small>Consistent with GDPR Art. 5 · Not legal advice</small>
+</footer>
+
+<!-- ── LIBRARIES ─────────────────────────────────────────────────────────── -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
