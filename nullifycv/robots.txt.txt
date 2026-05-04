@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nullifycv.com/sitemap.xml
