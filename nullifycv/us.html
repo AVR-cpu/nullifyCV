@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO: Title max 60 chars ── -->
+  <title>Resume Redaction Tool — Free & Private | NullifyCV</title>
+
+  <!-- ── SEO: Meta description max 155 chars ── -->
+  <meta name="description" content="Remove PII from resumes for blind hiring. Free, EEOC-compliant resume redaction tool. Files never leave your browser. No account needed.">
+
+  <meta name="keywords" content="resume redaction tool, blind hiring, remove PII from resume, EEOC compliance hiring, de-identify resume, unbiased hiring software, HR privacy tool, redact CV free">
+  <meta name="robots" content="index, follow">
+  <meta name="geo.region" content="US">
+  <link rel="canonical" href="https://nullifycv.com/us.html">
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:title" content="Resume Redaction Tool — Free & Private | NullifyCV">
+  <meta property="og:description" content="Remove PII from resumes for blind hiring. Files never leave your browser. Free, EEOC-consistent.">
+  <meta property="og:url" content="https://nullifycv.com/us.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+
+  <!-- ── Structured Data ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "NullifyCV",
+    "url": "https://nullifycv.com",
+    "description": "Free resume redaction tool for blind hiring. Removes PII from resumes and CVs. 100% client-side processing — files never leave the browser.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Resume PII redaction",
+      "Blind hiring support",
+      "EEOC-consistent workflow",
+      "100% browser-side processing",
+      "PDF and DOCX support",
+      "Audit log for compliance"
+    ],
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <!-- ── FAQ Schema for Google rich results ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is this resume redaction tool really free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The core tool is completely free with no account required. A Pro plan is available at $9/month for batch processing, saved profiles, and compliance audit logs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do my resumes get uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. NullifyCV processes files entirely in your browser using pdf.js and mammoth.js. Zero bytes of your resume data are ever transmitted to any server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool EEOC compliant?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "NullifyCV supports a structured blind review workflow consistent with EEOC blind hiring practices. It removes name, age proxies, graduation year, school names, gender pronouns, and other bias signals. Consult your legal counsel for a formal compliance assessment."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z' fill='%231e4d35'/><rect x='11' y='9' width='10' height='13' rx='1.5' fill='white'/><line x1='13' y1='14' x2='19' y2='14' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='17' x2='19' y2='17' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='20' x2='16.5' y2='20' stroke='%231e4d35' stroke-width='1.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .us-wrap { max-width: 820px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ── Hero ── */
+    .us-hero { padding: 56px 0 48px; text-align: center; }
+    .us-hero-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 14px;
+    }
+    .us-hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -1.2px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .us-hero h1 span { color: var(--green-mid); }
+    .us-hero-sub {
+      font-size: 16px;
+      color: var(--ink3);
+      max-width: 580px;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    /* ── Trust banner ── */
+    .trust-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-bg2);
+      border-radius: var(--r);
+      padding: 12px 18px;
+      font-size: 13px;
+      color: var(--green-dark);
+      font-weight: 500;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .trust-banner-icon {
+      width: 32px; height: 32px;
+      background: var(--green-dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .trust-banner p  { margin: 0; line-height: 1.4; }
+    .trust-banner small { display: block; font-size: 11px; color: var(--green-mid); font-weight: 400; margin-top: 2px; }
+
+    /* ── Upload CTA ── */
+    .us-upload {
+      border: 2px dashed var(--green-bg2);
+      border-radius: var(--rl);
+      padding: 40px 24px;
+      text-align: center;
+      background: var(--paper);
+      margin-bottom: 56px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+    .us-upload:hover { border-color: var(--green-mid); background: var(--green-bg); }
+    .us-upload-icon  { font-size: 32px; margin-bottom: 10px; }
+    .us-upload-title { font-size: 18px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .us-upload-sub   { font-size: 12px; color: var(--ink3); margin-bottom: 18px; }
+    .us-upload-btn {
+      display: inline-block;
+      background: var(--green-dark);
+      color: white;
+      padding: 13px 36px;
+      border-radius: var(--r);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .us-upload-btn:hover { background: var(--green-mid); }
+
+    /* ── Sections ── */
+    .us-section { margin-bottom: 56px; }
+    .us-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 6px;
+    }
+    .us-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .us-lead {
+      font-size: 14px;
+      color: var(--ink3);
+      margin-bottom: 28px;
+      line-height: 1.65;
+      max-width: 620px;
+    }
+    .us-rule { height: 1px; background: var(--border); margin-bottom: 28px; }
+
+    /* ── Stats ── */
+    .stats-strip {
+      background: var(--green-dark);
+      border-radius: var(--rl);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .stat-val   { font-size: 26px; font-weight: 800; color: white; margin-bottom: 4px; }
+    .stat-label { font-size: 10px; color: var(--green-muted); font-family: var(--mono); }
+
+    /* ── Steps ── */
+    .us-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .us-step {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .us-step-num {
+      width: 32px; height: 32px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .us-step h3 { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .us-step p  { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+
+    /* ── Bias section ── */
+    .bias-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .bias-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .bias-icon { font-size: 22px; margin-bottom: 10px; }
+    .bias-card h3 { font-size: 13px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .bias-card p  { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+
+    /* ── Compliance badges ── */
+    .compliance-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .comp-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .comp-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .badge-eeoc  { background: var(--green-bg);  color: var(--green-dark); }
+    .badge-ccpa  { background: #fdf3e3; color: #7a5000; }
+    .badge-bipa  { background: #f3e8f8; color: #4a1f7a; }
+    .badge-adea  { background: #fde8e8; color: #7a1f1f; }
+    .badge-nyc   { background: #e6f1fb; color: #185fa5; }
+
+    .comp-text h4 { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+    .comp-text p  { font-size: 11px; color: var(--ink3); line-height: 1.55; }
+    .comp-check   { color: var(--green-mid); font-size: 14px; flex-shrink: 0; margin-left: auto; margin-top: 2px; }
+
+    /* ── PII tags ── */
+    .pii-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 8px;
+    }
+    .pii-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--ink2);
+      box-shadow: var(--shadow);
+    }
+    .pii-dot { width: 8px; height: 8px; background: var(--green-mid); border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Comparison table ── */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .compare-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--green-dark);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .compare-table th:first-child { border-radius: 8px 0 0 0; }
+    .compare-table th:last-child  { border-radius: 0 8px 0 0; }
+    .compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink2);
+      vertical-align: middle;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:nth-child(even) td { background: var(--paper2); }
+    .check-y { color: var(--green-mid); font-weight: 700; }
+    .check-n { color: #c0c0c0; }
+
+    /* ── FAQ ── */
+    .us-faq { display: flex; flex-direction: column; gap: 0; }
+    .us-faq-item { border-bottom: 1px solid var(--border); }
+    .us-faq-item:first-child { border-top: 1px solid var(--border); }
+    .us-faq-q {
+      width: 100%; background: none; border: none; text-align: left;
+      padding: 16px 0; font-size: 13px; font-weight: 600; color: var(--ink);
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; font-family: var(--sans);
+    }
+    .us-faq-q:hover { color: var(--green-dark); }
+    .us-faq-arrow { color: var(--green-muted); font-size: 16px; transition: transform 0.2s; flex-shrink: 0; }
+    .us-faq-item.open .us-faq-arrow { transform: rotate(180deg); }
+    .us-faq-a { font-size: 13px; color: var(--ink3); line-height: 1.7; padding-bottom: 16px; display: none; }
+    .us-faq-item.open .us-faq-a { display: block; }
+
+    /* ── Disclaimer ── */
+    .us-disclaimer {
+      background: var(--paper2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      font-size: 11px;
+      color: var(--ink3);
+      line-height: 1.6;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 640px) {
+      .us-hero h1   { font-size: 28px; }
+      .us-steps     { grid-template-columns: 1fr; }
+      .bias-grid    { grid-template-columns: 1fr; }
+      .stats-strip  { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a href="/about.html">How it works</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/" class="nav-pro">Try the tool →</a>
+  </nav>
+  <div class="offline-pill">
+    <span class="pulse" aria-hidden="true"></span>
+    <span>Processing locally — no uploads</span>
+  </div>
+</header>
+
+<div class="us-wrap">
+
+  <!-- ── H1 HERO — above the fold ── -->
+  <div class="us-hero">
+    <div class="us-hero-tag">Free · Private · EEOC-consistent</div>
+    <h1>Blind hiring starts with<br><span>redacting the resume.</span></h1>
+    <p class="us-hero-sub">NullifyCV automatically removes names, contact details, addresses, graduation years, and other bias signals from resumes — so your hiring team evaluates skills, not demographics. 100% free, no account needed, files never leave your browser.</p>
+  </div>
+
+  <!-- ── TRUST BANNER ── -->
+  <div class="trust-banner" role="note">
+    <div class="trust-banner-icon">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 1L2 4.5v5C2 14.5 5.5 18.5 10 19.5c4.5-1 8-5 8-10v-5L10 1z" fill="none" stroke="white" stroke-width="1.5"/>
+        <path d="M7 10l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <p>Privacy guarantee: files are processed locally in your browser and are never uploaded to any server.</p>
+      <small>Verifiable via DevTools → Network — 0 bytes transmitted · Open source on GitHub</small>
+    </div>
+  </div>
+
+  <!-- ── UPLOAD CTA — above the fold ── -->
+  <div class="us-upload" onclick="window.location.href='/'" role="button" aria-label="Upload resume to redact">
+    <div class="us-upload-icon">📄</div>
+    <div class="us-upload-title">Drop your resume here</div>
+    <div class="us-upload-sub">PDF or DOCX · Processed locally · No account required · Free forever</div>
+    <a href="/" class="us-upload-btn">Redact resume — free →</a>
+  </div>
+
+  <!-- ── STATS ── -->
+  <div class="stats-strip" aria-label="Key statistics">
+    <div>
+      <div class="stat-val">0</div>
+      <div class="stat-label">Bytes sent to servers</div>
+    </div>
+    <div>
+      <div class="stat-val">15+</div>
+      <div class="stat-label">PII types detected</div>
+    </div>
+    <div>
+      <div class="stat-val">EEOC</div>
+      <div class="stat-label">Consistent workflow</div>
+    </div>
+    <div>
+      <div class="stat-val">Free</div>
+      <div class="stat-label">No account needed</div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="us-section">
+    <div class="us-tag">How it works</div>
+    <h2>Four steps to a bias-free resume</h2>
+    <p class="us-lead">NullifyCV processes your file entirely in the browser. No account, no uploads, no data stored. Works for single files on the free plan and batches of 200 on Pro.</p>
+    <div class="us-rule"></div>
+
+    <div class="us-steps">
+      <div class="us-step">
+        <div class="us-step-num">1</div>
+        <h3>Upload your resume</h3>
+        <p>Drop a PDF or DOCX file onto the tool. The file is read directly by your browser — it never travels to any server. NullifyCV works fully offline once the page has loaded.</p>
+      </div>
+      <div class="us-step">
+        <div class="us-step-num">2</div>
+        <h3>Automatic PII detection</h3>
+        <p>NullifyCV scans the resume for bias signals and personal data: name, email, phone, address, zip code, LinkedIn URL, graduation year, school name, gender pronouns, and more.</p>
+      </div>
+      <div class="us-step">
+        <div class="us-step-num">3</div>
+        <h3>Redaction applied</h3>
+        <p>Detected PII is covered with solid black redaction bars drawn directly onto the original PDF — same layout, same fonts, same structure. Only the identifying information is removed.</p>
+      </div>
+      <div class="us-step">
+        <div class="us-step-num">4</div>
+        <h3>Download & share</h3>
+        <p>Download the redacted PDF and share it with your hiring panel. An optional JSON audit log documents every item redacted — suitable for EEOC blind review documentation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WHAT GETS REMOVED ── -->
+  <div class="us-section">
+    <div class="us-tag">What gets removed</div>
+    <h2>Every bias signal, automatically detected</h2>
+    <p class="us-lead">NullifyCV detects over 15 categories of personal information and bias-causing signals. Choose standard PII removal, bias stripping, or full EEOC blind review mode.</p>
+    <div class="us-rule"></div>
+
+    <div class="pii-grid">
+      <div class="pii-tag"><span class="pii-dot"></span>Full name</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Email address</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Phone number</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Home address</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Zip code</div>
+      <div class="pii-tag"><span class="pii-dot"></span>City, state</div>
+      <div class="pii-tag"><span class="pii-dot"></span>LinkedIn / URLs</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Graduation year</div>
+      <div class="pii-tag"><span class="pii-dot"></span>School / university</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Gender pronouns</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Profile photo</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Date of birth</div>
+      <div class="pii-tag"><span class="pii-dot"></span>File metadata</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Religious affiliations</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Age proxy signals</div>
+    </div>
+  </div>
+
+  <!-- ── WHY BLIND HIRING ── -->
+  <div class="us-section">
+    <div class="us-tag">Why blind hiring</div>
+    <h2>Unconscious bias costs companies the best candidates</h2>
+    <p class="us-lead">Research consistently shows that identical resumes receive different callback rates based on name, zip code, and graduation year alone. Structured blind hiring is the evidence-based fix.</p>
+    <div class="us-rule"></div>
+
+    <div class="bias-grid">
+      <div class="bias-card">
+        <div class="bias-icon">📊</div>
+        <h3>The name problem</h3>
+        <p>Studies show resumes with white-sounding names receive <strong>50% more callbacks</strong> than identical resumes with Black-sounding names. Removing the name eliminates this bias at the source.</p>
+      </div>
+      <div class="bias-card">
+        <div class="bias-icon">📍</div>
+        <h3>The zip code problem</h3>
+        <p>Zip codes signal race, income, and class. Under CCPA, they're classified as sensitive personal information. Removing zip codes prevents demographic discrimination before it starts.</p>
+      </div>
+      <div class="bias-card">
+        <div class="bias-icon">🎓</div>
+        <h3>The school prestige problem</h3>
+        <p>Ivy League preference systematically disadvantages equally qualified candidates from state schools. Removing school names shifts evaluation to skills, experience, and demonstrated achievement.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--green-bg);border:1px solid var(--green-bg2);border-radius:var(--rl);padding:20px 24px;">
+      <p style="font-size:13px;color:var(--ink2);line-height:1.7;">
+        <strong style="color:var(--green-dark);">The business case:</strong> Companies that implement structured blind hiring report more diverse shortlists, reduced legal exposure under Title VII and EEOC guidelines, and stronger long-term team performance. NullifyCV makes the first step — de-identifying the resume — free, fast, and technically verifiable.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── COMPLIANCE ── -->
+  <div class="us-section">
+    <div class="us-tag">Compliance</div>
+    <h2>Built for US employment law and privacy regulations</h2>
+    <p class="us-lead">Each redaction action in NullifyCV maps to a specific US legal provision or EEOC guideline. The downloadable audit log documents your blind review process for compliance purposes.</p>
+    <div class="us-rule"></div>
+
+    <div class="compliance-row">
+      <div class="comp-item">
+        <span class="comp-badge badge-eeoc">EEOC / Title VII</span>
+        <div class="comp-text">
+          <h4>Blind hiring & gender/race discrimination prevention</h4>
+          <p>Removing names, addresses, and demographic signals supports structured blind review processes consistent with EEOC guidelines under Title VII of the Civil Rights Act.</p>
+        </div>
+        <span class="comp-check">✓</span>
+      </div>
+      <div class="comp-item">
+        <span class="comp-badge badge-adea">ADEA</span>
+        <div class="comp-text">
+          <h4>Age Discrimination in Employment Act</h4>
+          <p>Graduation years, class years, and early employment dates are removed as age proxies — supporting ADEA-compliant hiring practices for candidates over 40.</p>
+        </div>
+        <span class="comp-check">✓</span>
+      </div>
+      <div class="comp-item">
+        <span class="comp-badge badge-ccpa">CCPA / CPRA</span>
+        <div class="comp-text">
+          <h4>California Consumer Privacy Act — sensitive personal information</h4>
+          <p>Zip codes (precise geolocation proxy), religious affiliations, and racial/ethnic signals are treated as sensitive personal information under CPRA §1798.121.</p>
+        </div>
+        <span class="comp-check">✓</span>
+      </div>
+      <div class="comp-item">
+        <span class="comp-badge badge-bipa">IL BIPA</span>
+        <div class="comp-text">
+          <h4>Illinois Biometric Information Privacy Act</h4>
+          <p>Profile photos are removed in EEOC mode. No facial geometry or biometric data is retained in the output file — supporting BIPA compliance for Illinois employers.</p>
+        </div>
+        <span class="comp-check">✓</span>
+      </div>
+      <div class="comp-item">
+        <span class="comp-badge badge-nyc">NYC Local Law 144</span>
+        <div class="comp-text">
+          <h4>Automated employment decision tool bias audit documentation</h4>
+          <p>The downloadable audit log records the redaction profile, confidence scores, and timestamp — supporting bias-audit documentation requirements under NYC LL 144.</p>
+        </div>
+        <span class="comp-check">✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VS COMPETITORS ── -->
+  <div class="us-section">
+    <div class="us-tag">Why NullifyCV</div>
+    <h2>The only resume redaction tool that's truly private</h2>
+    <p class="us-lead">Most redaction tools upload your resumes to a server. NullifyCV is the only free tool that processes files entirely in the browser — making it safe for sensitive corporate and candidate data.</p>
+    <div class="us-rule"></div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>NullifyCV</th>
+          <th>Typical ATS tools</th>
+          <th>Generic PDF editors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>100% client-side processing</td>
+          <td><span class="check-y">✓ Yes</span></td>
+          <td><span class="check-n">✗ Server upload</span></td>
+          <td><span class="check-n">✗ Server upload</span></td>
+        </tr>
+        <tr>
+          <td>Automatic PII detection</td>
+          <td><span class="check-y">✓ 15+ types</span></td>
+          <td><span class="check-y">✓ Varies</span></td>
+          <td><span class="check-n">✗ Manual only</span></td>
+        </tr>
+        <tr>
+          <td>Preserves original PDF layout</td>
+          <td><span class="check-y">✓ Black bar redaction</span></td>
+          <td><span class="check-n">✗ Reformats</span></td>
+          <td><span class="check-y">✓ Yes</span></td>
+        </tr>
+        <tr>
+          <td>EEOC blind review mode</td>
+          <td><span class="check-y">✓ Built in</span></td>
+          <td><span class="check-y">✓ Some</span></td>
+          <td><span class="check-n">✗ No</span></td>
+        </tr>
+        <tr>
+          <td>Compliance audit log</td>
+          <td><span class="check-y">✓ JSON download</span></td>
+          <td><span class="check-y">✓ Some</span></td>
+          <td><span class="check-n">✗ No</span></td>
+        </tr>
+        <tr>
+          <td>Free to use</td>
+          <td><span class="check-y">✓ Always free</span></td>
+          <td><span class="check-n">✗ Subscription</span></td>
+          <td><span class="check-n">✗ Paid</span></td>
+        </tr>
+        <tr>
+          <td>Open source & auditable</td>
+          <td><span class="check-y">✓ GitHub</span></td>
+          <td><span class="check-n">✗ Closed source</span></td>
+          <td><span class="check-n">✗ Closed source</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── FOR WHO ── -->
+  <div class="us-section">
+    <div class="us-tag">Who it's for</div>
+    <h2>Built for both sides of the hiring process</h2>
+    <div class="us-rule"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:22px;box-shadow:var(--shadow);">
+        <div style="font-size:22px;margin-bottom:12px;">👔</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--green-dark);margin-bottom:8px;">Recruiters & HR teams</h3>
+        <p style="font-size:12px;color:var(--ink3);line-height:1.65;">Prepare blind candidate packs for your hiring panel in seconds. Document your structured blind review process with the audit log. Reduce legal exposure under Title VII, ADEA, and EEOC guidelines. Pro plan available for batch processing 200 resumes at once.</p>
+      </div>
+      <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:22px;box-shadow:var(--shadow);">
+        <div style="font-size:22px;margin-bottom:12px;">🎯</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--green-dark);margin-bottom:8px;">Job seekers & candidates</h3>
+        <p style="font-size:12px;color:var(--ink3);line-height:1.65;">Remove your personal details before sharing your resume with third-party recruiters or staffing agencies. Protect your address, phone number, and email from being forwarded without your knowledge. Send a redacted version and share contact details only when you're ready.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <div class="us-section">
+    <div class="us-tag">FAQ</div>
+    <h2>Frequently asked questions</h2>
+    <p class="us-lead">Everything HR teams and candidates ask us most.</p>
+    <div class="us-rule"></div>
+
+    <div class="us-faq">
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          Is this resume redaction tool really free?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">Yes — the core tool is completely free with no account required. A Pro plan is available at $9/month for batch processing up to 200 resumes at once, saved redaction profiles, and compliance audit logs for your legal or HR team.</div>
+      </div>
+
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          Do my resumes get uploaded to a server?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">No. NullifyCV processes files entirely in your browser using pdf.js and mammoth.js. There is no server that can receive your resume — not even ours. Zero bytes of your resume data are ever transmitted. You can verify this by opening DevTools → Network tab while processing a file and watching for outbound requests — you'll see none containing file data.</div>
+      </div>
+
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          Is this tool EEOC compliant?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">NullifyCV supports a structured blind review workflow consistent with EEOC blind hiring practices. It removes names, age proxies (graduation years), school names, gender pronouns, addresses, and other demographic signals. The downloadable audit log documents your process. Whether your specific hiring workflow satisfies your EEOC obligations depends on your circumstances — consult your legal counsel for a formal assessment.</div>
+      </div>
+
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          What file formats are supported?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">PDF and DOCX (Word) files are fully supported. For PDFs, the tool draws black redaction bars directly over identified PII on the original file — preserving layout, fonts, and formatting. For DOCX files, text is extracted and redacted. Note: scanned PDFs (image-only, no text layer) cannot be automatically redacted — export these as DOCX first for full redaction.</div>
+      </div>
+
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          Can I process multiple resumes at once?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">Batch processing of up to 200 resumes at once is available on the Pro plan at $9/month. This is particularly useful for recruiting teams running blind screening rounds before panel interviews. Pro also includes saved redaction profiles and EEOC-annotated audit logs.</div>
+      </div>
+
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          How do I verify the privacy claims?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">Open the source code on GitHub — every line that handles your resumes is public. You can also open your browser's DevTools (F12) → Network tab → upload a resume and process it. You will see zero outbound network requests containing your file data. The Network Monitor panel inside the tool also shows this in real time.</div>
+      </div>
+
+      <div class="us-faq-item">
+        <button class="us-faq-q" onclick="toggleUSFAQ(this)" aria-expanded="false">
+          Why are there ads on a privacy tool?
+          <span class="us-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="us-faq-a">NullifyCV is free and ads help keep it that way. All ads use contextual targeting only — based on the page content, not your browsing behavior or any personal data. Ad scripts are isolated from the document processing layer by a Content Security Policy. The Pro plan provides an ad-free experience.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM CTA ── -->
+  <div style="text-align:center;padding:48px 0 0;">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--green-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Ready to hire without bias?</div>
+    <h2 style="font-size:28px;font-weight:800;color:var(--green-dark);letter-spacing:-0.5px;margin-bottom:10px;">Nullify the bias.<br>Keep the talent.</h2>
+    <p style="font-size:13px;color:var(--ink3);margin-bottom:24px;">Free, private, and open source. No account required. Works in your browser right now.</p>
+    <a href="/" class="us-upload-btn">Start redacting — free →</a>
+  </div>
+
+  <div class="us-disclaimer">
+    <strong>Legal disclaimer:</strong> NullifyCV documents a data minimisation workflow and is intended as a supporting tool for compliance purposes only. NullifyCV does not make legal determinations regarding EEOC, CCPA, BIPA, ADEA, or any other regulation. Consult your legal counsel or qualified compliance advisor for a formal compliance assessment. · nullifycv.com
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span aria-hidden="true">·</span>
+  <a href="/privacy.html">Privacy policy</a>
+  <span aria-hidden="true">·</span>
+  <a href="/about.html">How it works</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">Open source on GitHub</a>
+  <span aria-hidden="true">·</span>
+  <small>EEOC-consistent · Not legal advice</small>
+</footer>
+
+<script>
+function toggleUSFAQ(btn) {
+  const item = btn.closest('.us-faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.us-faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+  btn.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

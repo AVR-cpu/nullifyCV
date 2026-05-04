@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO: Title max 60 tekens ── -->
+  <title>CV Anonimiseren Gratis | NullifyCV.com</title>
+
+  <!-- ── SEO: Meta description max 155 tekens ── -->
+  <meta name="description" content="Verwijder persoonsgegevens uit je cv met NullifyCV. 100% privé — bestanden blijven in je browser. Gratis, GDPR-conform en direct te gebruiken.">
+
+  <meta name="keywords" content="cv anonimiseren, privacy vriendelijk cv, GDPR resume cleaner, persoonsgegevens verwijderen cv, blind hiring, cv redacteren, anoniem solliciteren">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://nullifycv.com/nl.html">
+
+  <!-- ── Open Graph ── -->
+  <meta property="og:title" content="CV Anonimiseren Gratis | NullifyCV.com">
+  <meta property="og:description" content="Verwijder persoonsgegevens uit je cv. 100% privé — bestanden verlaten nooit je browser.">
+  <meta property="og:url" content="https://nullifycv.com/nl.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="nl_NL">
+
+  <!-- ── Structured Data ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "NullifyCV",
+    "url": "https://nullifycv.com",
+    "description": "Gratis tool om persoonsgegevens uit cv's te verwijderen voor anoniem solliciteren en privacybescherming.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "featureList": [
+      "CV anonimiseren",
+      "Persoonsgegevens verwijderen",
+      "GDPR-conforme verwerking",
+      "100% lokale verwerking in de browser",
+      "PDF en DOCX ondersteuning"
+    ],
+    "inLanguage": "nl"
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z' fill='%231e4d35'/><rect x='11' y='9' width='10' height='13' rx='1.5' fill='white'/><line x1='13' y1='14' x2='19' y2='14' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='17' x2='19' y2='17' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='20' x2='16.5' y2='20' stroke='%231e4d35' stroke-width='1.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .nl-wrap { max-width: 800px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ── Hero (above the fold) ── */
+    .nl-hero {
+      padding: 56px 0 48px;
+      text-align: center;
+    }
+    .nl-hero-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 14px;
+    }
+    .nl-hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .nl-hero h1 span { color: var(--green-mid); }
+    .nl-hero-sub {
+      font-size: 16px;
+      color: var(--ink3);
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    /* ── Privacy belofte banner ── */
+    .privacy-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-bg2);
+      border-radius: var(--r);
+      padding: 12px 18px;
+      font-size: 13px;
+      color: var(--green-dark);
+      font-weight: 500;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .privacy-banner-icon {
+      width: 32px; height: 32px;
+      background: var(--green-dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .privacy-banner p { margin: 0; line-height: 1.4; }
+    .privacy-banner small { display: block; font-size: 11px; color: var(--green-mid); font-weight: 400; margin-top: 2px; }
+
+    /* ── CTA upload box ── */
+    .nl-upload-box {
+      border: 2px dashed var(--green-bg2);
+      border-radius: var(--rl);
+      padding: 36px 24px;
+      text-align: center;
+      background: var(--paper);
+      margin-bottom: 56px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+    .nl-upload-box:hover { border-color: var(--green-mid); background: var(--green-bg); }
+    .nl-upload-icon { font-size: 32px; margin-bottom: 10px; }
+    .nl-upload-title { font-size: 17px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .nl-upload-sub   { font-size: 12px; color: var(--ink3); margin-bottom: 16px; }
+    .nl-upload-btn {
+      display: inline-block;
+      background: var(--green-dark);
+      color: white;
+      padding: 12px 32px;
+      border-radius: var(--r);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .nl-upload-btn:hover { background: var(--green-mid); }
+
+    /* ── Section ── */
+    .nl-section { margin-bottom: 56px; }
+    .nl-section-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 6px;
+    }
+    .nl-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .nl-section-lead {
+      font-size: 14px;
+      color: var(--ink3);
+      margin-bottom: 28px;
+      line-height: 1.65;
+      max-width: 600px;
+    }
+    .nl-rule { height: 1px; background: var(--border); margin-bottom: 28px; }
+
+    /* ── Steps ── */
+    .nl-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .nl-step {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .nl-step-num {
+      width: 32px; height: 32px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .nl-step h3 { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .nl-step p  { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+
+    /* ── Why section ── */
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .why-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .why-icon { font-size: 22px; margin-bottom: 10px; }
+    .why-card h3 { font-size: 13px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .why-card p  { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+
+    /* ── Stats strip ── */
+    .stats-strip {
+      background: var(--green-dark);
+      border-radius: var(--rl);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .stat-val   { font-size: 28px; font-weight: 800; color: white; margin-bottom: 4px; }
+    .stat-label { font-size: 11px; color: var(--green-muted); font-family: var(--mono); }
+
+    /* ── PII types ── */
+    .pii-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+    }
+    .pii-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--ink2);
+      box-shadow: var(--shadow);
+    }
+    .pii-dot {
+      width: 8px; height: 8px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── FAQ ── */
+    .nl-faq { display: flex; flex-direction: column; gap: 0; }
+    .nl-faq-item { border-bottom: 1px solid var(--border); }
+    .nl-faq-item:first-child { border-top: 1px solid var(--border); }
+    .nl-faq-q {
+      width: 100%; background: none; border: none; text-align: left;
+      padding: 16px 0; font-size: 13px; font-weight: 600; color: var(--ink);
+      cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; font-family: var(--sans);
+    }
+    .nl-faq-q:hover { color: var(--green-dark); }
+    .nl-faq-arrow { color: var(--green-muted); font-size: 16px; transition: transform 0.2s; flex-shrink: 0; }
+    .nl-faq-item.open .nl-faq-arrow { transform: rotate(180deg); }
+    .nl-faq-a { font-size: 13px; color: var(--ink3); line-height: 1.7; padding-bottom: 16px; display: none; }
+    .nl-faq-item.open .nl-faq-a { display: block; }
+
+    /* ── Footer disclaimer ── */
+    .nl-disclaimer {
+      background: var(--paper2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      font-size: 11px;
+      color: var(--ink3);
+      line-height: 1.6;
+      margin-top: 32px;
+    }
+
+    /* ── Bottom CTA ── */
+    .nl-bottom-cta {
+      text-align: center;
+      padding: 48px 0 0;
+    }
+
+    @media (max-width: 600px) {
+      .nl-hero h1   { font-size: 26px; }
+      .nl-steps     { grid-template-columns: 1fr; }
+      .why-grid     { grid-template-columns: 1fr; }
+      .stats-strip  { grid-template-columns: 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATIE ── -->
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav" aria-label="Hoofdnavigatie">
+    <a href="/about.html">Hoe het werkt</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/" class="nav-pro">Tool gebruiken →</a>
+  </nav>
+  <div class="offline-pill">
+    <span class="pulse" aria-hidden="true"></span>
+    <span>Lokaal verwerkt — geen uploads</span>
+  </div>
+</header>
+
+<div class="nl-wrap">
+
+  <!-- ── H1 HERO — above the fold ── -->
+  <div class="nl-hero">
+    <div class="nl-hero-tag">Gratis · Privé · GDPR-conform</div>
+    <h1>CV anonimiseren<br><span>in drie seconden.</span></h1>
+    <p class="nl-hero-sub">Verwijder automatisch naam, contactgegevens, locatie en andere persoonsgegevens uit je cv. Bestanden worden volledig lokaal in je browser verwerkt — ze verlaten nooit je apparaat.</p>
+  </div>
+
+  <!-- ── PRIVACY BELOFTE BANNER ── -->
+  <div class="privacy-banner" role="note" aria-label="Privacy belofte">
+    <div class="privacy-banner-icon">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 1L2 4.5v5C2 14.5 5.5 18.5 10 19.5c4.5-1 8-5 8-10v-5L10 1z" fill="none" stroke="white" stroke-width="1.5"/>
+        <path d="M7 10l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <p>Onze privacybelofte: bestanden worden alleen lokaal in je browser verwerkt en worden nooit naar een server geüpload.</p>
+      <small>Verifieerbaar via DevTools → Netwerk — 0 bytes verzonden · Open source op GitHub</small>
+    </div>
+  </div>
+
+  <!-- ── CTA UPLOAD BOX — above the fold ── -->
+  <div class="nl-upload-box" onclick="window.location.href='/'" role="button" aria-label="CV uploaden en anonimiseren">
+    <div class="nl-upload-icon">📄</div>
+    <div class="nl-upload-title">Sleep je cv hierheen</div>
+    <div class="nl-upload-sub">PDF of DOCX · Verwerkt via pdf.js &amp; mammoth.js · Geen account nodig</div>
+    <a href="/" class="nl-upload-btn">CV anonimiseren — gratis →</a>
+  </div>
+
+  <!-- ── STATS ── -->
+  <div class="stats-strip" aria-label="Statistieken">
+    <div>
+      <div class="stat-val">0 bytes</div>
+      <div class="stat-label">Verzonden naar servers</div>
+    </div>
+    <div>
+      <div class="stat-val">15+</div>
+      <div class="stat-label">PII-types gedetecteerd</div>
+    </div>
+    <div>
+      <div class="stat-val">100%</div>
+      <div class="stat-label">Gratis & open source</div>
+    </div>
+  </div>
+
+  <!-- ── HOE HET WERKT ── -->
+  <div class="nl-section">
+    <div class="nl-section-tag">Hoe het werkt</div>
+    <h2>Vier stappen naar een anoniem cv</h2>
+    <p class="nl-section-lead">NullifyCV verwerkt je bestand volledig in je browser. Er is geen account nodig en er worden geen bestanden opgeslagen of gedeeld.</p>
+    <div class="nl-rule"></div>
+
+    <div class="nl-steps">
+      <div class="nl-step">
+        <div class="nl-step-num">1</div>
+        <h3>Upload je cv</h3>
+        <p>Sleep een PDF of DOCX-bestand naar de tool. Het bestand wordt direct door je browser ingelezen — het reist nooit via het internet naar een server.</p>
+      </div>
+      <div class="nl-step">
+        <div class="nl-step-num">2</div>
+        <h3>Automatische detectie</h3>
+        <p>NullifyCV scant de tekst op persoonsgegevens: naam, e-mailadres, telefoonnummer, woonplaats, postcode, LinkedIn-profiel en meer — inclusief specifieke Nederlandse formaten.</p>
+      </div>
+      <div class="nl-step">
+        <div class="nl-step-num">3</div>
+        <h3>Anonimisering</h3>
+        <p>Gedetecteerde gegevens worden vervangen door zwarte redactiebalken direct op de originele PDF — hetzelfde lay-out, hetzelfde lettertype, alleen de gevoelige informatie is verwijderd.</p>
+      </div>
+      <div class="nl-step">
+        <div class="nl-step-num">4</div>
+        <h3>Download & gebruik</h3>
+        <p>Download het geanonimiseerde cv als PDF. Optioneel: download ook het auditlogboek als JSON — een gedocumenteerd overzicht van alle verwijderde gegevens voor je DPO of compliance-team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WAT WORDT VERWIJDERD ── -->
+  <div class="nl-section">
+    <div class="nl-section-tag">Wat wordt verwijderd</div>
+    <h2>Welke persoonsgegevens detecteert NullifyCV?</h2>
+    <p class="nl-section-lead">De tool herkent automatisch meer dan 15 soorten persoonsgegevens, inclusief specifieke Nederlandse formaten zoals 06-nummers en postcodes.</p>
+    <div class="nl-rule"></div>
+
+    <div class="pii-grid">
+      <div class="pii-tag"><span class="pii-dot"></span>Volledige naam</div>
+      <div class="pii-tag"><span class="pii-dot"></span>E-mailadres</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Telefoonnummer (06)</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Woonadres</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Postcode (1234 AB)</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Woonplaats</div>
+      <div class="pii-tag"><span class="pii-dot"></span>LinkedIn-profiel</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Geboortejaar (proxy)</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Afstudeerjaar</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Schoolnaam</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Gendervoornaamwoorden</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Profielfoto</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Geboortedatum</div>
+      <div class="pii-tag"><span class="pii-dot"></span>BSN-nummer</div>
+      <div class="pii-tag"><span class="pii-dot"></span>Bestandsmetadata</div>
+    </div>
+  </div>
+
+  <!-- ── WAAROM ANONIMISEREN ── -->
+  <div class="nl-section">
+    <div class="nl-section-tag">Waarom anonimiseren?</div>
+    <h2>Onbevooroordeeld aannemen begint met privacy</h2>
+    <p class="nl-section-lead">Onbewuste vooroordelen beïnvloeden wervingsbeslissingen vaker dan we denken. Door persoonsgegevens te verwijderen, beoordeel je kandidaten puur op hun vaardigheden en ervaring.</p>
+    <div class="nl-rule"></div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">⚖️</div>
+        <h3>Eerlijkere selectie</h3>
+        <p>Naam, woonplaats en leeftijd beïnvloeden onbewust de beoordeling van kandidaten. Door deze te verwijderen, selecteer je op basis van competenties — niet op demografische kenmerken.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔒</div>
+        <h3>GDPR-conformiteit</h3>
+        <p>De AVG (GDPR) vereist dataminimalisatie: verwerk alleen de gegevens die strikt noodzakelijk zijn voor het doel. Het delen van een volledig cv met een wervingspanel is juridisch risicovol.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🛡️</div>
+        <h3>Kandidaatprivacy</h3>
+        <p>Als recruiter of hr-professional heb je een zorgplicht. Door cv's te anonimiseren vóór interne verspreiding, beperk je de datavoetstap van de kandidaat aanzienlijk.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:20px 24px;box-shadow:var(--shadow);">
+      <p style="font-size:13px;color:var(--ink2);line-height:1.7;">
+        Onderzoek toont aan dat kandidaten met een niet-westerse naam gemiddeld <strong style="color:var(--green-dark);">50% minder terugbelverzoeken</strong> ontvangen voor identieke cv's. Blind hiring — waarbij persoonlijke gegevens worden verborgen — vermindert deze discriminatie aantoonbaar. NullifyCV maakt dit proces snel, gratis en privacyveilig.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── VOOR WIE ── -->
+  <div class="nl-section">
+    <div class="nl-section-tag">Voor wie</div>
+    <h2>Voor recruiters én kandidaten</h2>
+    <div class="nl-rule"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:20px;box-shadow:var(--shadow);">
+        <div style="font-size:20px;margin-bottom:10px;">👔</div>
+        <h3 style="font-size:14px;font-weight:700;color:var(--green-dark);margin-bottom:8px;">Recruiters & HR-professionals</h3>
+        <p style="font-size:12px;color:var(--ink3);line-height:1.6;">Bereid anonieme cv-pakketten voor je wervingspanel. Documenteer je blind-hiringproces met het auditlogboek. Voldoe aan AVG-vereisten voor dataminimalisatie. Beschikbaar in batchmodus voor Pro-gebruikers.</p>
+      </div>
+      <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:20px;box-shadow:var(--shadow);">
+        <div style="font-size:20px;margin-bottom:10px;">🎯</div>
+        <h3 style="font-size:14px;font-weight:700;color:var(--green-dark);margin-bottom:8px;">Kandidaten & Jobseekers</h3>
+        <p style="font-size:12px;color:var(--ink3);line-height:1.6;">Verwijder je persoonlijke gegevens voordat je je cv doorstuurt naar onbekende partijen. Bescherm je BSN, adres en geboortedatum. Stuur een geanonimiseerde versie mee als je zelf wilt bepalen wat je deelt.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <div class="nl-section">
+    <div class="nl-section-tag">Veelgestelde vragen</div>
+    <h2>FAQ — CV anonimiseren</h2>
+    <p class="nl-section-lead">Antwoorden op de meest gestelde vragen over beveiliging, privacy en bestandstypen.</p>
+    <div class="nl-rule"></div>
+
+    <div class="nl-faq">
+
+      <div class="nl-faq-item">
+        <button class="nl-faq-q" onclick="toggleNLFAQ(this)" aria-expanded="false">
+          Worden mijn bestanden opgeslagen of gedeeld?
+          <span class="nl-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="nl-faq-a">Nee. NullifyCV verwerkt bestanden volledig lokaal in je browser via pdf.js en mammoth.js. Er bestaat geen server die jouw bestand kan ontvangen — de hostinginfrastructuur heeft hiervoor geen mechanisme. Je kunt dit zelf verifiëren via DevTools → Netwerk terwijl je een bestand verwerkt: je ziet geen uitgaande verzoeken met bestandsdata.</div>
+      </div>
+
+      <div class="nl-faq-item">
+        <button class="nl-faq-q" onclick="toggleNLFAQ(this)" aria-expanded="false">
+          Welke bestandstypen worden ondersteund?
+          <span class="nl-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="nl-faq-a">PDF en DOCX (Word) worden volledig ondersteund. Voor PDF-bestanden tekent de tool zwarte redactiebalken direct op de originele lay-out — hetzelfde uiterlijk, alleen de persoonsgegevens zijn afgedekt. Gescande PDF's (afbeeldingen zonder tekstlaag) kunnen niet automatisch worden verwerkt — exporteer deze eerst als DOCX.</div>
+      </div>
+
+      <div class="nl-faq-item">
+        <button class="nl-faq-q" onclick="toggleNLFAQ(this)" aria-expanded="false">
+          Is NullifyCV AVG/GDPR-conform?
+          <span class="nl-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="nl-faq-a">NullifyCV ondersteunt een dataminimalisatieworkflow die consistent is met de principes van AVG Artikel 5. Omdat bestanden lokaal worden verwerkt en niets wordt opgeslagen of verzonden, verwerkt NullifyCV zelf geen persoonsgegevens als verwerkingsverantwoordelijke of verwerker. Of jouw gebruik van de tool voldoet aan jouw AVG-verplichtingen is afhankelijk van jouw specifieke situatie — raadpleeg je FG (Functionaris voor Gegevensbescherming) voor een formele beoordeling.</div>
+      </div>
+
+      <div class="nl-faq-item">
+        <button class="nl-faq-q" onclick="toggleNLFAQ(this)" aria-expanded="false">
+          Werkt de tool ook voor Nederlandse cv's?
+          <span class="nl-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="nl-faq-a">Ja — NullifyCV heeft specifieke ondersteuning voor Nederlandse cv's, waaronder: 06-nummers, Nederlandse postcodes (1234 AB), Nederlandse plaatsnamen (30+ steden), Nederlandse maandnamen in datums, velden als "geboortedatum" en "nationaliteit", en BSN-detectie.</div>
+      </div>
+
+      <div class="nl-faq-item">
+        <button class="nl-faq-q" onclick="toggleNLFAQ(this)" aria-expanded="false">
+          Is NullifyCV gratis?
+          <span class="nl-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="nl-faq-a">Ja — de basistool is volledig gratis zonder account. Een Pro-abonnement (€9/maand) is beschikbaar voor batchverwerking van meerdere bestanden tegelijk, opgeslagen redactieprofiel en AVG-geannoteerde auditlogboeken voor je DPO.</div>
+      </div>
+
+      <div class="nl-faq-item">
+        <button class="nl-faq-q" onclick="toggleNLFAQ(this)" aria-expanded="false">
+          Kan ik meerdere cv's tegelijk verwerken?
+          <span class="nl-faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="nl-faq-a">Batchverwerking van tot 200 bestanden tegelijk is beschikbaar via het Pro-abonnement. Dit is met name handig voor recruiters die een wervingsronde anonimiseren vóór beoordelingsgesprekken.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── BOTTOM CTA ── -->
+  <div class="nl-bottom-cta">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--green-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Klaar om te beginnen?</div>
+    <h2 style="font-size:26px;font-weight:800;color:var(--green-dark);letter-spacing:-0.5px;margin-bottom:10px;">Anonimiseer je cv nu.<br>Gratis en privé.</h2>
+    <p style="font-size:13px;color:var(--ink3);margin-bottom:24px;">Geen account. Geen uploads. Bestanden verlaten nooit je browser.</p>
+    <a href="/" class="nl-upload-btn">CV anonimiseren →</a>
+  </div>
+
+  <div class="nl-disclaimer">
+    <strong>Juridische disclaimer:</strong> NullifyCV documenteert een dataminimalisatieworkflow en is bedoeld als ondersteunend hulpmiddel voor compliance-doeleinden. NullifyCV stelt geen juridische naleving vast — raadpleeg je Functionaris voor Gegevensbescherming (FG) of juridisch adviseur voor een formele compliancebeoordeling. · nullifycv.com
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span aria-hidden="true">·</span>
+  <a href="/privacy.html">Privacybeleid</a>
+  <span aria-hidden="true">·</span>
+  <a href="/about.html">Hoe het werkt</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">Open source op GitHub</a>
+  <span aria-hidden="true">·</span>
+  <small>Conform AVG Art. 5 · Geen juridisch advies</small>
+</footer>
+
+<script>
+function toggleNLFAQ(btn) {
+  const item = btn.closest('.nl-faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.nl-faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+  btn.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
