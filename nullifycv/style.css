@@ -692,3 +692,59 @@ body {
   .arow { flex-wrap: wrap; }
   .btn-main { flex: 1 1 100%; }
 }
+
+/* ── AD: MID-PAGE ─────────────────────────────────────────────────────────── */
+.ad-mid {
+  background: var(--ad-bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--rl);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.ad-mid-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ad-mid-logo {
+  width: 42px;
+  height: 42px;
+  background: var(--green-dark);
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-family: var(--sans);
+  font-size: 16px;
+}
+
+.ad-mid-text { flex: 1; }
+.ad-mid-hl   { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.ad-mid-body { font-size: 10px; color: var(--ink3); line-height: 1.4; }
+
+.ad-mid-cta {
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: var(--r);
+  padding: 8px 14px;
+  font-size: 11px;
+  font-family: var(--sans);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.ad-mid-cta:hover { background: var(--green-mid); }
+
+@media (max-width: 720px) {
+  .ad-mid-inner { flex-wrap: wrap; }
+  .ad-mid-cta   { width: 100%; text-align: center; }
+}

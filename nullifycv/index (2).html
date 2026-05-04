@@ -29,7 +29,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- ── TOP BAR ─────────────────────────────────────────────────────────────── -->
@@ -174,6 +173,19 @@
       <button class="btn-sec" onclick="document.getElementById('nm').classList.toggle('show')" aria-label="Toggle network monitor">Network log</button>
     </div>
 
+    <!-- ── AD: MID-PAGE (below action buttons) ──────────────────────────────── -->
+    <div class="ad-mid" aria-label="Advertisement">
+      <p class="ad-label">sponsored · contextual · no cookies</p>
+      <div class="ad-mid-inner">
+        <div class="ad-mid-logo" aria-hidden="true">G</div>
+        <div class="ad-mid-text">
+          <div class="ad-mid-hl">Greenhouse ATS — hire without bias</div>
+          <div class="ad-mid-body">Structured interviews, blind review workflows, and EEOC reporting. Used by 7,000+ companies.</div>
+        </div>
+        <button class="ad-mid-cta" onclick="window.open('https://greenhouse.com','_blank')">Learn more →</button>
+      </div>
+    </div>
+
     <!-- ── AD: POST-DOWNLOAD ─────────────────────────────────────────────── -->
     <div class="post-ad" id="pad" aria-label="Advertisement">
       <p class="ad-label">sponsored · contextual — no tracking · shown after download</p>
@@ -294,6 +306,5 @@
 <!-- mammoth.js for DOCX extraction -->
 <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <script src="app.js"></script>
-<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
