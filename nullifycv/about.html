@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works — NullifyCV</title>
+  <meta name="description" content="Learn how NullifyCV removes PII from resumes for blind hiring. 100% client-side processing — files never leave your browser. GDPR-compliant, free, open source.">
+  <meta property="og:title" content="How NullifyCV Works — Privacy-First Resume Redaction">
+  <meta property="og:description" content="Simple, private, and GDPR-consistent. Your files never leave your device.">
+  <meta property="og:url" content="https://nullifycv.com/about.html">
+  <link rel="canonical" href="https://nullifycv.com/about.html">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z' fill='%231e4d35'/><rect x='11' y='9' width='10' height='13' rx='1.5' fill='white'/><line x1='13' y1='14' x2='19' y2='14' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='17' x2='19' y2='17' stroke='%231e4d35' stroke-width='1.3'/><line x1='13' y1='20' x2='16.5' y2='20' stroke='%231e4d35' stroke-width='1.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── About page specific styles ── */
+    .about-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .about-hero {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .about-hero-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 12px;
+    }
+
+    .about-hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .about-hero-sub {
+      font-size: 15px;
+      color: var(--ink3);
+      max-width: 520px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+
+    .about-cta {
+      display: inline-block;
+      background: var(--green-dark);
+      color: white;
+      padding: 12px 28px;
+      border-radius: var(--r);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .about-cta:hover { background: var(--green-mid); }
+
+    /* ── Section headings ── */
+    .about-section { margin-bottom: 56px; }
+
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .section-lead {
+      font-size: 13px;
+      color: var(--ink3);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .section-rule {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 28px;
+    }
+
+    /* ── Steps ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 0 20px;
+      position: relative;
+      padding-bottom: 32px;
+    }
+
+    .step:last-child { padding-bottom: 0; }
+
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+      font-family: var(--sans);
+      z-index: 1;
+    }
+
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: var(--green-bg2);
+      margin-top: 6px;
+    }
+
+    .step:last-child .step-line { display: none; }
+
+    .step-right { padding-top: 8px; }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 5px;
+    }
+
+    .step-body {
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+
+    .step-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-bg2);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 11px;
+      color: var(--green-dark);
+      font-family: var(--mono);
+    }
+
+    /* ── Privacy cards ── */
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .privacy-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .privacy-card-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--green-bg);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .privacy-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 5px;
+    }
+
+    .privacy-card p {
+      font-size: 12px;
+      color: var(--ink3);
+      line-height: 1.6;
+    }
+
+    /* ── Tech table ── */
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 16px;
+    }
+
+    .tech-table th {
+      text-align: left;
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--ink3);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--paper2);
+    }
+
+    .tech-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink2);
+      vertical-align: top;
+    }
+
+    .tech-table tr:last-child td { border-bottom: none; }
+    .tech-table tr:nth-child(even) td { background: var(--paper2); }
+
+    .tech-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      background: var(--green-bg);
+      color: var(--green-dark);
+      padding: 2px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    /* ── GDPR cards ── */
+    .gdpr-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .gdpr-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .gdpr-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .badge-gdpr  { background: #e6f1fb; color: #185fa5; }
+    .badge-ccpa  { background: #fdf3e3; color: #7a5000; }
+    .badge-bipa  { background: #f3e8f8; color: #4a1f7a; }
+    .badge-eeoc  { background: var(--green-bg); color: var(--green-dark); }
+    .badge-adea  { background: #fde8e8; color: #7a1f1f; }
+
+    .gdpr-text h4 { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+    .gdpr-text p  { font-size: 11px; color: var(--ink3); line-height: 1.55; }
+
+    .gdpr-check {
+      color: var(--green-mid);
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-left: auto;
+      margin-top: 2px;
+    }
+
+    /* ── FAQ ── */
+    .faq-list { display: flex; flex-direction: column; gap: 0; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 16px 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--sans);
+    }
+
+    .faq-q:hover { color: var(--green-dark); }
+
+    .faq-arrow {
+      color: var(--green-muted);
+      font-size: 16px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    .faq-a {
+      font-size: 13px;
+      color: var(--ink3);
+      line-height: 1.7;
+      padding-bottom: 16px;
+      display: none;
+    }
+
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Disclaimer ── */
+    .disclaimer-box {
+      background: var(--paper2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      font-size: 11px;
+      color: var(--ink3);
+      line-height: 1.6;
+      margin-top: 32px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .about-hero-title { font-size: 26px; }
+      .privacy-grid { grid-template-columns: 1fr; }
+      .step { grid-template-columns: 36px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <path d="M11 9.5l3-3.5h5l2 3.5" fill="none" stroke="#7aaa8a" stroke-width="1.2"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a href="/about.html" style="color:var(--green-muted);">How it works</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/pro.html" class="nav-pro">Pro →</a>
+  </nav>
+  <div class="offline-pill">
+    <span class="pulse" aria-hidden="true"></span>
+    <span>Processing locally — no uploads</span>
+  </div>
+</header>
+
+<div class="about-wrap">
+
+  <!-- ── HERO ── -->
+  <div class="about-hero">
+    <div class="about-hero-tag">How it works</div>
+    <h1 class="about-hero-title">Simple, private,<br>and bias-free.</h1>
+    <p class="about-hero-sub">NullifyCV removes identifying information from CVs so hiring teams can focus purely on skills and experience. Your files never leave your device — not even for a millisecond.</p>
+    <a href="/" class="about-cta">Try it free →</a>
+  </div>
+
+  <!-- ── STEP BY STEP ── -->
+  <div class="about-section">
+    <div class="section-tag">Step by step</div>
+    <h2 class="section-title">How to use NullifyCV</h2>
+    <p class="section-lead">Three steps from upload to redacted CV. Works for recruiters preparing blind review packs and candidates protecting their privacy before sharing.</p>
+    <div class="section-rule"></div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <div class="step-title">Upload your CV</div>
+          <p class="step-body">Drop a PDF or DOCX file onto the tool. The file is read directly by your browser — it never travels across the internet to any server. NullifyCV works entirely offline once the page has loaded.</p>
+          <span class="step-note">✓ PDF and DOCX supported</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <div class="step-title">Choose what to redact</div>
+          <p class="step-body">Select your redaction targets using the toggle cards, or pick a preset mode. Standard PII removes names, contact details, and location. Bias Strip also removes school names, graduation years, and gender pronouns. EEOC mode removes everything.</p>
+          <span class="step-note">✓ 4 preset modes · 8 individual targets</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-right">
+          <div class="step-title">Download the redacted file</div>
+          <p class="step-body">Click Nullify & Download. For PDFs, you receive the original file with black redaction bars drawn directly over the identified PII — same layout, same formatting, just the sensitive information covered. A downloadable audit log is also generated for your records.</p>
+          <span class="step-note">✓ Redacted PDF · Audit log JSON</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRIVACY ── -->
+  <div class="about-section">
+    <div class="section-tag">Privacy architecture</div>
+    <h2 class="section-title">Your files never leave your device</h2>
+    <p class="section-lead">Most tools upload your CV to a server for processing. NullifyCV is built differently — everything runs inside your browser. Here's exactly what that means.</p>
+    <div class="section-rule"></div>
+
+    <div class="privacy-grid">
+      <div class="privacy-card">
+        <div class="privacy-card-icon">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 1L2 4.5v5C2 14.5 5.5 18.5 10 19.5c4.5-1 8-5 8-10v-5L10 1z" fill="#eef5f1" stroke="#2d6b4a" stroke-width="1.3"/></svg>
+        </div>
+        <h3>In-browser processing</h3>
+        <p>pdf.js and mammoth.js run entirely inside your browser tab. They extract text from your file without sending any data over the network.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-card-icon">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="10" rx="2" stroke="#2d6b4a" stroke-width="1.3"/><path d="M7 8V6a3 3 0 016 0v2" stroke="#2d6b4a" stroke-width="1.3"/></svg>
+        </div>
+        <h3>Zero server endpoints</h3>
+        <p>NullifyCV is a static website. There is no server-side code that can receive your file. The hosting infrastructure has no mechanism to accept document uploads.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-card-icon">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M4 6h12M4 14h8" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Isolated ad scripts</h3>
+        <p>Ads on this site run in a separate browser context. A strict Content Security Policy prevents ad network scripts from accessing the file processing layer.</p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-card-icon">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#2d6b4a" stroke-width="1.3"/><path d="M7 10l2 2 4-4" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Open source & auditable</h3>
+        <p>Every line of code that handles your documents is public on GitHub. You don't need to trust our claims — you can verify them yourself.</p>
+      </div>
+    </div>
+
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Technology</th>
+          <th>What it does</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PDF extraction</td>
+          <td><span class="tech-tag">pdf.js 3.11.174</span></td>
+          <td>Reads text and coordinates from PDFs entirely in the browser</td>
+        </tr>
+        <tr>
+          <td>PDF redaction</td>
+          <td><span class="tech-tag">pdf-lib 1.17.1</span></td>
+          <td>Draws black rectangles over PII positions in the original PDF</td>
+        </tr>
+        <tr>
+          <td>DOCX extraction</td>
+          <td><span class="tech-tag">mammoth 1.6.0</span></td>
+          <td>Extracts raw text from Word documents locally</td>
+        </tr>
+        <tr>
+          <td>File output</td>
+          <td><span class="tech-tag">Blob URL</span></td>
+          <td>Redacted file created in memory and downloaded locally — URL revoked after 5 seconds</td>
+        </tr>
+        <tr>
+          <td>Hosting</td>
+          <td><span class="tech-tag">Vercel CDN</span></td>
+          <td>Static files only — no server-side processing of any kind</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── GDPR ── -->
+  <div class="about-section">
+    <div class="section-tag">Regulatory compliance</div>
+    <h2 class="section-title">Built for GDPR, CCPA, and EEOC</h2>
+    <p class="section-lead">NullifyCV supports a data minimisation workflow consistent with several major privacy and employment regulations. Each redaction action maps to a specific legal provision.</p>
+    <div class="section-rule"></div>
+
+    <div class="gdpr-grid">
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-gdpr">GDPR Art. 5(1)(c)</span>
+        <div class="gdpr-text">
+          <h4>Data minimisation</h4>
+          <p>Only data adequate for skills assessment is retained. Name, contact details, and location are stripped before sharing with hiring panels.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-gdpr">GDPR Art. 5(1)(b)</span>
+        <div class="gdpr-text">
+          <h4>Purpose limitation</h4>
+          <p>PII not required for role assessment is removed before the CV is shared internally, preventing data from being used beyond its original purpose.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-gdpr">GDPR Art. 17</span>
+        <div class="gdpr-text">
+          <h4>Right to erasure</h4>
+          <p>De-identified copies limit the personal data footprint shared across a hiring team, reducing erasure obligations if a candidate later requests deletion.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-ccpa">CCPA §1798.121</span>
+        <div class="gdpr-text">
+          <h4>Sensitive personal information</h4>
+          <p>Zip codes (precise geolocation proxy) and religious affiliations are treated as sensitive personal information and removed under CPRA expansion.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-bipa">IL BIPA §15</span>
+        <div class="gdpr-text">
+          <h4>Biometric data</h4>
+          <p>Embedded profile photos are removed in EEOC mode. No facial geometry or biometric data is retained in the output file.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-adea">ADEA / EEOC</span>
+        <div class="gdpr-text">
+          <h4>Age discrimination prevention</h4>
+          <p>Graduation years and class years are removed to prevent age-proxy bias during candidate screening, supporting EEOC blind review processes.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+      <div class="gdpr-row">
+        <span class="gdpr-badge badge-eeoc">NYC Local Law 144</span>
+        <div class="gdpr-text">
+          <h4>Bias audit documentation</h4>
+          <p>The downloadable audit log documents the redaction profile applied, confidence scores, and timestamp — supporting documented bias-audit requirements.</p>
+        </div>
+        <span class="gdpr-check">✓</span>
+      </div>
+    </div>
+
+    <div class="disclaimer-box">
+      <strong>Legal disclaimer:</strong> NullifyCV documents a data minimisation workflow and is intended as a supporting tool for compliance purposes. NullifyCV does not determine legal compliance — consult your Data Protection Officer or legal counsel for a formal compliance assessment.
+    </div>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <div class="about-section">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Frequently asked questions</h2>
+    <p class="section-lead">Answers to the questions we hear most from recruiters, HR teams, and candidates.</p>
+    <div class="section-rule"></div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          Is NullifyCV really free?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">Yes — the core tool is completely free with no account required. A Pro plan (€9/month) is available for batch processing of multiple files, saved redaction profiles, and GDPR-annotated audit log exports for DPOs.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          Do my files ever get stored or transmitted?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">No. Processing happens entirely inside your browser using pdf.js and mammoth.js. The file is read into browser memory, processed, and the redacted version is downloaded directly to your device. Zero bytes of your document data travel across the internet. You can verify this by opening your browser's DevTools → Network tab while processing a file — you will see no outbound requests containing file data.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          What file formats are supported?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">PDF and DOCX (Word) files are fully supported. For PDFs, the tool extracts the text layer and draws black redaction bars over PII positions in the original file — preserving your layout. For DOCX files, the text is extracted and redacted. Note: scanned PDFs (images without a text layer) cannot be automatically redacted — these should be exported as DOCX first.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          What personal information does it detect?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">NullifyCV detects: full names, email addresses, phone numbers (including Dutch 06 format), street addresses, postcodes (Dutch, US, UK), city names (Dutch and international), graduation years and age proxies, LinkedIn and other URLs, gender pronouns, school and university names, profile photos (in EEOC mode), file author metadata, dates of birth, and BSN / national ID numbers.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          Does it work for non-English CVs?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">Yes — NullifyCV has specific support for Dutch CVs including Dutch phone formats, Dutch city names, Dutch postcodes (1234 AB format), Dutch month names in graduation dates, Dutch field labels like "geboortedatum" and "nationaliteit", and BSN detection. English and other European CV formats are also well supported.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          Is NullifyCV GDPR compliant?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">NullifyCV supports a data minimisation workflow consistent with GDPR Article 5 principles. Because files are processed client-side and nothing is stored or transmitted, NullifyCV itself does not process personal data as a controller or processor — there is nothing to be compliant about on our end. Whether your use of the tool satisfies your own GDPR obligations depends on your specific circumstances — consult your DPO for a formal assessment.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          Can I use it for batch processing — many CVs at once?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">Batch processing of up to 200 files at once is available on the Pro plan at €9/month. The Pro plan also includes saved redaction profiles and GDPR-annotated audit logs suitable for DPO filing.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          How do I verify the privacy claims?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">Open the source code on GitHub — every line that handles your documents is public. You can also open your browser's DevTools (F12) → Network tab → upload a file and process it. You will see zero outbound network requests containing your document. The Network Monitor panel inside the tool also shows this in real time.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+          Why are ads shown if this is a privacy tool?
+          <span class="faq-arrow" aria-hidden="true">↓</span>
+        </button>
+        <div class="faq-a">NullifyCV is free to use and ads help keep it that way. The ads use contextual targeting only — they show relevant HR and ATS advertisements based on the page content, not based on your browsing behaviour or any personal data. Ad scripts are isolated from the document processing layer by a Content Security Policy. If you prefer no ads, the Pro plan provides an ad-free experience.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── BOTTOM CTA ── -->
+  <div style="text-align:center;padding:40px 0 0;">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--green-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Ready to try it?</div>
+    <h2 style="font-size:24px;font-weight:800;color:var(--green-dark);letter-spacing:-0.5px;margin-bottom:10px;">Nullify the bias.<br>Keep the talent.</h2>
+    <p style="font-size:13px;color:var(--ink3);margin-bottom:24px;">Free, private, and open source. No account required.</p>
+    <a href="/" class="about-cta">Start de-identifying →</a>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span aria-hidden="true">·</span>
+  <a href="/privacy.html">Privacy policy</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">Open source on GitHub</a>
+  <span aria-hidden="true">·</span>
+  <a href="/about.html">How it works</a>
+  <span aria-hidden="true">·</span>
+  <small>Consistent with GDPR Art. 5 · Not legal advice</small>
+</footer>
+
+<script>
+function toggleFAQ(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  // Open this one if it was closed
+  if (!isOpen) item.classList.add('open');
+  btn.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
