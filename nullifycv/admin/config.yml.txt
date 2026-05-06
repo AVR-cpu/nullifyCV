@@ -1,0 +1,24 @@
+backend:
+  name: git-gateway
+  branch: main
+
+site_url: https://nullifycv.netlify.app
+display_url: https://nullifycv.com
+
+media_folder: nullifycv/images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: blog
+    label: Blog articles
+    folder: nullifycv/blog
+    create: true
+    slug: "{{slug}}"
+    extension: html
+    format: frontmatter
+    fields:
+      - {label: Title, name: title, widget: string}
+      - {label: Meta description, name: description, widget: string}
+      - {label: Date, name: date, widget: datetime}
+      - {label: Language, name: lang, widget: select, options: [en, nl], default: en}
+      - {label: Body, name: body, widget: markdown}
