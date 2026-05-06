@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex">
+  <title>NullifyCV — Content Manager</title>
+</head>
+<body>
+  <script>window.CMS_MANUAL_INIT = true;</script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'AVR-cpu/nullifyCV',
+          branch: 'main',
+          auth_type: 'pkce',
+          app_id: 'Ov23li55ytdUU5JiVo1a'
+        },
+        media_folder: 'nullifycv/images/uploads',
+        public_folder: '/images/uploads',
+        collections: [{
+          name: 'blog',
+          label: 'Blog articles',
+          folder: 'nullifycv/blog',
+          create: true,
+          slug: '{{slug}}',
+          fields: [
+            { label: 'Title', name: 'title', widget: 'string' },
+            { label: 'Meta description', name: 'description', widget: 'string' },
+            { label: 'Publish date', name: 'date', widget: 'datetime' },
+            { label: 'Language', name: 'lang', widget: 'select', options: ['en', 'nl'], default: 'en' },
+            { label: 'Body', name: 'body', widget: 'markdown' }
+          ]
+        }]
+      }
+    });
+  </script>
+</body>
+</html>
