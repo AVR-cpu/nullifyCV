@@ -5,20 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex">
   <title>NullifyCV — Content Manager</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <script>window.CMS_MANUAL_INIT = true;</script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
     CMS.init({
       config: {
         backend: {
-          name: 'github',
-          repo: 'AVR-cpu/nullifyCV',
-          branch: 'main',
-          auth_type: 'pkce',
-          app_id: 'Ov23li55ytdUU5JiVo1a'
+          name: 'git-gateway',
+          branch: 'main'
         },
+        site_url: 'https://nullifycv.netlify.app',
+        display_url: 'https://nullifycv.com',
         media_folder: 'nullifycv/images/uploads',
         public_folder: '/images/uploads',
         collections: [{
@@ -27,6 +26,8 @@
           folder: 'nullifycv/blog',
           create: true,
           slug: '{{slug}}',
+          extension: 'html',
+          format: 'frontmatter',
           fields: [
             { label: 'Title', name: 'title', widget: 'string' },
             { label: 'Meta description', name: 'description', widget: 'string' },
