@@ -8,7 +8,6 @@
 </head>
 <body>
   <script>
-    // Tell Decap CMS exactly where config.yml lives
     window.CMS_MANUAL_INIT = true;
   </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
@@ -19,7 +18,8 @@
           name: 'github',
           repo: 'AVR-cpu/nullifyCV',
           branch: 'main',
-          base_url: 'https://sveltia-cms-auth.vercel.app'
+          auth_type: 'pkce',
+          app_id: 'Ov23li55ytdUU5JiVo1a'
         },
         media_folder: 'nullifycv/images/uploads',
         public_folder: '/images/uploads',
