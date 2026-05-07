@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — NullifyCV</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z' fill='%231e4d35' stroke='%237aaa8a' stroke-width='1.2'/><rect x='11' y='8' width='10' height='14' rx='1.5' fill='white'/><line x1='13' y1='13' x2='19' y2='13' stroke='%231e4d35' stroke-width='1.4' stroke-linecap='round'/><line x1='13' y1='16' x2='19' y2='16' stroke='%231e4d35' stroke-width='1.4' stroke-linecap='round'/><line x1='13' y1='19' x2='17' y2='19' stroke='%231e4d35' stroke-width='1.4' stroke-linecap='round'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: var(--bg); }
+    .success-wrap {
+      max-width: 520px;
+      margin: 80px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: var(--green-bg);
+      border: 2px solid var(--green-mid);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px;
+    }
+    .success-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--green-muted);
+      margin-bottom: 10px;
+    }
+    .success-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -0.8px;
+      margin-bottom: 10px;
+    }
+    .success-sub {
+      font-size: 14px;
+      color: var(--ink3);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .key-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .key-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--ink3);
+      margin-bottom: 10px;
+    }
+    .key-display {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--green-dark);
+      background: var(--green-bg);
+      border: 1.5px solid var(--green-bg2);
+      border-radius: var(--r);
+      padding: 12px 16px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      word-break: break-all;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .key-copy-btn {
+      background: var(--green-dark);
+      color: white;
+      border: none;
+      border-radius: var(--r);
+      padding: 10px 24px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: background 0.15s;
+      width: 100%;
+    }
+    .key-copy-btn:hover { background: var(--green-mid); }
+    .key-copy-btn.copied { background: var(--green-mid); }
+    .key-instructions {
+      background: var(--paper2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 18px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .key-instructions h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .key-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.5;
+    }
+    .key-step-num {
+      width: 20px; height: 20px;
+      background: var(--green-dark);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .go-btn {
+      display: block;
+      background: var(--green-dark);
+      color: white;
+      padding: 13px 32px;
+      border-radius: var(--r);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s;
+      margin-bottom: 16px;
+    }
+    .go-btn:hover { background: var(--green-mid); }
+    .save-note {
+      font-size: 11px;
+      color: var(--ink3);
+      line-height: 1.6;
+      font-family: var(--mono);
+    }
+    .loading-key {
+      color: var(--ink3);
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+    .plan-badge {
+      display: inline-block;
+      background: var(--green-bg);
+      color: var(--green-dark);
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 3px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+      border: 1px solid var(--green-bg2);
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav">
+    <a href="/about.html">How it works</a>
+    <a href="/pro.html">Pricing</a>
+    <a href="/" class="nav-pro">Use the tool →</a>
+  </nav>
+</header>
+
+<div class="success-wrap">
+  <div class="success-icon">✓</div>
+  <div class="success-tag">Payment confirmed</div>
+  <h1 class="success-title">You're all set.</h1>
+  <p class="success-sub">Your licence key is ready below. Copy it and paste it into NullifyCV to unlock your plan.</p>
+
+  <div id="plan-badge-wrap"></div>
+
+  <div class="key-card">
+    <div class="key-label">Your licence key</div>
+    <div class="key-display" id="key-display">
+      <span class="loading-key">Generating key...</span>
+    </div>
+    <button class="key-copy-btn" id="copy-btn" onclick="copyKey()">Copy key to clipboard</button>
+  </div>
+
+  <div class="key-instructions">
+    <h3>How to activate your plan</h3>
+    <div class="key-step">
+      <div class="key-step-num">1</div>
+      <span>Copy your licence key above</span>
+    </div>
+    <div class="key-step">
+      <div class="key-step-num">2</div>
+      <span>Go to nullifycv.com and click <strong>Enter licence key</strong> below the redaction mode tabs</span>
+    </div>
+    <div class="key-step">
+      <div class="key-step-num">3</div>
+      <span>Paste your key and click <strong>Activate</strong> — your plan unlocks instantly</span>
+    </div>
+    <div class="key-step">
+      <div class="key-step-num">4</div>
+      <span>The key is saved in your browser — you won't need to enter it again on this device</span>
+    </div>
+  </div>
+
+  <a href="/" class="go-btn" id="go-btn">Go to NullifyCV →</a>
+
+  <div class="save-note">
+    Save your key somewhere safe — you'll need it if you clear your browser data or switch devices.<br>
+    Key is tied to your payment and valid for the duration of your plan.
+  </div>
+</div>
+
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span>·</span>
+  <a href="/pro.html">Pricing</a>
+  <span>·</span>
+  <a href="/about.html">How it works</a>
+  <span>·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+<script>
+/* ── NullifyCV licence key system ─────────────────────────────────────────── */
+/* Keys are deterministic HMAC-SHA256 hashes of the Stripe session ID         */
+/* Salt is baked in — not secret (open source) but sufficient friction        */
+
+const SALT = 'nullifycv-2026-licence-v1';
+
+// Plan detection from URL params
+const params    = new URLSearchParams(window.location.search);
+const sessionId = params.get('session_id') || '';
+const planParam = params.get('plan') || 'seeker';
+
+const PLAN_LABELS = {
+  single:  { label: 'Single File Unlock',  tier: 'seeker',  days: 1   },
+  week:    { label: 'Week Pass',            tier: 'seeker',  days: 7   },
+  month:   { label: 'Month Pass',           tier: 'seeker',  days: 30  },
+  pro:     { label: 'Pro Monthly',          tier: 'pro',     days: 30  },
+  proyr:   { label: 'Pro Annual',           tier: 'pro',     days: 365 },
+  team:    { label: 'Team',                 tier: 'team',    days: 30  },
+};
+
+const plan = PLAN_LABELS[planParam] || PLAN_LABELS.week;
+
+// Show plan badge
+document.getElementById('plan-badge-wrap').innerHTML =
+  `<div class="plan-badge">${plan.label}</div>`;
+
+// Generate HMAC-SHA256 key
+async function generateKey(sessionId, salt) {
+  if (!sessionId) {
+    // Demo mode — no session ID in URL
+    return 'DEMO-KEY-VISIT-PRO-PAGE-TO-PURCHASE';
+  }
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw', encoder.encode(salt),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false, ['sign']
+  );
+  const sig = await crypto.subtle.sign(
+    'HMAC', keyMaterial, encoder.encode(sessionId)
+  );
+  // Convert to hex string, take first 32 chars, format as XXXX-XXXX-XXXX-XXXX
+  const hex = Array.from(new Uint8Array(sig))
+    .map(b => b.toString(16).padStart(2,'0'))
+    .join('').toUpperCase().slice(0, 32);
+  return `${hex.slice(0,8)}-${hex.slice(8,16)}-${hex.slice(16,24)}-${hex.slice(24,32)}`;
+}
+
+let currentKey = '';
+
+async function init() {
+  try {
+    const key = await generateKey(sessionId, SALT + '-' + planParam);
+    currentKey = key;
+
+    document.getElementById('key-display').textContent = key;
+
+    // Store in localStorage immediately for convenience
+    const expiry = Date.now() + (plan.days * 24 * 60 * 60 * 1000);
+    const licenceData = {
+      key,
+      tier: plan.tier,
+      plan: planParam,
+      issued: Date.now(),
+      expires: expiry,
+      days: plan.days
+    };
+    localStorage.setItem('ncv_licence', JSON.stringify(licenceData));
+
+    // Update go button to pass key as URL param for auto-activation
+    document.getElementById('go-btn').href =
+      `/?licence_key=${encodeURIComponent(key)}&plan=${planParam}`;
+
+  } catch(err) {
+    document.getElementById('key-display').textContent = 'Error generating key — please contact support';
+    console.error('[NullifyCV]', err);
+  }
+}
+
+function copyKey() {
+  if (!currentKey) return;
+  navigator.clipboard.writeText(currentKey).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy key to clipboard';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+init();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

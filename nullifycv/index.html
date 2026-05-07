@@ -90,9 +90,22 @@
     <p class="slabel">Redaction mode</p>
     <div class="tabs" role="tablist" aria-label="Redaction mode">
       <button class="tab on" role="tab" aria-selected="true" onclick="setMode('standard',this)">Standard PII</button>
-      <button class="tab" role="tab" aria-selected="false" onclick="setMode('bias',this)">Bias strip</button>
-      <button class="tab" role="tab" aria-selected="false" onclick="setMode('client',this)">Client sub.</button>
-      <button class="tab" role="tab" aria-selected="false" onclick="setMode('eeoc',this)">EEOC</button>
+      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Bias strip 🔒</button>
+      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Client sub. 🔒</button>
+      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">EEOC 🔒</button>
+    </div>
+
+    <!-- Licence status bar -->
+    <div id="licence-status" style="display:none;align-items:center;gap:8px;font-size:12px;font-family:var(--mono);color:var(--ink2);background:var(--green-bg);border:1px solid var(--green-bg2);border-radius:var(--r);padding:8px 12px;margin-top:8px;"></div>
+
+    <!-- Licence key input -->
+    <div id="licence-box" style="margin-top:8px;background:var(--paper2);border:1px dashed var(--border);border-radius:var(--r);padding:12px 14px;">
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:8px;font-family:var(--mono);">Have a licence key? Enter it to unlock paid features.</div>
+      <div style="display:flex;gap:8px;">
+        <input id="licence-input" type="text" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" style="flex:1;font-family:var(--mono);font-size:12px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--paper);color:var(--ink);outline:none;" />
+        <button id="licence-activate-btn" onclick="activateLicenceKey()" style="background:var(--green-dark);color:white;border:none;border-radius:var(--r);padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap;">Activate</button>
+      </div>
+      <div id="licence-err" style="font-size:11px;color:#c0392b;margin-top:6px;font-family:var(--mono);"></div>
     </div>
 
     <!-- Redaction targets -->
@@ -102,10 +115,10 @@
       <div class="tcard on" data-key="contact" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Contact info</div><div class="tdesc">Email, phone, address</div></div></div>
       <div class="tcard on" data-key="location" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Location / zip</div><div class="tdesc">Demographic proxy</div></div></div>
       <div class="tcard on" data-key="gradyear" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Graduation year</div><div class="tdesc">Age proxy</div></div></div>
-      <div class="tcard" data-key="school" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias</div></div></div>
-      <div class="tcard" data-key="pronouns" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they in bio</div></div></div>
-      <div class="tcard" data-key="urls" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links</div></div></div>
-      <div class="tcard" data-key="metadata" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX props</div></div></div>
+      <div class="tcard tcard-locked" data-key="school" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias · paid</div></div></div>
+      <div class="tcard tcard-locked" data-key="pronouns" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they · paid</div></div></div>
+      <div class="tcard tcard-locked" data-key="urls" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links · paid</div></div></div>
+      <div class="tcard tcard-locked" data-key="metadata" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX · paid</div></div></div>
     </div>
 
     <!-- UPGRADE MODAL -->
@@ -118,6 +131,24 @@
         <a href="https://buy.stripe.com/bJe3cwcXodl72nO68d18c04" style="display:block;background:var(--green-bg);color:var(--green-dark);border:1.5px solid var(--green-mid);text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Single file — $1.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">tax included</span></a>
         <a href="https://buy.stripe.com/fZu28s9Lc0yl1jKfIN18c05" style="display:block;background:var(--green-dark);color:white;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Week pass — $4.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">7 days unlimited</span></a>
         <a href="https://buy.stripe.com/eVq9AUbTkftfgeE40518c06" style="display:block;background:transparent;color:var(--green-dark);border:1px solid var(--border);text-align:center;padding:10px;border-radius:var(--r);font-size:12px;font-weight:600;text-decoration:none;">Month pass — $9.99 &nbsp;·&nbsp; <span style="text-decoration:underline;">or see all Pro plans</span></a>
+      </div>
+      <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:4px;">No thanks — stay on free plan</button>
+    </div>
+
+    <!-- UPGRADE MODAL -->
+    <div id="upgrade-overlay" onclick="closeUpgrade()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;"></div>
+    <div id="upgrade-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1001;background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:28px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--green-muted);margin-bottom:8px;">Paid feature</div>
+      <h3 id="upgrade-title" style="font-size:18px;font-weight:800;color:var(--green-dark);margin-bottom:8px;letter-spacing:-0.5px;">Unlock advanced redaction</h3>
+      <p id="upgrade-desc" style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:20px;"></p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+        <a href="https://buy.stripe.com/bJe3cwcXodl72nO68d18c04?success_url=https://nullifycv.com/success.html?plan=single" style="display:block;background:var(--green-bg);color:var(--green-dark);border:1.5px solid var(--green-mid);text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Single file — $1.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">tax included</span></a>
+        <a href="https://buy.stripe.com/fZu28s9Lc0yl1jKfIN18c05?success_url=https://nullifycv.com/success.html?plan=week" style="display:block;background:var(--green-dark);color:white;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Week pass — $4.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">7 days unlimited</span></a>
+        <a href="/pro.html" style="display:block;background:transparent;color:var(--green-dark);border:1px solid var(--border);text-align:center;padding:10px;border-radius:var(--r);font-size:12px;font-weight:600;text-decoration:none;">Month pass $9.99 &nbsp;·&nbsp; Pro $49/mo &nbsp;·&nbsp; See all plans →</a>
+      </div>
+      <div style="text-align:center;margin-bottom:8px;">
+        <span style="font-size:11px;color:var(--ink3);font-family:var(--mono);">Already paid? </span>
+        <button onclick="closeUpgrade();document.getElementById('licence-box').scrollIntoView({behavior:'smooth'});" style="background:none;border:none;color:var(--green-dark);font-size:11px;font-weight:600;cursor:pointer;text-decoration:underline;">Enter licence key →</button>
       </div>
       <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:4px;">No thanks — stay on free plan</button>
     </div>

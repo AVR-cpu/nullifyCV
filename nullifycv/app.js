@@ -473,3 +473,183 @@ function closeUpgrade() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeUpgrade();
 });
+
+/* ── NullifyCV Licence Key System ─────────────────────────────────────────── */
+const LICENCE_SALT = 'nullifycv-2026-licence-v1';
+const PLAN_DAYS = { single:1, week:7, month:30, pro:30, proyr:365, team:30 };
+const PLAN_TIERS = { single:'seeker', week:'seeker', month:'seeker', pro:'pro', proyr:'pro', team:'team' };
+
+let activeLicence = null;
+
+/* ── Validate a key against a session ID ── */
+async function validateKey(inputKey, planCode) {
+  // Check localStorage first
+  try {
+    const stored = JSON.parse(localStorage.getItem('ncv_licence') || 'null');
+    if (stored && stored.key === inputKey && stored.expires > Date.now()) {
+      return { valid: true, tier: stored.tier, plan: stored.plan, expires: stored.expires };
+    }
+  } catch(e) {}
+
+  // Re-derive: we can't validate without a session ID server-side
+  // So we trust the key format and expiry stored in localStorage
+  // If not in localStorage, ask user to visit success page
+  return { valid: false };
+}
+
+/* ── Load licence from localStorage on page load ── */
+function loadStoredLicence() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('ncv_licence') || 'null');
+    if (stored && stored.expires > Date.now()) {
+      activeLicence = stored;
+      applyLicence(stored.tier);
+      showLicenceStatus(stored);
+      return true;
+    } else if (stored) {
+      // Expired
+      localStorage.removeItem('ncv_licence');
+    }
+  } catch(e) {}
+  return false;
+}
+
+/* ── Apply licence — unlock features ── */
+function applyLicence(tier) {
+  activeLicence = { tier };
+  const isSeeker = ['seeker','pro','team'].includes(tier);
+  const isPro    = ['pro','team'].includes(tier);
+
+  // Unlock mode tabs
+  document.querySelectorAll('.tab-locked').forEach(tab => {
+    tab.classList.remove('tab-locked');
+    const txt = tab.textContent.replace(' 🔒','').trim();
+    tab.textContent = txt;
+    if (txt === 'Bias strip') tab.onclick = function(){ setMode('bias', this); };
+    if (txt === 'Client sub.') tab.onclick = function(){ setMode('client', this); };
+    if (txt === 'EEOC') tab.onclick = function(){ setMode('eeoc', this); };
+  });
+
+  // Unlock target cards
+  document.querySelectorAll('.tcard-locked').forEach(card => {
+    card.classList.remove('tcard-locked');
+    card.querySelector('.tbox').textContent = '';
+    card.onclick = function(){ toggleCard(this); };
+  });
+
+  // Update licence input area
+  const licBox = document.getElementById('licence-box');
+  if (licBox) licBox.style.display = 'none';
+}
+
+/* ── Show licence status bar ── */
+function showLicenceStatus(licence) {
+  const bar = document.getElementById('licence-status');
+  if (!bar) return;
+  const expDate = new Date(licence.expires).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  const tierLabel = licence.tier === 'pro' ? 'Pro' : licence.tier === 'team' ? 'Team' : 'Job Seeker';
+  bar.innerHTML = `<span style="color:var(--green-mid)">✓</span> ${tierLabel} plan active — expires ${expDate} · <a href="/pro.html" style="color:var(--green-muted);text-decoration:underline;font-size:11px;">upgrade</a>`;
+  bar.style.display = 'flex';
+}
+
+/* ── Activate key from input field ── */
+async function activateLicenceKey() {
+  const input = document.getElementById('licence-input');
+  const btn   = document.getElementById('licence-activate-btn');
+  const err   = document.getElementById('licence-err');
+  const key   = (input.value || '').trim().toUpperCase();
+
+  if (!key) { err.textContent = 'Please enter your licence key.'; return; }
+
+  btn.textContent = 'Validating...';
+  btn.disabled = true;
+  err.textContent = '';
+
+  // Check format: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX
+  const keyFormat = /^[A-F0-9]{8}-[A-F0-9]{8}-[A-F0-9]{8}-[A-F0-9]{8}$/;
+  if (!keyFormat.test(key)) {
+    err.textContent = 'Invalid key format. Keys look like: ABCD1234-EFGH5678-IJKL9012-MNOP3456';
+    btn.textContent = 'Activate';
+    btn.disabled = false;
+    return;
+  }
+
+  // Trust the key — store it with a default 30 day expiry
+  // In a real system this would verify server-side; here we trust valid-format keys
+  const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000);
+  const licenceData = {
+    key,
+    tier: 'seeker',
+    plan: 'manual',
+    issued: Date.now(),
+    expires: expiry,
+    days: 30
+  };
+
+  localStorage.setItem('ncv_licence', JSON.stringify(licenceData));
+  activeLicence = licenceData;
+  applyLicence('seeker');
+  showLicenceStatus(licenceData);
+
+  btn.textContent = '✓ Activated!';
+  setTimeout(() => {
+    btn.textContent = 'Activate';
+    btn.disabled = false;
+  }, 2000);
+}
+
+/* ── Check URL for auto-activation from success page ── */
+function checkURLLicence() {
+  const params  = new URLSearchParams(window.location.search);
+  const urlKey  = params.get('licence_key');
+  const urlPlan = params.get('plan') || 'week';
+
+  if (urlKey) {
+    const days   = PLAN_DAYS[urlPlan] || 30;
+    const tier   = PLAN_TIERS[urlPlan] || 'seeker';
+    const expiry = Date.now() + (days * 24 * 60 * 60 * 1000);
+    const licenceData = { key: urlKey, tier, plan: urlPlan, issued: Date.now(), expires: expiry, days };
+    localStorage.setItem('ncv_licence', JSON.stringify(licenceData));
+    activeLicence = licenceData;
+    applyLicence(tier);
+    showLicenceStatus(licenceData);
+    // Clean URL
+    window.history.replaceState({}, '', '/');
+    return true;
+  }
+  return false;
+}
+
+/* ── Upgrade modal ── */
+const UPGRADE_COPY = {
+  mode: {
+    title: 'Unlock advanced redaction modes',
+    desc: 'Bias Strip removes school names, graduation years and pronouns. Client Sub. protects candidate contact details. EEOC mode applies full blind review redaction. All available from $1.99 — one-time, no subscription.'
+  },
+  target: {
+    title: 'Unlock additional redaction targets',
+    desc: 'School names, gender pronouns, LinkedIn URLs and file metadata are paid targets. They remove prestige bias, gender signals and hidden author data. Available from $1.99 — one-time, no subscription.'
+  }
+};
+
+function showUpgrade(type) {
+  const copy = UPGRADE_COPY[type] || UPGRADE_COPY.mode;
+  document.getElementById('upgrade-title').textContent = copy.title;
+  document.getElementById('upgrade-desc').textContent  = copy.desc;
+  document.getElementById('upgrade-overlay').style.display = 'block';
+  document.getElementById('upgrade-modal').style.display   = 'block';
+}
+
+function closeUpgrade() {
+  document.getElementById('upgrade-overlay').style.display = 'none';
+  document.getElementById('upgrade-modal').style.display   = 'none';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUpgrade(); });
+
+/* ── Init on load ── */
+document.addEventListener('DOMContentLoaded', () => {
+  if (!checkURLLicence()) {
+    loadStoredLicence();
+  }
+});
