@@ -11,9 +11,9 @@
   <meta property="og:url" content="https://nullifycv.com">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://nullifycv.com">
-  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/icons/favicon-32x32.png">
+  
+  
+  
   <!-- Structured data for SEO -->
   <script type="application/ld+json">
   {
@@ -27,8 +27,17 @@
     "featureList": ["Client-side PDF processing", "DOCX redaction", "GDPR compliance support", "Blind hiring workflow"]
   }
   </script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27><path d=%27M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z%27 fill=%27%231e4d35%27 stroke=%27%237aaa8a%27 stroke-width=%271.2%27/><rect x=%2711%27 y=%278%27 width=%2710%27 height=%2714%27 rx=%271.5%27 fill=%27white%27/><line x1=%2713%27 y1=%2713%27 x2=%2719%27 y2=%2713%27 stroke=%27%231e4d35%27 stroke-width=%271.4%27 stroke-linecap=%27round%27/><line x1=%2713%27 y1=%2716%27 x2=%2719%27 y2=%2716%27 stroke=%27%231e4d35%27 stroke-width=%271.4%27 stroke-linecap=%27round%27/><line x1=%2713%27 y1=%2719%27 x2=%2717%27 y2=%2719%27 stroke=%27%231e4d35%27 stroke-width=%271.4%27 stroke-linecap=%27round%27/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <style>
+    .tab-locked { opacity: 0.55; cursor: pointer; }
+    .tab-locked:hover { opacity: 0.75; }
+    .tcard-locked { opacity: 0.6; cursor: pointer; background: var(--paper2) !important; border-style: dashed !important; }
+    .tcard-locked:hover { opacity: 0.8; }
+    #upgrade-overlay { display: none; }
+    #upgrade-modal { display: none; }
+  </style>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -80,23 +89,37 @@
     <!-- Mode tabs -->
     <p class="slabel">Redaction mode</p>
     <div class="tabs" role="tablist" aria-label="Redaction mode">
-      <button class="tab on" role="tab" aria-selected="true"  onclick="setMode('standard',this)">Standard PII</button>
-      <button class="tab"    role="tab" aria-selected="false" onclick="setMode('bias',this)">Bias strip</button>
-      <button class="tab"    role="tab" aria-selected="false" onclick="setMode('client',this)">Client sub.</button>
-      <button class="tab"    role="tab" aria-selected="false" onclick="setMode('eeoc',this)">EEOC</button>
+      <button class="tab on" role="tab" aria-selected="true" onclick="setMode('standard',this)">Standard PII</button>
+      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Bias strip 🔒</button>
+      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Client sub. 🔒</button>
+      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">EEOC 🔒</button>
     </div>
 
     <!-- Redaction targets -->
     <p class="slabel">Redaction targets</p>
     <div class="tgrid" id="tgrid">
-      <div class="tcard on" data-key="name"     onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Full name</div><div class="tdesc">First, middle, last</div></div></div>
-      <div class="tcard on" data-key="contact"  onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Contact info</div><div class="tdesc">Email, phone, address</div></div></div>
-      <div class="tcard on" data-key="location" onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Location / zip</div><div class="tdesc">Demographic proxy</div></div></div>
-      <div class="tcard on" data-key="gradyear" onclick="toggleCard(this)" role="checkbox" aria-checked="true"  tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Graduation year</div><div class="tdesc">Age proxy</div></div></div>
-      <div class="tcard"    data-key="school"   onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias</div></div></div>
-      <div class="tcard"    data-key="pronouns" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they in bio</div></div></div>
-      <div class="tcard"    data-key="urls"     onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links</div></div></div>
-      <div class="tcard"    data-key="metadata" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX props</div></div></div>
+      <div class="tcard on" data-key="name" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Full name</div><div class="tdesc">First, middle, last</div></div></div>
+      <div class="tcard on" data-key="contact" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Contact info</div><div class="tdesc">Email, phone, address</div></div></div>
+      <div class="tcard on" data-key="location" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Location / zip</div><div class="tdesc">Demographic proxy</div></div></div>
+      <div class="tcard on" data-key="gradyear" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Graduation year</div><div class="tdesc">Age proxy</div></div></div>
+      <div class="tcard tcard-locked" data-key="school" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias · paid</div></div></div>
+      <div class="tcard tcard-locked" data-key="pronouns" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they · paid</div></div></div>
+      <div class="tcard tcard-locked" data-key="urls" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links · paid</div></div></div>
+      <div class="tcard tcard-locked" data-key="metadata" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX · paid</div></div></div>
+    </div>
+
+    <!-- UPGRADE MODAL -->
+    <div id="upgrade-overlay" onclick="closeUpgrade()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;"></div>
+    <div id="upgrade-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1001;background:var(--paper);border:1px solid var(--border);border-radius:var(--rl);padding:28px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--green-muted);margin-bottom:8px;">Paid feature</div>
+      <h3 id="upgrade-title" style="font-size:18px;font-weight:800;color:var(--green-dark);margin-bottom:8px;letter-spacing:-0.5px;">Unlock advanced redaction</h3>
+      <p id="upgrade-desc" style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:20px;"></p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+        <a href="https://buy.stripe.com/bJe3cwcXodl72nO68d18c04" style="display:block;background:var(--green-bg);color:var(--green-dark);border:1.5px solid var(--green-mid);text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Single file — $1.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">tax included</span></a>
+        <a href="https://buy.stripe.com/fZu28s9Lc0yl1jKfIN18c05" style="display:block;background:var(--green-dark);color:white;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Week pass — $4.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">7 days unlimited</span></a>
+        <a href="https://buy.stripe.com/eVq9AUbTkftfgeE40518c06" style="display:block;background:transparent;color:var(--green-dark);border:1px solid var(--border);text-align:center;padding:10px;border-radius:var(--r);font-size:12px;font-weight:600;text-decoration:none;">Month pass — $9.99 &nbsp;·&nbsp; <span style="text-decoration:underline;">or see all Pro plans</span></a>
+      </div>
+      <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:4px;">No thanks — stay on free plan</button>
     </div>
 
     <!-- File loaded state -->
@@ -279,7 +302,7 @@
       <div class="pro-badge">Pro</div>
       <strong>Need batch processing?</strong>
       <p>Process 200 files at once, save redaction profiles, and export GDPR-annotated audit logs for your DPO.</p>
-      <a href="/pro.html" class="pro-cta">See Pro plan — $9/mo</a>
+      <a href="/pro.html" class="pro-cta">See plans — from $1.99 →</a>
     </div>
 
   </aside>
