@@ -27,7 +27,9 @@
     "featureList": ["Client-side PDF processing", "DOCX redaction", "GDPR compliance support", "Blind hiring workflow"]
   }
   </script>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27><path d=%27M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z%27 fill=%27%231e4d35%27 stroke=%27%237aaa8a%27 stroke-width=%271.2%27/><rect x=%2711%27 y=%278%27 width=%2710%27 height=%2714%27 rx=%271.5%27 fill=%27white%27/><line x1=%2713%27 y1=%2713%27 x2=%2719%27 y2=%2713%27 stroke=%27%231e4d35%27 stroke-width=%271.4%27 stroke-linecap=%27round%27/><line x1=%2713%27 y1=%2716%27 x2=%2719%27 y2=%2716%27 stroke=%27%231e4d35%27 stroke-width=%271.4%27 stroke-linecap=%27round%27/><line x1=%2713%27 y1=%2719%27 x2=%2717%27 y2=%2719%27 stroke=%27%231e4d35%27 stroke-width=%271.4%27 stroke-linecap=%27round%27/></svg>">
+  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
   <style>
@@ -37,6 +39,15 @@
     .tcard-locked:hover { opacity: 0.8; }
     #upgrade-overlay { display: none; }
     #upgrade-modal { display: none; }
+    /* Trust strip */
+    .trust-strip { display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:11px;font-family:var(--mono); }
+    .ts-item { color:var(--green-dark);font-weight:500; }
+    .ts-sep  { color:var(--border); }
+    .ts-verify { color:var(--green-muted); }
+    #verify-tooltip { display:none; }
+    #verify-tooltip.show { display:block; }
+    /* Post-download trust box */
+    .post-ad { background:var(--green-bg);border:1px solid var(--green-bg2);border-radius:var(--rl);padding:16px 18px;margin-top:16px; }
   </style>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -68,22 +79,32 @@
   </div>
 </header>
 
-<!-- ── AD: LEADERBOARD ────────────────────────────────────────────────────── -->
-<div class="ad-leaderboard" aria-label="Advertisement">
-  <p class="ad-label">sponsored</p>
-  <div class="ad-unit-leader">
-    <!-- Replace with your Carbon Ads / Ethical Ads script tag -->
-    <span class="ad-placeholder">728×90 · Contextual ad — ATS / HR / compliance advertisers · $12–18 CPM · No cookies</span>
-  </div>
-</div>
-
 <!-- ── MAIN LAYOUT ────────────────────────────────────────────────────────── -->
 <div class="layout">
   <main class="main-col" id="main-content">
 
     <div class="page-head">
-      <h1 class="page-title">Nullify the bias.<br><span>Keep the talent.</span></h1>
-      <p class="page-sub">Client-side PII redaction for blind hiring — files never leave your browser.</p>
+      <h1 class="page-title">Your CV. Your browser.<br><span>Nobody else's business.</span></h1>
+      <p class="page-sub">NullifyCV removes personal data from CVs for blind hiring and privacy compliance. Processing happens entirely in your browser — your files never travel, never upload, never leave.</p>
+      <!-- Trust strip -->
+      <div class="trust-strip">
+        <span class="ts-item">🔒 Local only</span>
+        <span class="ts-sep">·</span>
+        <span class="ts-item">📡 <span id="bytes-counter">0</span> bytes sent</span>
+        <span class="ts-sep">·</span>
+        <span class="ts-item">🔓 <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Open source</a></span>
+        <span class="ts-sep">·</span>
+        <span class="ts-item ts-verify" onclick="document.getElementById('verify-tooltip').classList.toggle('show')" style="cursor:pointer;text-decoration:underline;">How to verify ↗</span>
+      </div>
+      <!-- Verify tooltip -->
+      <div id="verify-tooltip" style="display:none;background:var(--paper);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:8px;font-size:12px;color:var(--ink2);line-height:1.7;text-align:left;box-shadow:var(--shadow);">
+        <strong style="color:var(--green-dark);display:block;margin-bottom:6px;">How to verify 0 bytes are transmitted</strong>
+        1. Open DevTools (F12) → Network tab<br>
+        2. Upload and process a CV<br>
+        3. Filter by "Fetch/XHR" — you will see zero outbound requests containing file data<br>
+        4. Or check the Network Monitor panel below the tool<br>
+        <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener" style="color:var(--green-dark);font-weight:600;">View source code on GitHub →</a>
+      </div>
     </div>
 
     <!-- Mode tabs -->
@@ -178,7 +199,7 @@
         </svg>
       </div>
       <div class="drop-title">Drop your CV here</div>
-      <div class="drop-sub">PDF or DOCX · Processed locally via pdf-lib &amp; mammoth.js</div>
+      <div class="drop-sub">PDF or DOCX · Processed locally in your browser · Your file never leaves this device — not even for a millisecond</div>
       <input type="file" id="fi" style="display:none" accept=".pdf,.docx,.doc" onchange="fsel(event)" aria-hidden="true">
     </div>
 
@@ -227,31 +248,16 @@
       <button class="btn-sec" onclick="document.getElementById('nm').classList.toggle('show')" aria-label="Toggle network monitor">Network log</button>
     </div>
 
-    <!-- ── AD: MID-PAGE (below action buttons) ──────────────────────────────── -->
-    <div class="ad-mid" aria-label="Advertisement">
-      <p class="ad-label">sponsored · contextual · no cookies</p>
-      <div class="ad-mid-inner">
-        <div class="ad-mid-logo" aria-hidden="true">G</div>
-        <div class="ad-mid-text">
-          <div class="ad-mid-hl">Greenhouse ATS — hire without bias</div>
-          <div class="ad-mid-body">Structured interviews, blind review workflows, and EEOC reporting. Used by 7,000+ companies.</div>
-        </div>
-        <button class="ad-mid-cta" onclick="window.open('https://greenhouse.com','_blank')">Learn more →</button>
+    <!-- ── POST-DOWNLOAD TRUST CONFIRMATION ──────────────────────────────── -->
+    <div class="post-ad" id="pad">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="font-size:20px;">✓</span>
+        <strong style="font-size:14px;color:var(--green-dark);">File processed locally — nothing transmitted</strong>
       </div>
-    </div>
-
-    <!-- ── AD: POST-DOWNLOAD ─────────────────────────────────────────────── -->
-    <div class="post-ad" id="pad" aria-label="Advertisement">
-      <p class="ad-label">sponsored · contextual — no tracking · shown after download</p>
-      <div class="post-ad-inner">
-        <div class="pad-logo" aria-hidden="true">W</div>
-        <div>
-          <div class="pad-hl">Workable ATS — built for bias-free hiring</div>
-          <div class="pad-body">Send nullified candidates to your panel. EEOC reporting built in.</div>
-        </div>
-        <button class="pad-cta" onclick="window.open('https://workable.com','_blank')">Try free →</button>
+      <p class="pad-ok" id="padok" style="font-size:12px;color:var(--ink3);margin:0;font-family:var(--mono);"></p>
+      <div style="margin-top:10px;font-size:11px;color:var(--ink3);font-family:var(--mono);">
+        0 bytes of document data sent to any server · Redacted file created in browser memory · Blob URL revoked after download
       </div>
-      <p class="pad-ok" id="padok"></p>
     </div>
 
     <!-- Trust section -->
@@ -283,8 +289,8 @@
           <div class="trust-icon" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#2d6b4a" stroke-width="1.3"/><path d="M7 10l2 2 4-4" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
           </div>
-          <h3>Ad scripts are isolated</h3>
-          <p>A strict Content Security Policy separates the ad layer from the document processing layer. Ad networks cannot access your file data.</p>
+          <h3>No data processor relationship</h3>
+          <p>NullifyCV does not act as a data processor under GDPR. No personal data is transmitted to us — there is nothing for us to process, store, or be liable for.</p>
         </div>
       </div>
     </section>
@@ -294,36 +300,33 @@
   <!-- ── SIDEBAR ──────────────────────────────────────────────────────────── -->
   <aside class="side-col" aria-label="Sidebar">
 
-    <!-- AD: Sidebar 300x250 -->
-    <div class="ad-side" aria-label="Advertisement">
-      <p class="ad-label">sponsored</p>
-      <!-- Replace with Carbon Ads / Ethical Ads embed -->
-      <div class="ad-placeholder-side">
-        <div class="ad-fake-logo" aria-hidden="true"></div>
-        <div class="ad-fake-hl">Run compliant blind interviews</div>
-        <div class="ad-fake-body">Structured scoring. Bias audit reports. Works with nullified CVs.</div>
-        <button class="ad-fake-cta">Get a demo</button>
-        <p class="ad-cpm">300×250 · $18–22 CPM · Contextual, no cookies</p>
-      </div>
-    </div>
-
-    <!-- Trust box -->
+    <!-- Trust box — expanded -->
     <div class="trust-box">
       <strong>Privacy architecture</strong>
-      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>pdf-lib processes files in memory</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>pdf-lib processes files in browser memory</span></div>
       <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>mammoth.js extracts DOCX locally</span></div>
-      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Zero server endpoints</span></div>
-      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Ad scripts CSP-isolated</span></div>
-      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Open source on GitHub</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Zero server endpoints — static site only</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Not a GDPR data processor — nothing transmitted</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Hosted on Vercel CDN — no server-side code</span></div>
+      <div class="trow"><span class="tick" aria-hidden="true">✓</span><span>Open source — audit the code yourself</span></div>
     </div>
 
-    <!-- AD: Sidebar 2 -->
-    <div class="ad-side2" aria-label="Advertisement">
-      <p class="ad-label">sponsored</p>
-      <div class="ad-fake-hl2">Checkr Background</div>
-      <div class="ad-fake-body2">Fast, FCRA-compliant checks.</div>
-      <button class="ad-fake-cta2">Learn more</button>
-      <p class="ad-cpm">160×100 · $14 CPM</p>
+    <!-- GitHub link -->
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener"
+       style="display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;text-decoration:none;margin-top:0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--green-dark)"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--green-dark);">Open source on GitHub</div>
+        <div style="font-size:11px;color:var(--ink3);">AVR-cpu/nullifyCV · Audit the code</div>
+      </div>
+    </a>
+
+    <!-- Verify link -->
+    <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-top:0;">
+      <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:6px;">How to verify the privacy claims</div>
+      <div style="font-size:11px;color:var(--ink3);line-height:1.65;">
+        Open DevTools (F12) → Network tab → upload a file and process it. Filter by Fetch/XHR. You will see zero outbound requests containing document data.
+      </div>
     </div>
 
     <!-- Pro upsell -->
@@ -413,7 +416,7 @@
   <span aria-hidden="true">·</span>
   <span class="foot-mono">pdf-lib 1.17.1 · mammoth 1.6.0</span>
   <span aria-hidden="true">·</span>
-  <small>Consistent with GDPR Art. 5 · Not legal advice</small>
+  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
 </footer>
 
 <!-- ── LIBRARIES ─────────────────────────────────────────────────────────── -->
