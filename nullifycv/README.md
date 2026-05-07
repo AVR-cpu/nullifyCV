@@ -144,7 +144,7 @@ Pro and Team users can drop up to 200 files at once. All files are processed in 
 Static site — no build step required.
 
 ```bash
-git clone https://github.com/AVR-cpu/nullifyCV.git
+git clone https://github.com/NullifyCV/nullifyCV.git
 cd nullifyCV/nullifycv
 
 # Python
