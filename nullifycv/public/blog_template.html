@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- EDIT: title, description, canonical, lang -->
+  <title>ARTICLE TITLE | NullifyCV</title>
+  <meta name="description" content="ARTICLE DESCRIPTION (max 155 chars)">
+  <link rel="canonical" href="https://nullifycv.com/blog/SLUG.html">
+  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/blog/blog.css">
+</head>
+<body>
+
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark"><span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span></span>
+  </a>
+  <nav class="top-nav">
+    <a href="/about.html">How it works</a>
+    <a href="/blog/">Blog</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/pro.html" class="nav-pro">Pro →</a>
+  </nav>
+  <div class="offline-pill"><span class="pulse"></span><span>Processing locally — no uploads</span></div>
+</header>
+
+<div class="blog-post-wrap">
+
+  <!-- EDIT: category, tag, title, meta -->
+  <div class="post-category-tag">CATEGORY · TAGS</div>
+  <h1 class="post-title">ARTICLE TITLE</h1>
+  <div class="post-meta">
+    <span>📅 DATE</span>
+    <span>⏱ X min read</span>
+    <span>✍ NullifyCV Team</span>
+  </div>
+  <div class="post-rule"></div>
+
+  <!-- EDIT: Article body below -->
+  <div class="post-body">
+
+    <p>Introduction paragraph...</p>
+
+    <h2>Section heading</h2>
+    <p>Content...</p>
+
+    <!-- CTA block — keep this in every post -->
+    <div class="post-cta">
+      <h3>Try NullifyCV free</h3>
+      <p>Remove PII from a resume in under 30 seconds. No account, no uploads, no data stored.</p>
+      <a href="/">Try the tool →</a>
+    </div>
+
+    <!-- Legal disclaimer — keep this in every post -->
+    <div class="post-disclaimer">
+      <strong>Legal disclaimer:</strong> This article is for informational purposes only and does not constitute legal advice. Consult your legal counsel or Data Protection Officer for guidance specific to your organisation. · nullifycv.com
+    </div>
+
+  </div>
+
+  <!-- Auto-injected by posts.js: prev/next nav + related posts -->
+  <div id="post-nav-inject"></div>
+  <div id="related-inject"></div>
+
+</div>
+
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span>·</span>
+  <a href="/about.html">How it works</a>
+  <span>·</span>
+  <a href="/blog/">Blog</a>
+  <span>·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+  <span>·</span>
+  <a href="/">Try the tool</a>
+  <span>·</span>
+  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
+</footer>
+
+<!-- EDIT: update THIS_SLUG to match the post's slug in posts.js -->
+<script src="/posts.js"></script>
+<script>
+const THIS_SLUG = 'SLUG';
+document.getElementById('post-nav-inject').innerHTML  = renderPrevNext(THIS_SLUG);
+document.getElementById('related-inject').innerHTML   = renderRelatedPosts(THIS_SLUG);
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

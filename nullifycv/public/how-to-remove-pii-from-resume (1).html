@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Remove PII from a Resume — A Guide for Recruiters | NullifyCV</title>
+  <meta name="description" content="Learn how to remove personally identifiable information from resumes for blind hiring. Free, GDPR-consistent method that works in your browser. No uploads needed.">
+  <link rel="canonical" href="https://nullifycv.com/blog/how-to-remove-pii-from-resume.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .blog-wrap { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+    .blog-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 12px; }
+    .blog-title { font-size: 32px; font-weight: 800; color: var(--green-dark); letter-spacing: -1px; line-height: 1.15; margin-bottom: 14px; }
+    .blog-meta { font-size: 12px; color: var(--ink3); margin-bottom: 32px; display: flex; gap: 16px; align-items: center; }
+    .blog-meta span { display: flex; align-items: center; gap: 4px; }
+    .blog-rule { height: 1px; background: var(--border); margin-bottom: 32px; }
+    .blog-body h2 { font-size: 20px; font-weight: 700; color: var(--green-dark); margin: 36px 0 12px; letter-spacing: -0.3px; }
+    .blog-body h3 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 24px 0 8px; }
+    .blog-body p { font-size: 14px; color: var(--ink2); line-height: 1.8; margin-bottom: 16px; }
+    .blog-body ul, .blog-body ol { margin: 0 0 16px 20px; }
+    .blog-body li { font-size: 14px; color: var(--ink2); line-height: 1.8; margin-bottom: 6px; }
+    .blog-body strong { color: var(--ink); font-weight: 600; }
+    .blog-callout { background: var(--green-bg); border-left: 3px solid var(--green-dark); border-radius: 0 var(--r) var(--r) 0; padding: 14px 18px; margin: 24px 0; }
+    .blog-callout p { margin: 0; font-size: 13px; color: var(--green-dark); font-weight: 500; }
+    .blog-cta { background: var(--green-dark); color: white; border-radius: var(--rl); padding: 28px 32px; text-align: center; margin: 40px 0; }
+    .blog-cta h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .blog-cta p { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 16px; }
+    .blog-cta a { display: inline-block; background: var(--green-muted); color: var(--green-dark); padding: 10px 24px; border-radius: var(--r); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .disclaimer { background: var(--paper2); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 16px; font-size: 11px; color: var(--ink3); line-height: 1.6; margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav">
+    <a href="/about.html">How it works</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/" class="nav-pro">Try the tool →</a>
+  </nav>
+  <div class="offline-pill">
+    <span class="pulse"></span>
+    <span>Processing locally — no uploads</span>
+  </div>
+</header>
+
+<div class="blog-wrap">
+
+  <div class="blog-tag">Recruiting · Privacy · GDPR</div>
+  <h1 class="blog-title">How to Remove PII from a Resume — A Practical Guide for Recruiters</h1>
+  <div class="blog-meta">
+    <span>📅 May 2026</span>
+    <span>⏱ 6 min read</span>
+    <span>✍ NullifyCV Team</span>
+  </div>
+  <div class="blog-rule"></div>
+
+  <div class="blog-body">
+
+    <p>Sharing a candidate's resume internally — with hiring managers, panel members, or external clients — creates a data privacy problem that most HR teams haven't fully solved. Every time a full resume is forwarded, you're distributing personal data: names, addresses, phone numbers, email addresses, and often sensitive signals like graduation year, school names, and even embedded photos.</p>
+
+    <p>This guide explains what PII is in the context of hiring, why removing it matters legally and ethically, and how to do it quickly using a free, browser-based tool that never uploads your files to any server.</p>
+
+    <div class="blog-callout">
+      <p>📌 In a hurry? Skip to the tool: <a href="/" style="color:var(--green-dark);text-decoration:underline;">nullifycv.com</a> — upload a PDF or DOCX, select your redaction targets, download the redacted file. Free, no account needed, files never leave your browser.</p>
+    </div>
+
+    <h2>What is PII in a resume context?</h2>
+
+    <p>PII stands for Personally Identifiable Information — any data that can be used to identify a specific individual. In the context of candidate resumes, PII typically includes:</p>
+
+    <ul>
+      <li><strong>Direct identifiers:</strong> full name, email address, phone number, home address, postcode</li>
+      <li><strong>Indirect identifiers (bias signals):</strong> graduation year (age proxy), school name (prestige bias), city and postcode (demographic proxy), gender pronouns, profile photos</li>
+      <li><strong>Digital identifiers:</strong> LinkedIn profile URL, personal website, GitHub username</li>
+      <li><strong>Sensitive categories:</strong> religious affiliations through organisation memberships, national ID numbers (BSN), date of birth</li>
+    </ul>
+
+    <p>The distinction between direct and indirect identifiers matters. Direct identifiers obviously reveal who the candidate is. Indirect identifiers are subtler — a graduation year of 2004 tells a recruiter a candidate is likely in their early 40s, triggering potential age bias. A postcode in a particular area can signal socioeconomic background or ethnicity. Removing both categories is what makes blind hiring genuinely effective.</p>
+
+    <h2>Why removing PII from resumes matters</h2>
+
+    <h3>1. Unconscious bias in hiring is well documented</h3>
+
+    <p>Research consistently shows that identical resumes receive different treatment based on superficial personal characteristics. A widely cited study found that resumes with white-sounding names received 50% more callbacks than identical resumes with Black-sounding names. Similar studies have demonstrated bias based on gender, age, school prestige, and postcode.</p>
+
+    <p>Removing PII before resumes reach the scoring panel is the most direct way to interrupt this bias at the source. It doesn't rely on changing human psychology — it simply removes the data that triggers the bias.</p>
+
+    <h3>2. GDPR requires data minimisation</h3>
+
+    <p>Under GDPR Article 5(1)(c), personal data must be "adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed." When a hiring panel needs to evaluate whether a candidate has the right skills and experience, they don't need the candidate's home address or phone number. Sharing a full resume with those details to a panel of five people creates unnecessary data exposure.</p>
+
+    <p>By stripping PII before internal distribution, you support GDPR data minimisation principles and reduce the personal data footprint across your hiring process.</p>
+
+    <h3>3. Right to erasure becomes easier to manage</h3>
+
+    <p>Under GDPR Article 17, candidates have the right to request deletion of their personal data. If you've forwarded a full resume to ten people internally, honouring an erasure request becomes complex. A de-identified copy shared with the panel contains no personal data — making erasure requests simpler to manage.</p>
+
+    <h3>4. EEOC compliance in the US</h3>
+
+    <p>In the United States, EEOC guidelines and employment law under Title VII, the ADEA (Age Discrimination in Employment Act), and state-level laws like Illinois BIPA create strong incentives for structured blind hiring. Removing graduation years (age proxy), school names, and demographic signals from resumes before panel review is a documented, defensible practice.</p>
+
+    <h2>What to remove from a resume before sharing</h2>
+
+    <p>The right level of redaction depends on your goal. Here are three common approaches:</p>
+
+    <h3>Standard PII removal (minimum recommended)</h3>
+    <ul>
+      <li>Full name</li>
+      <li>Email address</li>
+      <li>Phone number</li>
+      <li>Home address and postcode</li>
+      <li>Graduation year</li>
+    </ul>
+
+    <h3>Bias stripping (recommended for structured blind hiring)</h3>
+    <p>Everything in standard PII, plus:</p>
+    <ul>
+      <li>School and university names (keep degree type and field)</li>
+      <li>Gender pronouns in bio sections</li>
+      <li>LinkedIn and personal website URLs</li>
+      <li>Profile photos (especially common in European CVs)</li>
+    </ul>
+
+    <h3>Full EEOC blind review</h3>
+    <p>Everything above, plus:</p>
+    <ul>
+      <li>Religious organisation memberships</li>
+      <li>File metadata (author name embedded in DOCX properties)</li>
+      <li>All location signals including city names</li>
+    </ul>
+
+    <h2>How to remove PII from a resume — step by step</h2>
+
+    <h3>Method 1: Manual redaction (slow, error-prone)</h3>
+    <p>Open the resume in a PDF editor or Word, manually select each piece of PII, and delete or cover it with a black box. This takes 5-15 minutes per resume, is inconsistent across reviewers, and creates no audit trail. Not recommended for teams processing more than a handful of applications.</p>
+
+    <h3>Method 2: Use NullifyCV (free, fast, private)</h3>
+
+    <p>NullifyCV processes resumes entirely in your browser — no files are ever uploaded to any server. Here's how it works:</p>
+
+    <ol>
+      <li><strong>Upload your resume</strong> — drag a PDF or DOCX onto the tool at nullifycv.com</li>
+      <li><strong>Choose your redaction mode</strong> — Standard PII, Bias Strip, or EEOC Blind Review</li>
+      <li><strong>Download the redacted file</strong> — for PDFs, you receive the original with black redaction bars drawn over the PII positions. The layout, fonts, and formatting are preserved.</li>
+      <li><strong>Download the audit log</strong> — a JSON file documenting every item redacted, with confidence scores. Useful for EEOC documentation.</li>
+    </ol>
+
+    <p>The entire process takes under 30 seconds per resume. Because processing happens locally in your browser using pdf.js and mammoth.js, the tool is safe for sensitive corporate use — your candidates' data never leaves your device.</p>
+
+    <div class="blog-cta">
+      <h3>Try NullifyCV free</h3>
+      <p>Remove PII from a resume in under 30 seconds. No account, no uploads, no data stored.</p>
+      <a href="/">Redact a resume now →</a>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+
+    <h3>Does removing PII make hiring GDPR compliant?</h3>
+    <p>De-identifying resumes before internal distribution supports GDPR data minimisation principles under Article 5(1)(c). Whether your overall hiring process is fully GDPR compliant depends on many other factors — consult your Data Protection Officer for a formal assessment.</p>
+
+    <h3>What file formats can be redacted?</h3>
+    <p>NullifyCV supports PDF and DOCX files. For PDFs with a text layer, black redaction bars are drawn directly onto the original file preserving layout. Scanned PDFs (image-only) should be exported as DOCX first.</p>
+
+    <h3>Can I process multiple resumes at once?</h3>
+    <p>The free tool processes one file at a time. NullifyCV Pro ($9/month) supports batch processing of up to 200 resumes at once, saved redaction profiles, and GDPR-annotated audit logs.</p>
+
+    <h3>Is the tool open source?</h3>
+    <p>Yes — the full source code is available on <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener" style="color:var(--green-dark);">GitHub</a>. You can audit every line that handles your documents.</p>
+
+    <div class="disclaimer">
+      <strong>Legal disclaimer:</strong> This article is for informational purposes only and does not constitute legal advice. GDPR, EEOC, and other regulatory requirements vary by jurisdiction and circumstance. Consult your legal counsel or Data Protection Officer for guidance specific to your organisation. · nullifycv.com
+    </div>
+
+  </div>
+</div>
+
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span>·</span>
+  <a href="/about.html">How it works</a>
+  <span>·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+  <span>·</span>
+  <a href="/">Try the tool</a>
+</footer>
+
+<div id="post-nav-inject"></div>
+<div id="related-inject"></div>
+<script src="/posts.js"></script>
+<script>
+const THIS_SLUG = "how-to-remove-pii-from-resume";
+document.getElementById("post-nav-inject").innerHTML = renderPrevNext(THIS_SLUG);
+document.getElementById("related-inject").innerHTML  = renderRelatedPosts(THIS_SLUG);
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
