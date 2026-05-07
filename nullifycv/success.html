@@ -285,23 +285,14 @@ document.getElementById('plan-badge-wrap').innerHTML = `
 
 // Generate HMAC-SHA256 key
 async function generateKey(sessionId, salt) {
-  if (!sessionId) {
-    // Demo mode — no session ID in URL
-    return 'DEMO-KEY-VISIT-PRO-PAGE-TO-PURCHASE';
-  }
-  const encoder = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey(
-    'raw', encoder.encode(salt),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false, ['sign']
-  );
-  const sig = await crypto.subtle.sign(
-    'HMAC', keyMaterial, encoder.encode(sessionId)
-  );
-  // Convert to hex string, take first 32 chars, format as XXXX-XXXX-XXXX-XXXX
-  const hex = Array.from(new Uint8Array(sig))
+  // Generate a cryptographically random key
+  // Stripe Payment Links do not pass session_id to success URLs
+  // so we generate a secure random key and store it immediately in localStorage
+  const randomBytes = new Uint8Array(16);
+  crypto.getRandomValues(randomBytes);
+  const hex = Array.from(randomBytes)
     .map(b => b.toString(16).padStart(2,'0'))
-    .join('').toUpperCase().slice(0, 32);
+    .join('').toUpperCase();
   return `${hex.slice(0,8)}-${hex.slice(8,16)}-${hex.slice(16,24)}-${hex.slice(24,32)}`;
 }
 
