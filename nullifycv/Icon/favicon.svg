@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Green background circle -->
+  <rect width="32" height="32" rx="6" fill="#1e4d35"/>
+  <!-- Shield -->
+  <path d="M16 4L5 8.5v6C5 20.8 9.9 26.2 16 27.5c6.1-1.3 11-6.7 11-13V8.5L16 4z" fill="#ffffff" opacity="0.15"/>
+  <path d="M16 4L5 8.5v6C5 20.8 9.9 26.2 16 27.5c6.1-1.3 11-6.7 11-13V8.5L16 4z" fill="none" stroke="#7aaa8a" stroke-width="1.2"/>
+  <!-- Document inside shield -->
+  <rect x="12" y="10" width="8" height="11" rx="1" fill="white"/>
+  <!-- Redaction lines -->
+  <line x1="13.5" y1="13" x2="18.5" y2="13" stroke="#1e4d35" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="13.5" y1="15.5" x2="18.5" y2="15.5" stroke="#1e4d35" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="13.5" y1="18" x2="16.5" y2="18" stroke="#1e4d35" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Black redaction bar on top line -->
+  <rect x="13.5" y="12.2" width="5" height="1.6" rx="0.3" fill="#1e4d35"/>
+</svg>
