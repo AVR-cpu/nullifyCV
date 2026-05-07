@@ -628,31 +628,6 @@ function checkURLLicence() {
   return false;
 }
 
-/* ── Upgrade modal ── */
-const UPGRADE_COPY = {
-  mode: {
-    title: 'Unlock advanced redaction modes',
-    desc: 'Bias Strip removes school names, graduation years and pronouns. Client Sub. protects candidate contact details. EEOC mode applies full blind review redaction. All available from $1.99 — one-time, no subscription.'
-  },
-  target: {
-    title: 'Unlock additional redaction targets',
-    desc: 'School names, gender pronouns, LinkedIn URLs and file metadata are paid targets. They remove prestige bias, gender signals and hidden author data. Available from $1.99 — one-time, no subscription.'
-  }
-};
 
-function showUpgrade(type) {
-  const copy = UPGRADE_COPY[type] || UPGRADE_COPY.mode;
-  document.getElementById('upgrade-title').textContent = copy.title;
-  document.getElementById('upgrade-desc').textContent  = copy.desc;
-  document.getElementById('upgrade-overlay').style.display = 'block';
-  document.getElementById('upgrade-modal').style.display   = 'block';
-}
-
-function closeUpgrade() {
-  document.getElementById('upgrade-overlay').style.display = 'none';
-  document.getElementById('upgrade-modal').style.display   = 'none';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUpgrade(); });
 
 
