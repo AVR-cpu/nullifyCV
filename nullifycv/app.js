@@ -443,6 +443,10 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(card);}
     });
   });
+  // Licence system init
+  if (!checkURLLicence()) {
+    loadStoredLicence();
+  }
 });
 
 /* ── Upgrade modal ────────────────────────────────────────────────────────── */
@@ -574,21 +578,25 @@ async function activateLicenceKey() {
     return;
   }
 
-  // Trust the key — store it with a default 30 day expiry
-  // In a real system this would verify server-side; here we trust valid-format keys
-  const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000);
-  const licenceData = {
-    key,
-    tier: 'seeker',
-    plan: 'manual',
-    issued: Date.now(),
-    expires: expiry,
-    days: 30
-  };
+  // Check if this key matches one already stored in localStorage
+  // (auto-saved from success page) — if so, use that data including correct tier/expiry
+  let licenceData;
+  try {
+    const stored = JSON.parse(localStorage.getItem('ncv_licence') || 'null');
+    if (stored && stored.key === key && stored.expires > Date.now()) {
+      licenceData = stored;
+    }
+  } catch(e) {}
+
+  // If not found in storage, create a new entry with default 30 day seeker tier
+  if (!licenceData) {
+    const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000);
+    licenceData = { key, tier: 'seeker', plan: 'manual', issued: Date.now(), expires: expiry, days: 30 };
+  }
 
   localStorage.setItem('ncv_licence', JSON.stringify(licenceData));
   activeLicence = licenceData;
-  applyLicence('seeker');
+  applyLicence(licenceData.tier);
   showLicenceStatus(licenceData);
 
   btn.textContent = '✓ Activated!';
@@ -647,9 +655,4 @@ function closeUpgrade() {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUpgrade(); });
 
-/* ── Init on load ── */
-document.addEventListener('DOMContentLoaded', () => {
-  if (!checkURLLicence()) {
-    loadStoredLicence();
-  }
-});
+
