@@ -480,7 +480,7 @@ document.addEventListener('keydown', e => {
 
 /* ── NullifyCV Licence Key System ─────────────────────────────────────────── */
 const LICENCE_SALT = 'nullifycv-2026-licence-v1';
-const PLAN_DAYS = { single:1, week:7, month:30, pro:30, proyr:365, team:30 };
+const PLAN_DAYS = { single:7, week:7, month:30, pro:30, proyr:365, team:30 };
 const PLAN_TIERS = { single:'seeker', week:'seeker', month:'seeker', pro:'pro', proyr:'pro', team:'team' };
 
 let activeLicence = null;

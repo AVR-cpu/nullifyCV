@@ -259,7 +259,7 @@ const sessionId = params.get('session_id') || '';
 const planParam = params.get('plan') || 'seeker';
 
 const PLAN_LABELS = {
-  single:  { label: 'Single File Unlock',  tier: 'seeker',  days: 1,   desc: 'All redaction modes and targets unlocked for one file. Ad-free.' },
+  single:  { label: 'Single File Unlock',  tier: 'seeker',  days: 7,   desc: 'All redaction modes and targets unlocked for one file. Ad-free.' },
   week:    { label: 'Week Pass',            tier: 'seeker',  days: 7,   desc: 'Unlimited files for 7 days. All modes, all targets, ad-free.' },
   month:   { label: 'Month Pass',           tier: 'seeker',  days: 30,  desc: 'Unlimited files for 30 days. All modes, all targets, ad-free.' },
   pro:     { label: 'Pro Monthly',          tier: 'pro',     days: 30,  desc: 'Batch processing (200 files), saved profiles, GDPR audit log, ad-free.' },
