@@ -808,11 +808,24 @@ async function batchRun() {
       });
 
       // Add combined audit log
+      // Detect active mode name
+      const activeModeName = (() => {
+        const tabs = document.querySelectorAll('.tab.on');
+        for (const t of tabs) {
+          const txt = t.textContent.trim().toLowerCase();
+          if (txt.includes('bias')) return 'Bias Strip';
+          if (txt.includes('client')) return 'Client Submission';
+          if (txt.includes('eeoc')) return 'EEOC Blind Review';
+        }
+        return 'Standard PII';
+      })();
+
       const auditLog = {
         tool: 'NullifyCV v2.0.0',
         site: 'nullifycv.com',
         batch_id: 'BATCH-' + Date.now(),
         timestamp: new Date().toISOString(),
+        redaction_mode: activeModeName,
         total_files: batchQueue.length,
         processed: results.length,
         errors,
