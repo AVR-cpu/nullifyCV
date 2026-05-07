@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blind Hiring & HR Privacy Glossary — NullifyCV</title>
+  <meta name="description" content="Definitions of key terms in blind hiring, CV redaction, GDPR compliance, and HR privacy. A reference guide for recruiters, HR teams, and DPOs.">
+  <link rel="canonical" href="https://nullifycv.com/glossary.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    "name": "Blind Hiring & HR Privacy Glossary",
+    "description": "Definitions of key terms in blind hiring, CV redaction, GDPR compliance, and HR privacy.",
+    "url": "https://nullifycv.com/glossary.html",
+    "publisher": { "@type": "Organization", "name": "NullifyCV", "url": "https://nullifycv.com" },
+    "hasDefinedTerm": [
+      { "@type": "DefinedTerm", "name": "Blind Hiring", "description": "A recruitment process in which personally identifying information is removed from candidate applications before they reach evaluators, so decisions are based on skills and experience rather than demographic characteristics." },
+      { "@type": "DefinedTerm", "name": "CV Redaction", "description": "The process of removing or obscuring personally identifiable information from a curriculum vitae before it is shared internally or externally." },
+      { "@type": "DefinedTerm", "name": "PII", "description": "Personally Identifiable Information — any data that can be used to identify a specific individual, either directly (name, email) or indirectly (graduation year, postcode)." },
+      { "@type": "DefinedTerm", "name": "Data Minimisation", "description": "A GDPR principle requiring that only the minimum personal data necessary for a specific purpose is collected and processed. Defined in GDPR Article 5(1)(c)." },
+      { "@type": "DefinedTerm", "name": "GDPR", "description": "General Data Protection Regulation — EU regulation governing the collection, processing, and storage of personal data of EU residents, in force since May 2018." }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .gloss-wrap { max-width: 820px; margin: 0 auto; padding: 48px 24px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .gloss-sidebar { position: sticky; top: 24px; }
+    .gloss-sidebar-title { font-size: 11px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 12px; }
+    .gloss-alpha-nav { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
+    .gloss-alpha-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; font-family: var(--mono); border-radius: var(--r); text-decoration: none; color: var(--ink3); background: var(--paper); border: 1px solid var(--border); transition: all 0.15s; }
+    .gloss-alpha-btn:hover { background: var(--green-bg); color: var(--green-dark); border-color: var(--green-mid); }
+    .gloss-alpha-btn.has-terms { color: var(--green-dark); background: var(--green-bg); border-color: var(--green-bg2); }
+    .gloss-cta-box { background: var(--green-dark); border-radius: var(--rl); padding: 18px; text-align: center; }
+    .gloss-cta-box h3 { font-size: 13px; font-weight: 700; color: white; margin-bottom: 6px; }
+    .gloss-cta-box p { font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 12px; line-height: 1.5; }
+    .gloss-cta-box a { display: block; background: var(--green-muted); color: var(--green-dark); padding: 8px; border-radius: var(--r); font-size: 12px; font-weight: 700; text-decoration: none; }
+
+    .gloss-main {}
+    .gloss-hero-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 10px; }
+    .gloss-title { font-size: 32px; font-weight: 800; color: var(--green-dark); letter-spacing: -1px; margin-bottom: 10px; line-height: 1.1; }
+    .gloss-sub { font-size: 14px; color: var(--ink3); line-height: 1.65; margin-bottom: 12px; }
+    .gloss-rule { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+    /* Search */
+    .gloss-search-wrap { position: relative; margin-bottom: 28px; }
+    .gloss-search { width: 100%; padding: 10px 14px 10px 36px; font-size: 13px; font-family: var(--sans); border: 1px solid var(--border); border-radius: var(--r); background: var(--paper); color: var(--ink); outline: none; box-sizing: border-box; transition: border-color 0.15s; }
+    .gloss-search:focus { border-color: var(--green-mid); }
+    .gloss-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink3); font-size: 14px; pointer-events: none; }
+
+    /* Letter sections */
+    .gloss-letter-section { margin-bottom: 40px; }
+    .gloss-letter-head { font-size: 24px; font-weight: 800; color: var(--green-dark); font-family: var(--mono); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--green-bg2); }
+
+    /* Term cards */
+    .gloss-term { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .gloss-term:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .gloss-term-name { font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; scroll-margin-top: 20px; }
+    .gloss-term-also { font-size: 11px; color: var(--ink3); font-family: var(--mono); margin-bottom: 8px; }
+    .gloss-term-def { font-size: 13px; color: var(--ink2); line-height: 1.75; margin-bottom: 8px; }
+    .gloss-term-context { font-size: 12px; color: var(--ink3); line-height: 1.65; font-style: italic; border-left: 2px solid var(--green-bg2); padding-left: 10px; margin-bottom: 8px; }
+    .gloss-term-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .gloss-tag { font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 100px; }
+    .tag-gdpr     { background: #e6f1fb; color: #185fa5; }
+    .tag-eeoc     { background: var(--green-bg); color: var(--green-dark); }
+    .tag-hr       { background: #f3e8f8; color: #4a1f7a; }
+    .tag-privacy  { background: #fdf3e3; color: #7a5000; }
+    .tag-legal    { background: #fde8e8; color: #7a1f1f; }
+
+    /* Related links */
+    .gloss-related { margin-top: 8px; font-size: 11px; color: var(--ink3); }
+    .gloss-related a { color: var(--green-dark); text-decoration: underline; }
+
+    /* Empty state */
+    .gloss-empty { text-align: center; padding: 40px; color: var(--ink3); font-size: 13px; display: none; }
+
+    @media (max-width: 680px) {
+      .gloss-wrap { grid-template-columns: 1fr; }
+      .gloss-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark"><span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span></span>
+  </a>
+  <nav class="top-nav">
+    <a href="/about.html">How it works</a>
+    <a href="/blog/">Blog</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/pro.html" class="nav-pro">Pro →</a>
+  </nav>
+  <div class="offline-pill"><span class="pulse"></span><span>Processing locally — no uploads</span></div>
+</header>
+
+<div class="gloss-wrap">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="gloss-sidebar">
+    <div class="gloss-sidebar-title">Jump to letter</div>
+    <nav class="gloss-alpha-nav" aria-label="Alphabetical navigation" id="alpha-nav"></nav>
+
+    <div class="gloss-cta-box">
+      <h3>Try NullifyCV free</h3>
+      <p>Remove PII from CVs for blind hiring. Files never leave your browser.</p>
+      <a href="/">Try the tool →</a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="gloss-main">
+    <div class="gloss-hero-tag">Reference</div>
+    <h1 class="gloss-title">Blind Hiring &amp;<br>HR Privacy Glossary</h1>
+    <p class="gloss-sub">Definitions of key terms in blind hiring, CV redaction, GDPR compliance, and HR privacy. A reference guide for recruiters, HR teams, compliance officers, and DPOs.</p>
+    <div class="gloss-rule"></div>
+
+    <!-- Search -->
+    <div class="gloss-search-wrap">
+      <span class="gloss-search-icon">🔍</span>
+      <input type="text" class="gloss-search" id="gloss-search" placeholder="Search terms..." oninput="filterGlossary(this.value)" autocomplete="off">
+    </div>
+
+    <div id="gloss-empty" class="gloss-empty">No terms found matching your search.</div>
+    <div id="gloss-content"></div>
+  </main>
+
+</div>
+
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span>·</span>
+  <a href="/about.html">How it works</a>
+  <span>·</span>
+  <a href="/blog/">Blog</a>
+  <span>·</span>
+  <a href="/glossary.html" style="color:rgba(255,255,255,0.85);">Glossary</a>
+  <span>·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+  <span>·</span>
+  <a href="/">Try the tool</a>
+  <span>·</span>
+  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
+</footer>
+
+<script>
+const TERMS = [
+  {
+    term: 'Adverse Impact',
+    also: 'Also: Disparate Impact',
+    def: 'A situation in which a neutral employment practice disproportionately disadvantages members of a protected group (race, gender, age, etc.) compared to non-protected groups. Adverse impact is measured using the 4/5ths rule under EEOC guidelines: if the selection rate for a protected group is less than 80% of the rate for the most selected group, adverse impact may exist.',
+    context: 'Blind hiring reduces adverse impact by removing demographic signals from the screening process before evaluators see candidate materials.',
+    tags: ['eeoc', 'legal'],
+    related: [{ text: 'EEOC', href: '#eeoc' }, { text: 'Blind Hiring', href: '#blind-hiring' }]
+  },
+  {
+    term: 'Anonymisation',
+    also: 'Also: De-identification, Pseudonymisation (different — see below)',
+    def: 'The process of removing or altering personal data so that the individual cannot be identified, directly or indirectly. Under GDPR, truly anonymised data is no longer considered personal data and falls outside the regulation\'s scope. Anonymisation is irreversible — if the data can be re-identified, it is pseudonymisation, not anonymisation.',
+    context: 'CV anonymisation for blind hiring removes direct identifiers (name, contact details) and indirect identifiers (graduation year, school name). The resulting document cannot be used to identify the candidate without additional information.',
+    tags: ['gdpr', 'privacy'],
+    related: [{ text: 'Pseudonymisation', href: '#pseudonymisation' }, { text: 'PII', href: '#pii' }]
+  },
+  {
+    term: 'Audit Log',
+    def: 'A chronological record documenting actions taken on data — in the context of CV redaction, an audit log records which PII items were detected, which were removed, the confidence level of each detection, the redaction mode applied, and the timestamp. Audit logs support GDPR Article 30 Records of Processing Activities and EEOC blind review documentation.',
+    context: 'NullifyCV generates a downloadable JSON audit log for every file processed, including batch runs. This log can be attached to your Records of Processing Activities as evidence of a systematic data minimisation workflow.',
+    tags: ['gdpr', 'eeoc'],
+    related: [{ text: 'Records of Processing Activities', href: '#records-of-processing-activities' }, { text: 'Data Minimisation', href: '#data-minimisation' }]
+  },
+  {
+    term: 'Bias Signal',
+    def: 'Any piece of information in a CV or application that could trigger conscious or unconscious bias in an evaluator. Bias signals include demographic markers (name, gender, age) and proxy signals that correlate with demographic characteristics (graduation year as an age proxy, postcode as a socioeconomic proxy, school name as a prestige/class signal).',
+    context: 'Removing bias signals is the core purpose of blind hiring. Standard PII removal addresses direct identifiers; full bias stripping also removes proxy signals.',
+    tags: ['hr', 'eeoc'],
+    related: [{ text: 'Blind Hiring', href: '#blind-hiring' }, { text: 'Unconscious Bias', href: '#unconscious-bias' }]
+  },
+  {
+    term: 'Blind Hiring',
+    def: 'A structured recruitment approach in which personally identifying information is removed from candidate applications before they reach the people making hiring decisions. The goal is to ensure that selection decisions are based on demonstrated skills, experience, and qualifications rather than name, age, gender, address, or school prestige. Blind hiring exists on a spectrum from name-blind screening to full anonymisation of all demographic signals.',
+    context: 'Research consistently demonstrates that blind hiring increases diversity in shortlists and reduces measurable bias in candidate evaluation. It is also a defensible practice under EEOC guidelines and supports GDPR data minimisation.',
+    tags: ['hr', 'eeoc'],
+    related: [{ text: 'CV Redaction', href: '#cv-redaction' }, { text: 'Unconscious Bias', href: '#unconscious-bias' }, { text: 'Structured Interview', href: '#structured-interview' }]
+  },
+  {
+    term: 'BSN',
+    also: 'Burgerservicenummer (Dutch National ID)',
+    def: 'The Dutch national identification number, equivalent to a Social Security Number (US) or National Insurance Number (UK). BSNs are sensitive personal data under GDPR and should never appear in CVs shared internally or externally. Employers may only process BSNs when legally required — for example, for payroll and tax purposes after hiring.',
+    context: 'NullifyCV detects and redacts BSN numbers as part of its Dutch CV support.',
+    tags: ['gdpr', 'privacy', 'legal'],
+    related: [{ text: 'Special Category Data', href: '#special-category-data' }, { text: 'PII', href: '#pii' }]
+  },
+  {
+    term: 'Client-Side Processing',
+    def: 'Data processing that occurs entirely within the user\'s browser, without any data being sent to a remote server. Client-side processing means the service provider never receives or handles the user\'s data. This is architecturally distinct from server-side processing, where files are uploaded to a vendor\'s infrastructure.',
+    context: 'NullifyCV processes all CV files client-side using pdf.js and pdf-lib. This means NullifyCV does not act as a data processor under GDPR — no personal data is transmitted to NullifyCV at any point.',
+    tags: ['privacy', 'gdpr'],
+    related: [{ text: 'Data Processor', href: '#data-processor' }, { text: 'Zero Transmission', href: '#zero-transmission' }]
+  },
+  {
+    term: 'CV Redaction',
+    also: 'Also: Resume Redaction, CV Anonymisation, CV De-identification',
+    def: 'The process of removing or obscuring personally identifiable information from a curriculum vitae (CV) or resume before it is shared with hiring panels, clients, or other third parties. Redaction can be manual (editing in Word or a PDF editor) or automated (using a tool that detects and removes PII systematically).',
+    context: 'Automated CV redaction is faster, more consistent, and produces an audit trail. Manual redaction is error-prone and leaves no documentation of what was removed.',
+    tags: ['hr', 'privacy'],
+    related: [{ text: 'Blind Hiring', href: '#blind-hiring' }, { text: 'PII', href: '#pii' }]
+  },
+  {
+    term: 'Data Controller',
+    def: 'Under GDPR Article 4(7), the natural or legal person that determines the purposes and means of processing personal data. In a recruitment context, the employer or recruiting agency that decides to collect and process candidate CVs is the data controller.',
+    context: 'As a data controller, an employer has obligations including providing a privacy notice to candidates, establishing a legal basis for processing, responding to data subject requests, and maintaining Records of Processing Activities.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'Data Processor', href: '#data-processor' }, { text: 'GDPR', href: '#gdpr' }]
+  },
+  {
+    term: 'Data Minimisation',
+    def: 'A core GDPR principle defined in Article 5(1)(c): personal data must be "adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed." Data minimisation requires organisations to collect and share only the data they actually need for a specific purpose — not all data that might be useful.',
+    context: 'In hiring, data minimisation means sharing only the skills-relevant content of a CV with evaluators — not the candidate\'s address, phone number, or date of birth. CV redaction is a practical implementation of the data minimisation principle.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'Purpose Limitation', href: '#purpose-limitation' }]
+  },
+  {
+    term: 'Data Processor',
+    def: 'Under GDPR Article 4(8), a natural or legal person that processes personal data on behalf of a data controller. Unlike a data controller, a data processor does not determine the purposes of processing — they act under the controller\'s instructions. A Data Processing Agreement (DPA) is required between controllers and processors.',
+    context: 'NullifyCV does not act as a data processor because no personal data is transmitted to NullifyCV — all processing occurs client-side in the user\'s browser. No DPA is required.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'Data Controller', href: '#data-controller' }, { text: 'Client-Side Processing', href: '#client-side-processing' }]
+  },
+  {
+    term: 'Data Processing Agreement',
+    also: 'Also: DPA',
+    def: 'A legally binding contract required under GDPR Article 28 between a data controller and any third-party data processor. The DPA specifies the subject matter, duration, nature, and purpose of the processing, as well as the obligations and rights of each party.',
+    context: 'Because NullifyCV processes files client-side and receives no personal data, no Data Processing Agreement is required for its use.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'Data Processor', href: '#data-processor' }, { text: 'GDPR', href: '#gdpr' }]
+  },
+  {
+    term: 'Data Subject',
+    def: 'Under GDPR Article 4(1), an identified or identifiable natural person whose personal data is being processed. In recruitment, the candidate whose CV is being reviewed is the data subject.',
+    context: 'Data subjects have rights under GDPR including the right to access their data, the right to rectification, the right to erasure, and the right to object to processing.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'Right to Erasure', href: '#right-to-erasure' }, { text: 'GDPR', href: '#gdpr' }]
+  },
+  {
+    term: 'DPO',
+    also: 'Data Protection Officer',
+    def: 'A role required under GDPR Article 37 for certain organisations — including public authorities, organisations that process sensitive data at scale, or those engaged in large-scale systematic monitoring. The DPO is responsible for ensuring the organisation\'s GDPR compliance and acts as a point of contact for data subjects and supervisory authorities.',
+    context: 'The NullifyCV GDPR-annotated audit log is designed to be presented to DPOs as evidence of a data minimisation workflow in the hiring process.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'Audit Log', href: '#audit-log' }]
+  },
+  {
+    term: 'EEOC',
+    also: 'Equal Employment Opportunity Commission',
+    def: 'The US federal agency responsible for enforcing federal laws prohibiting employment discrimination. The EEOC enforces Title VII of the Civil Rights Act, the Age Discrimination in Employment Act (ADEA), the Americans with Disabilities Act (ADA), and other statutes. EEOC guidelines inform best practice for structured and blind hiring in the United States.',
+    context: 'EEOC blind review mode in NullifyCV removes all demographic signals including graduation year (age proxy), school name, gender pronouns, and profile photos — supporting EEOC-compliant structured hiring.',
+    tags: ['eeoc', 'legal'],
+    related: [{ text: 'Blind Hiring', href: '#blind-hiring' }, { text: 'Title VII', href: '#title-vii' }, { text: 'ADEA', href: '#adea' }]
+  },
+  {
+    term: 'GDPR',
+    also: 'General Data Protection Regulation',
+    def: 'EU Regulation 2016/679, in force since 25 May 2018. GDPR governs the collection, processing, storage, and transfer of personal data of EU residents. It applies to any organisation that processes personal data of EU residents, regardless of where the organisation is based. Key principles include lawfulness, fairness, transparency, purpose limitation, data minimisation, accuracy, storage limitation, integrity and confidentiality, and accountability.',
+    context: 'GDPR has significant implications for recruitment. Candidate CVs contain personal data; sharing them internally or with third parties constitutes processing and must comply with GDPR principles.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'Data Minimisation', href: '#data-minimisation' }, { text: 'Purpose Limitation', href: '#purpose-limitation' }, { text: 'Right to Erasure', href: '#right-to-erasure' }]
+  },
+  {
+    term: 'Indirect Identifier',
+    also: 'Also: Quasi-identifier, Demographic Proxy',
+    def: 'A piece of information that does not directly identify an individual but, alone or in combination with other data, can be used to infer demographic characteristics such as age, race, gender, or socioeconomic background. In CVs, indirect identifiers include graduation year (age proxy), postcode (demographic and socioeconomic proxy), and school name (class/prestige proxy).',
+    context: 'Indirect identifiers are the most overlooked category in CV redaction. Standard PII removal addresses direct identifiers; full bias stripping must also remove indirect identifiers.',
+    tags: ['privacy', 'hr'],
+    related: [{ text: 'PII', href: '#pii' }, { text: 'Bias Signal', href: '#bias-signal' }]
+  },
+  {
+    term: 'Lawful Basis',
+    def: 'Under GDPR Article 6, one of six legal grounds that must exist before personal data can be processed. The six bases are: consent, contract, legal obligation, vital interests, public task, and legitimate interests. Processing without a lawful basis is unlawful under GDPR.',
+    context: 'Most employers rely on legitimate interests (Article 6(1)(f)) or performance of a contract (Article 6(1)(b)) as the lawful basis for processing candidate CVs. The chosen basis must be documented in the organisation\'s Records of Processing Activities.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'Records of Processing Activities', href: '#records-of-processing-activities' }]
+  },
+  {
+    term: 'Name-Blind Hiring',
+    def: 'A form of blind hiring in which only the candidate\'s name is removed before the CV reaches evaluators. Name-blind hiring addresses one specific bias — name-based discrimination — but leaves other bias signals intact. It is the most minimal form of blind hiring and is a common starting point for organisations implementing structured screening.',
+    context: 'Research shows name-blind hiring reduces callback rate disparities between candidates with majority and minority-group names. However, it does not address age bias (graduation year), prestige bias (school name), or location bias (postcode).',
+    tags: ['hr', 'eeoc'],
+    related: [{ text: 'Blind Hiring', href: '#blind-hiring' }, { text: 'Bias Signal', href: '#bias-signal' }]
+  },
+  {
+    term: 'PII',
+    also: 'Personally Identifiable Information',
+    def: 'Any information that can be used to identify a specific individual, either on its own (direct PII) or in combination with other data (indirect PII). In the context of CV screening, PII includes name, email address, phone number, home address, postcode, date of birth, national ID numbers, profile photos, and digital identifiers such as LinkedIn URLs. Indirect PII includes graduation year, school name, and city of residence.',
+    context: 'GDPR uses the term "personal data" rather than PII, but the concepts are closely related. Personal data has a broader definition under GDPR and includes any information relating to an identified or identifiable natural person.',
+    tags: ['privacy', 'gdpr'],
+    related: [{ text: 'Anonymisation', href: '#anonymisation' }, { text: 'Special Category Data', href: '#special-category-data' }]
+  },
+  {
+    term: 'Prestige Bias',
+    def: 'A form of unconscious bias in which candidates from highly ranked or well-known universities are evaluated more favourably than equally qualified candidates from less prestigious institutions. Prestige bias correlates strongly with socioeconomic background and perpetuates inequality in hiring.',
+    context: 'Removing school and university names from CVs during blind review prevents prestige bias. Evaluators score candidates on the type of degree and field of study — not the reputation of the institution.',
+    tags: ['hr', 'eeoc'],
+    related: [{ text: 'Unconscious Bias', href: '#unconscious-bias' }, { text: 'Bias Signal', href: '#bias-signal' }]
+  },
+  {
+    term: 'Pseudonymisation',
+    def: 'The processing of personal data in such a way that it can no longer be attributed to a specific data subject without the use of additional information, provided that such additional information is kept separately. Unlike anonymisation, pseudonymisation is reversible — the original data can be restored using the additional information. GDPR Article 4(5) defines pseudonymisation; Article 25 recommends it as a privacy-by-design measure.',
+    context: 'CV redaction for blind hiring is closer to pseudonymisation than true anonymisation — the recruiter retains the original CV and can re-identify the candidate if needed. The redacted copy shared with evaluators prevents identification during the scoring process.',
+    tags: ['gdpr', 'privacy'],
+    related: [{ text: 'Anonymisation', href: '#anonymisation' }, { text: 'GDPR', href: '#gdpr' }]
+  },
+  {
+    term: 'Purpose Limitation',
+    def: 'A GDPR principle defined in Article 5(1)(b): personal data must be "collected for specified, explicit and legitimate purposes and not further processed in a manner that is incompatible with those purposes." Data collected for one purpose cannot be repurposed for an unrelated use without a new legal basis or the data subject\'s consent.',
+    context: 'In recruitment, purpose limitation means a candidate\'s CV submitted for a specific role should not be retained indefinitely or shared for unrelated purposes. Redacting CVs before sharing limits the data to what is necessary for the immediate hiring purpose.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'Data Minimisation', href: '#data-minimisation' }]
+  },
+  {
+    term: 'Records of Processing Activities',
+    also: 'Also: RoPA, Article 30 Record',
+    def: 'A document required under GDPR Article 30 that organisations must maintain describing their data processing activities. A RoPA must include the purposes of processing, categories of data subjects and personal data, recipients of the data, retention periods, and security measures. Organisations with fewer than 250 employees are generally exempt unless their processing is not occasional, involves special category data, or poses a risk to data subjects.',
+    context: 'The NullifyCV audit log can be referenced in a RoPA as evidence that CV data is processed under a documented data minimisation workflow.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'DPO', href: '#dpo' }, { text: 'Audit Log', href: '#audit-log' }]
+  },
+  {
+    term: 'Redaction',
+    def: 'The act of editing a document to remove or obscure sensitive or confidential information before sharing or publishing. In legal and government contexts, redaction typically means covering text with black bars. In CV processing, redaction refers to the systematic removal of PII and bias signals from candidate documents.',
+    context: 'NullifyCV performs PDF redaction by drawing solid black rectangles over the coordinates of detected PII on the original document — preserving layout, fonts, and formatting while making the underlying text permanently unreadable.',
+    tags: ['privacy', 'hr'],
+    related: [{ text: 'CV Redaction', href: '#cv-redaction' }, { text: 'PII', href: '#pii' }]
+  },
+  {
+    term: 'Right to Erasure',
+    also: 'Also: Right to be Forgotten',
+    def: 'A data subject right under GDPR Article 17 allowing individuals to request the deletion of their personal data in certain circumstances — for example, when the data is no longer necessary for the purpose it was collected, or when consent is withdrawn. Organisations must respond to erasure requests without undue delay and within one month.',
+    context: 'Organisations that have shared complete CVs internally face complex erasure obligations — they must locate and delete every copy. Sharing only redacted CVs with panels significantly limits the data footprint and simplifies erasure compliance.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'Data Subject', href: '#data-subject' }]
+  },
+  {
+    term: 'Special Category Data',
+    def: 'A category of personal data defined in GDPR Article 9 that requires additional protection due to its particularly sensitive nature. Special category data includes racial or ethnic origin, political opinions, religious or philosophical beliefs, trade union membership, genetic data, biometric data, health data, sex life or sexual orientation data. Processing special category data requires explicit consent or one of the specific conditions listed in Article 9(2).',
+    context: 'CVs sometimes contain special category data — profile photos (biometric), religious organisation memberships (religious beliefs), or health disclosures. NullifyCV\'s EEOC mode removes photos and flags religious affiliations for redaction.',
+    tags: ['gdpr', 'legal'],
+    related: [{ text: 'GDPR', href: '#gdpr' }, { text: 'PII', href: '#pii' }]
+  },
+  {
+    term: 'Structured Interview',
+    def: 'An interview format in which all candidates are asked the same predetermined questions, scored against the same criteria by the same evaluators. Structured interviews reduce interviewer bias and improve predictive validity — they better predict job performance than unstructured interviews. Structured interviews are a complement to blind hiring, not a replacement.',
+    context: 'Blind CV screening removes bias at the application stage; structured interviews reduce bias at the interview stage. Together they create a more defensible and equitable hiring process.',
+    tags: ['hr', 'eeoc'],
+    related: [{ text: 'Blind Hiring', href: '#blind-hiring' }, { text: 'Unconscious Bias', href: '#unconscious-bias' }]
+  },
+  {
+    term: 'Title VII',
+    def: 'Title VII of the Civil Rights Act of 1964 — the primary US federal law prohibiting employment discrimination based on race, colour, religion, sex, or national origin. Title VII applies to employers with 15 or more employees and is enforced by the EEOC.',
+    context: 'Blind hiring supports Title VII compliance by reducing the opportunity for name-based, gender-based, and origin-based discrimination at the screening stage.',
+    tags: ['eeoc', 'legal'],
+    related: [{ text: 'EEOC', href: '#eeoc' }, { text: 'ADEA', href: '#adea' }, { text: 'Blind Hiring', href: '#blind-hiring' }]
+  },
+  {
+    term: 'ADEA',
+    also: 'Age Discrimination in Employment Act',
+    def: 'US federal law enacted in 1967 prohibiting employment discrimination against persons 40 years of age or older. The ADEA applies to employers with 20 or more employees and is enforced by the EEOC. Using graduation years, class years, or early employment dates to infer a candidate\'s age and discriminate on that basis violates the ADEA.',
+    context: 'NullifyCV removes graduation years and early employment date patterns as age proxies, supporting ADEA-compliant blind screening.',
+    tags: ['eeoc', 'legal'],
+    related: [{ text: 'EEOC', href: '#eeoc' }, { text: 'Title VII', href: '#title-vii' }, { text: 'Bias Signal', href: '#bias-signal' }]
+  },
+  {
+    term: 'Unconscious Bias',
+    also: 'Also: Implicit Bias',
+    def: 'Attitudes, stereotypes, or preferences that affect judgement and decision-making without the individual\'s conscious awareness. Unconscious bias operates below the level of deliberate intention and affects even people who consciously hold egalitarian values. In hiring, unconscious bias can influence how CVs are evaluated based on a candidate\'s name, address, school, age, or photo.',
+    context: 'Blind hiring does not rely on individuals overcoming their unconscious bias — it removes the information that triggers the bias. This structural approach is more reliable than training alone.',
+    tags: ['hr', 'eeoc'],
+    related: [{ text: 'Blind Hiring', href: '#blind-hiring' }, { text: 'Bias Signal', href: '#bias-signal' }, { text: 'Structured Interview', href: '#structured-interview' }]
+  },
+  {
+    term: 'Zero Transmission',
+    def: 'A privacy architecture in which a service processes user data without any data being transmitted to the service provider\'s servers. Zero transmission is achieved through client-side processing — all computation occurs in the user\'s browser using locally executed code. This means the service provider never receives, stores, or processes the user\'s data.',
+    context: 'NullifyCV operates on a zero transmission architecture. CV files are read, processed, and redacted entirely within the user\'s browser. The service can be verified by opening browser DevTools and observing that no outbound requests contain document data during processing.',
+    tags: ['privacy'],
+    related: [{ text: 'Client-Side Processing', href: '#client-side-processing' }, { text: 'Data Processor', href: '#data-processor' }]
+  },
+];
+
+/* ── Build glossary ── */
+function slugify(term) {
+  return term.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function renderTag(tag) {
+  const labels = { gdpr: 'GDPR', eeoc: 'EEOC', hr: 'HR', privacy: 'Privacy', legal: 'Legal' };
+  return `<span class="gloss-tag tag-${tag}">${labels[tag] || tag}</span>`;
+}
+
+function renderTerm(t) {
+  const id = slugify(t.term);
+  const related = t.related ? `<div class="gloss-related">Related: ${t.related.map(r => `<a href="${r.href}">${r.text}</a>`).join(' · ')}</div>` : '';
+  const also    = t.also ? `<div class="gloss-term-also">${t.also}</div>` : '';
+  const context = t.context ? `<div class="gloss-term-context">${t.context}</div>` : '';
+  return `
+    <div class="gloss-term" id="${id}" data-term="${t.term.toLowerCase()}">
+      <div class="gloss-term-name">${t.term}</div>
+      ${also}
+      <div class="gloss-term-def">${t.def}</div>
+      ${context}
+      <div class="gloss-term-tags">${t.tags.map(renderTag).join('')}</div>
+      ${related}
+    </div>
+  `;
+}
+
+function buildGlossary(terms) {
+  const sorted  = [...terms].sort((a, b) => a.term.localeCompare(b.term));
+  const byLetter = {};
+  sorted.forEach(t => {
+    const letter = t.term[0].toUpperCase();
+    if (!byLetter[letter]) byLetter[letter] = [];
+    byLetter[letter].push(t);
+  });
+
+  // Alpha nav
+  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const nav = document.getElementById('alpha-nav');
+  nav.innerHTML = allLetters.map(l => {
+    const has = !!byLetter[l];
+    return `<a href="${has ? '#letter-' + l : '#'}" class="gloss-alpha-btn ${has ? 'has-terms' : ''}">${l}</a>`;
+  }).join('');
+
+  // Content
+  const content = document.getElementById('gloss-content');
+  content.innerHTML = Object.keys(byLetter).sort().map(letter => `
+    <div class="gloss-letter-section" id="letter-${letter}">
+      <div class="gloss-letter-head">${letter}</div>
+      ${byLetter[letter].map(renderTerm).join('')}
+    </div>
+  `).join('');
+}
+
+function filterGlossary(query) {
+  const q = query.toLowerCase().trim();
+  const terms = document.querySelectorAll('.gloss-term');
+  const sections = document.querySelectorAll('.gloss-letter-section');
+  let visible = 0;
+
+  terms.forEach(t => {
+    const match = !q || t.dataset.term.includes(q) || t.textContent.toLowerCase().includes(q);
+    t.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+
+  sections.forEach(s => {
+    const hasVisible = [...s.querySelectorAll('.gloss-term')].some(t => t.style.display !== 'none');
+    s.style.display = hasVisible ? '' : 'none';
+  });
+
+  document.getElementById('gloss-empty').style.display = visible === 0 ? 'block' : 'none';
+}
+
+buildGlossary(TERMS);
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
