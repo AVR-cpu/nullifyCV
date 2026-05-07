@@ -447,6 +447,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   if (!checkURLLicence()) {
     loadStoredLicence();
   }
+  // Init batch UI (shows only for pro/team)
+  initBatchUI();
 });
 
 /* ── Upgrade modal ────────────────────────────────────────────────────────── */
@@ -544,6 +546,8 @@ function applyLicence(tier) {
   // Update licence input area
   const licBox = document.getElementById('licence-box');
   if (licBox) licBox.style.display = 'none';
+  // Show batch UI for pro/team
+  initBatchUI();
 }
 
 /* ── Show licence status bar ── */
@@ -621,3 +625,234 @@ function checkURLLicence() {
 
 
 
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* ── BATCH PROCESSING (Pro / Team only) ─────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════ */
+
+let batchQueue   = [];   // Array of File objects
+let batchRunning = false;
+
+/* ── Show / hide batch UI based on licence tier ── */
+function initBatchUI() {
+  const tier = activeLicence ? activeLicence.tier : null;
+  const batchSection = document.getElementById('batch-section');
+  if (!batchSection) return;
+  if (tier === 'pro' || tier === 'team') {
+    batchSection.style.display = 'block';
+  } else {
+    batchSection.style.display = 'none';
+  }
+}
+
+/* ── Add files to batch queue ── */
+function batchAddFiles(files) {
+  const allowed = ['pdf','docx','doc'];
+  let added = 0;
+  for (const file of files) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!allowed.includes(ext)) continue;
+    if (batchQueue.length >= 200) { batchShowError('Maximum 200 files per batch.'); break; }
+    // Avoid duplicates
+    if (batchQueue.find(f => f.name === file.name && f.size === file.size)) continue;
+    batchQueue.push(file);
+    added++;
+  }
+  batchRenderQueue();
+  if (added > 0) document.getElementById('batch-run-btn').disabled = false;
+}
+
+/* ── Render the queue list ── */
+function batchRenderQueue() {
+  const list  = document.getElementById('batch-list');
+  const count = document.getElementById('batch-count');
+  if (!list) return;
+
+  count.textContent = batchQueue.length + ' file' + (batchQueue.length !== 1 ? 's' : '') + ' queued';
+  list.innerHTML = '';
+
+  batchQueue.forEach((file, i) => {
+    const row = document.createElement('div');
+    row.className = 'batch-row';
+    row.id = 'brow-' + i;
+    row.innerHTML = `
+      <span class="batch-row-icon">${file.name.endsWith('.pdf') ? '📄' : '📝'}</span>
+      <span class="batch-row-name">${esc(file.name)}</span>
+      <span class="batch-row-size">${fmtSize(file.size)}</span>
+      <span class="batch-row-status" id="bstat-${i}">queued</span>
+      <button class="batch-row-del" onclick="batchRemove(${i})" aria-label="Remove">×</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+/* ── Remove a file from queue ── */
+function batchRemove(i) {
+  batchQueue.splice(i, 1);
+  batchRenderQueue();
+  if (batchQueue.length === 0) document.getElementById('batch-run-btn').disabled = true;
+}
+
+function batchClear() {
+  batchQueue = [];
+  batchRenderQueue();
+  document.getElementById('batch-run-btn').disabled = true;
+  document.getElementById('batch-dl-btn').style.display = 'none';
+  document.getElementById('batch-progress-wrap').style.display = 'none';
+  batchShowError('');
+}
+
+function batchShowError(msg) {
+  const el = document.getElementById('batch-err');
+  if (el) el.textContent = msg;
+}
+
+/* ── Process single file for batch (returns {name, bytes|text, piiCount}) ── */
+async function batchProcessFile(file, activeKeys) {
+  const ext = file.name.split('.').pop().toLowerCase();
+
+  if (ext === 'pdf') {
+    const { text, items, rawBytes } = await extractPDFData(file);
+    const pii       = scanForPII(text, activeKeys);
+    const positions = findPIIPositions(items, pii.map(p => p.value));
+    let outBytes    = rawBytes;
+    if (positions.length > 0) {
+      outBytes = await buildRedactedPDF(rawBytes, positions);
+    }
+    return { name: file.name.replace(/\.pdf$/i, '_NULLIFIED.pdf'), bytes: outBytes, piiCount: pii.length, type: 'pdf' };
+
+  } else {
+    const text    = await extractDOCXText(file);
+    const pii     = scanForPII(text, activeKeys);
+    const redacted = applyTextRedactions(text, pii);
+    const baseName = file.name.replace(/\.[^.]+$/, '');
+    const sep      = '═'.repeat(42);
+    const content  = ['NULLIFYCV — DE-IDENTIFIED DOCUMENT', 'nullifycv.com', sep,
+      'Original file : ' + file.name,
+      'Processed     : ' + new Date().toISOString(),
+      'Engine        : mammoth 1.6.0',
+      'Transmitted   : 0 bytes',
+      'Nullified     : ' + pii.length + ' PII items',
+      sep, '', redacted].join('\n');
+    return { name: baseName + '_NULLIFIED.txt', bytes: new TextEncoder().encode(content), piiCount: pii.length, type: 'docx' };
+  }
+}
+
+/* ── Run the batch ── */
+async function batchRun() {
+  if (batchRunning || batchQueue.length === 0) return;
+  batchRunning = true;
+  batchShowError('');
+
+  const runBtn   = document.getElementById('batch-run-btn');
+  const dlBtn    = document.getElementById('batch-dl-btn');
+  const progWrap = document.getElementById('batch-progress-wrap');
+  const progBar  = document.getElementById('batch-progress-bar');
+  const progTxt  = document.getElementById('batch-progress-txt');
+
+  runBtn.disabled  = true;
+  runBtn.textContent = 'Processing...';
+  progWrap.style.display = 'block';
+  dlBtn.style.display    = 'none';
+
+  const activeKeys = getActiveKeys();
+  const results    = [];
+  const auditItems = [];
+  let   errors     = 0;
+
+  for (let i = 0; i < batchQueue.length; i++) {
+    const file   = batchQueue[i];
+    const statEl = document.getElementById('bstat-' + i);
+    const rowEl  = document.getElementById('brow-' + i);
+
+    if (statEl) statEl.textContent = 'processing...';
+    if (statEl) statEl.style.color = 'var(--green-muted)';
+
+    const pct = Math.round(((i) / batchQueue.length) * 100);
+    progBar.style.width = pct + '%';
+    progTxt.textContent = (i + 1) + ' of ' + batchQueue.length + ' — ' + file.name;
+
+    try {
+      const result = await batchProcessFile(file, activeKeys);
+      results.push(result);
+      auditItems.push({ file: file.name, pii_nullified: result.piiCount, status: 'success' });
+      if (statEl) { statEl.textContent = '✓ ' + result.piiCount + ' items'; statEl.style.color = 'var(--green-mid)'; }
+      if (rowEl)  rowEl.style.opacity = '0.7';
+    } catch (err) {
+      errors++;
+      auditItems.push({ file: file.name, pii_nullified: 0, status: 'error', error: err.message });
+      if (statEl) { statEl.textContent = '✗ error'; statEl.style.color = '#c0392b'; }
+      console.error('[Batch]', file.name, err);
+    }
+
+    await slp(50); // Small pause to keep UI responsive
+  }
+
+  progBar.style.width = '100%';
+  progTxt.textContent = '✓ Complete — ' + results.length + ' files processed' + (errors > 0 ? ', ' + errors + ' errors' : '');
+
+  // Build ZIP using JSZip
+  if (results.length > 0) {
+    try {
+      if (typeof JSZip === 'undefined') {
+        batchShowError('JSZip not loaded — please reload the page.');
+        batchRunning = false;
+        return;
+      }
+
+      const zip = new JSZip();
+
+      // Add all redacted files
+      results.forEach(r => {
+        zip.file(r.name, r.bytes);
+      });
+
+      // Add combined audit log
+      const auditLog = {
+        tool: 'NullifyCV v2.0.0',
+        site: 'nullifycv.com',
+        batch_id: 'BATCH-' + Date.now(),
+        timestamp: new Date().toISOString(),
+        total_files: batchQueue.length,
+        processed: results.length,
+        errors,
+        server_transmissions: 0,
+        active_keys: Object.keys(activeKeys),
+        files: auditItems,
+        disclaimer: 'Consistent with GDPR Article 5. Not legal advice.'
+      };
+      zip.file('nullifycv_batch_audit.json', JSON.stringify(auditLog, null, 2));
+
+      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+      const zipUrl  = URL.createObjectURL(zipBlob);
+
+      dlBtn.style.display = 'inline-block';
+      dlBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = zipUrl;
+        a.download = 'NullifyCV_Batch_' + new Date().toISOString().slice(0,10) + '.zip';
+        a.click();
+      };
+      setTimeout(() => URL.revokeObjectURL(zipUrl), 60000);
+
+    } catch (zipErr) {
+      batchShowError('Error creating ZIP: ' + zipErr.message);
+      console.error('[Batch ZIP]', zipErr);
+    }
+  }
+
+  runBtn.textContent = 'Run batch again';
+  runBtn.disabled    = false;
+  batchRunning       = false;
+}
+
+/* ── Drag and drop for batch zone ── */
+function batchDov(e) { e.preventDefault(); document.getElementById('batch-drop').classList.add('over'); }
+function batchDdr(e) {
+  e.preventDefault();
+  document.getElementById('batch-drop').classList.remove('over');
+  if (e.dataTransfer.files.length > 0) batchAddFiles(Array.from(e.dataTransfer.files));
+}
+function batchFsel(e) {
+  if (e.target.files.length > 0) batchAddFiles(Array.from(e.target.files));
+}
