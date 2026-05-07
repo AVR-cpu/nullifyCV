@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — NullifyCV</title>
+  <meta name="description" content="Guides on blind hiring, GDPR compliance, resume redaction, and privacy-first recruitment. From the NullifyCV team.">
+  <link rel="canonical" href="https://nullifycv.com/blog/">
+  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .blog-index-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+    .blog-index-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 10px; }
+    .blog-index-title { font-size: 32px; font-weight: 800; color: var(--green-dark); letter-spacing: -1px; margin-bottom: 10px; }
+    .blog-index-sub { font-size: 14px; color: var(--ink3); line-height: 1.6; margin-bottom: 40px; }
+    .blog-rule { height: 1px; background: var(--border); margin-bottom: 32px; }
+    .blog-card {
+      display: block;
+      text-decoration: none;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .blog-card:hover { border-color: var(--green-mid); box-shadow: 0 4px 20px rgba(30,77,53,0.1); }
+    .blog-card-tag { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 8px; }
+    .blog-card-title { font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; letter-spacing: -0.3px; }
+    .blog-card-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; margin-bottom: 10px; }
+    .blog-card-meta { font-size: 11px; color: var(--ink3); font-family: var(--mono); display: flex; gap: 12px; }
+  </style>
+</head>
+<body>
+
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark"><span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span></span>
+  </a>
+  <nav class="top-nav">
+    <a href="/about.html">How it works</a>
+    <a href="/blog/" style="color:#ffffff;font-weight:600;">Blog</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/pro.html" class="nav-pro">Pro →</a>
+  </nav>
+  <div class="offline-pill"><span class="pulse"></span><span>Processing locally — no uploads</span></div>
+</header>
+
+<div class="blog-index-wrap">
+
+  <div class="blog-index-tag">Blog</div>
+  <h1 class="blog-index-title">Guides on blind hiring,<br>GDPR, and privacy.</h1>
+  <p class="blog-index-sub">Practical guides for HR teams, recruiters, and job seekers on privacy-first hiring, resume redaction, and compliance.</p>
+  <div class="blog-rule"></div>
+
+  <a href="/blog/how-to-remove-pii-from-resume.html" class="blog-card">
+    <div class="blog-card-tag">Recruiting · Privacy · GDPR</div>
+    <div class="blog-card-title">How to Remove PII from a Resume — A Guide for Recruiters</div>
+    <div class="blog-card-desc">Learn how to remove personally identifiable information from resumes for blind hiring. Free, GDPR-consistent method that works in your browser. No uploads needed.</div>
+    <div class="blog-card-meta"><span>📅 May 2026</span><span>⏱ 6 min read</span><span>🌐 EN</span></div>
+  </a>
+
+  <a href="/blog/cv-anonimiseren-voor-recruiters.html" class="blog-card">
+    <div class="blog-card-tag">Recruiting · Privacy · AVG</div>
+    <div class="blog-card-title">CV Anonimiseren voor Recruiters — een Praktische Gids</div>
+    <div class="blog-card-desc">Leer hoe je als recruiter een cv anonimiseert voor blind hiring. Gratis tool, GDPR-conform, bestanden verlaten nooit je browser.</div>
+    <div class="blog-card-meta"><span>📅 Mei 2026</span><span>⏱ 7 min lezen</span><span>🌐 NL</span></div>
+  </a>
+
+  <a href="/blog/blind-hiring-guide-hr-teams.html" class="blog-card">
+    <div class="blog-card-tag">HR · Blind Hiring · EEOC</div>
+    <div class="blog-card-title">Blind Hiring Guide for HR Teams — What It Is and How to Do It</div>
+    <div class="blog-card-desc">A practical guide to blind hiring for HR teams. What to anonymise, how to run structured blind review, and how to document the process for EEOC compliance.</div>
+    <div class="blog-card-meta"><span>📅 May 2026</span><span>⏱ 8 min read</span><span>🌐 EN</span></div>
+  </a>
+
+  <a href="/blog/gdpr-hiring-hr-guide.html" class="blog-card">
+    <div class="blog-card-tag">GDPR · HR Compliance · Privacy</div>
+    <div class="blog-card-title">GDPR and Hiring — What HR Teams Need to Know</div>
+    <div class="blog-card-desc">How GDPR affects your hiring process. Data minimisation, purpose limitation, right to erasure — and how resume redaction supports compliant recruitment.</div>
+    <div class="blog-card-meta"><span>📅 May 2026</span><span>⏱ 8 min read</span><span>🌐 EN</span></div>
+  </a>
+
+  <a href="/blog/redact-cv-client-submission.html" class="blog-card">
+    <div class="blog-card-tag">Recruiting · Client Submission · Privacy</div>
+    <div class="blog-card-title">How to Redact a CV for Client Submission — A Recruiter's Guide</div>
+    <div class="blog-card-desc">How to redact a candidate's CV before sending it to a client. Protect candidate data, prevent poaching, and stay GDPR-compliant.</div>
+    <div class="blog-card-meta"><span>📅 May 2026</span><span>⏱ 6 min read</span><span>🌐 EN</span></div>
+  </a>
+
+</div>
+
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span>·</span>
+  <a href="/about.html">How it works</a>
+  <span>·</span>
+  <a href="/blog/">Blog</a>
+  <span>·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+  <span>·</span>
+  <a href="/">Try the tool</a>
+  <span>·</span>
+  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
+</footer>
+
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
