@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NullifyCV Pro — Pricing Plans</title>
+  <meta name="description" content="Upgrade NullifyCV for batch processing, GDPR audit logs, and saved redaction profiles. Job Seeker plan from $1.99. Pro from $9/month.">
+  <link rel="canonical" href="https://nullifycv.com/pro.html">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z' fill='%231e4d35' stroke='%237aaa8a' stroke-width='1.2'/><rect x='11' y='8' width='10' height='14' rx='1.5' fill='white'/><line x1='13' y1='13' x2='19' y2='13' stroke='%231e4d35' stroke-width='1.4' stroke-linecap='round'/><line x1='13' y1='16' x2='19' y2='16' stroke='%231e4d35' stroke-width='1.4' stroke-linecap='round'/><line x1='13' y1='19' x2='17' y2='19' stroke='%231e4d35' stroke-width='1.4' stroke-linecap='round'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .pro-wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* ── Hero ── */
+    .pro-hero { text-align: center; margin-bottom: 48px; }
+    .pro-hero-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 12px; }
+    .pro-hero h1 { font-size: 36px; font-weight: 800; color: var(--green-dark); letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; }
+    .pro-hero p { font-size: 15px; color: var(--ink3); max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+    /* ── Billing toggle ── */
+    .billing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .toggle-switch {
+      width: 44px; height: 24px;
+      background: var(--green-dark);
+      border-radius: 100px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      flex-shrink: 0;
+    }
+    .toggle-switch::after {
+      content: '';
+      width: 18px; height: 18px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px; left: 3px;
+      transition: transform 0.2s;
+    }
+    .toggle-switch.annual::after { transform: translateX(20px); }
+    .toggle-label { color: var(--ink3); }
+    .toggle-label.active { color: var(--green-dark); font-weight: 700; }
+    .save-badge { background: var(--green-bg); color: var(--green-dark); font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 100px; }
+
+    /* ── Pricing grid ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 48px;
+      align-items: start;
+    }
+
+    .tier-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .tier-card.featured {
+      border: 2px solid var(--green-dark);
+      transform: translateY(-4px);
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green-dark);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 14px;
+      border-radius: 100px;
+      font-family: var(--mono);
+      white-space: nowrap;
+    }
+
+    .tier-name { font-size: 13px; font-weight: 700; color: var(--ink2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--mono); }
+    .tier-price { font-size: 36px; font-weight: 800; color: var(--green-dark); line-height: 1; margin-bottom: 4px; letter-spacing: -1px; }
+    .tier-price sup { font-size: 18px; font-weight: 700; vertical-align: super; }
+    .tier-price span { font-size: 13px; font-weight: 400; color: var(--ink3); }
+    .tier-desc { font-size: 12px; color: var(--ink3); margin-bottom: 20px; line-height: 1.5; min-height: 36px; }
+    .tier-divider { height: 1px; background: var(--border); margin-bottom: 16px; }
+
+    .tier-features { list-style: none; flex: 1; margin-bottom: 24px; }
+    .tier-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink2);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .feat-yes { color: var(--green-mid); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .feat-no  { color: var(--paper3); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+    .tier-btn {
+      display: block;
+      text-align: center;
+      padding: 11px;
+      border-radius: var(--r);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s;
+      font-family: var(--sans);
+      border: none;
+      cursor: pointer;
+    }
+
+    .tier-btn.free     { background: var(--paper2); color: var(--ink2); border: 1px solid var(--border); }
+    .tier-btn.free:hover { background: var(--paper3); }
+    .tier-btn.seeker   { background: var(--green-bg); color: var(--green-dark); border: 1.5px solid var(--green-mid); }
+    .tier-btn.seeker:hover { background: var(--green-bg2); }
+    .tier-btn.primary  { background: var(--green-dark); color: white; }
+    .tier-btn.primary:hover { background: var(--green-mid); }
+
+    /* ── Annual price display ── */
+    .price-monthly { display: block; }
+    .price-annual  { display: none; }
+    .body-annual .price-monthly { display: none; }
+    .body-annual .price-annual  { display: block; }
+    .body-annual .annual-hide   { display: none; }
+    .body-annual .annual-show   { display: inline; }
+    .annual-show { display: none; }
+
+    /* ── Feature comparison ── */
+    .compare-section { margin-bottom: 48px; }
+    .compare-title { font-size: 20px; font-weight: 800; color: var(--green-dark); margin-bottom: 6px; letter-spacing: -0.5px; }
+    .compare-sub { font-size: 13px; color: var(--ink3); margin-bottom: 24px; }
+
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .compare-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink3);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .compare-table th:first-child { width: 40%; }
+    .compare-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink2);
+      vertical-align: middle;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:nth-child(even) td { background: var(--paper2); }
+    .check-y { color: var(--green-mid); font-size: 14px; font-weight: 700; }
+    .check-n { color: var(--paper3); font-size: 14px; }
+    .check-p { font-size: 11px; color: var(--ink3); font-family: var(--mono); }
+
+    /* ── Trust section ── */
+    .trust-section { background: var(--green-bg); border: 1px solid var(--green-bg2); border-radius: var(--rl); padding: 28px 32px; margin-bottom: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .trust-item { text-align: center; }
+    .trust-item-icon { font-size: 24px; margin-bottom: 8px; }
+    .trust-item h3 { font-size: 13px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
+    .trust-item p { font-size: 11px; color: var(--ink3); line-height: 1.5; }
+
+    /* ── FAQ ── */
+    .faq-title { font-size: 20px; font-weight: 800; color: var(--green-dark); margin-bottom: 20px; letter-spacing: -0.5px; }
+    .faq-list { display: flex; flex-direction: column; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+    .faq-q { width: 100%; background: none; border: none; text-align: left; padding: 14px 0; font-size: 13px; font-weight: 600; color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--sans); }
+    .faq-q:hover { color: var(--green-dark); }
+    .faq-arrow { color: var(--green-muted); font-size: 16px; transition: transform 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-a { font-size: 13px; color: var(--ink3); line-height: 1.7; padding-bottom: 14px; display: none; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Bottom CTA ── */
+    .bottom-cta { text-align: center; padding: 48px 0 0; }
+    .bottom-cta h2 { font-size: 24px; font-weight: 800; color: var(--green-dark); letter-spacing: -0.5px; margin-bottom: 8px; }
+    .bottom-cta p { font-size: 13px; color: var(--ink3); margin-bottom: 20px; }
+    .bottom-cta a { display: inline-block; background: var(--green-dark); color: white; padding: 12px 28px; border-radius: var(--r); font-size: 13px; font-weight: 700; text-decoration: none; }
+
+    .disclaimer { font-size: 11px; color: var(--ink3); text-align: center; margin-top: 24px; line-height: 1.6; }
+
+    @media (max-width: 680px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+      .tier-card.featured { transform: none; }
+      .trust-section { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header class="top-bar" role="banner">
+  <a href="/" class="logo" aria-label="NullifyCV home">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L3 7.5v7C3 22.5 8.8 28.5 16 30c7.2-1.5 13-7.5 13-15.5v-7L16 2z" fill="none" stroke="#7aaa8a" stroke-width="1.8"/>
+      <rect x="11" y="9" width="10" height="13" rx="1.5" fill="none" stroke="#7aaa8a" stroke-width="1.5"/>
+      <line x1="13" y1="14" x2="19" y2="14" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="16.5" x2="19" y2="16.5" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="13" y1="19" x2="17" y2="19" stroke="#7aaa8a" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">
+      <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
+    </span>
+  </a>
+  <nav class="top-nav">
+    <a href="/about.html">How it works</a>
+    <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+    <a href="/" class="nav-pro">Try the tool →</a>
+  </nav>
+  <div class="offline-pill">
+    <span class="pulse"></span>
+    <span>Processing locally — no uploads</span>
+  </div>
+</header>
+
+<div class="pro-wrap">
+
+  <!-- ── HERO ── -->
+  <div class="pro-hero">
+    <div class="pro-hero-tag">Pricing</div>
+    <h1>Simple, transparent pricing.<br>Start free, upgrade when ready.</h1>
+    <p>Every plan processes files 100% in your browser. No uploads, no data stored — ever.</p>
+  </div>
+
+  <!-- ── BILLING TOGGLE ── -->
+  <div class="billing-toggle">
+    <span class="toggle-label active" id="label-monthly">Monthly</span>
+    <button class="toggle-switch" id="billingToggle" onclick="toggleBilling()" aria-label="Toggle annual billing"></button>
+    <span class="toggle-label" id="label-annual">Annual <span class="save-badge">Save $18</span></span>
+  </div>
+
+  <!-- ── PRICING CARDS ── -->
+  <div class="pricing-grid">
+
+    <!-- Free -->
+    <div class="tier-card">
+      <div class="tier-name">Free</div>
+      <div class="tier-price"><sup>$</sup>0<span> / forever</span></div>
+      <div class="tier-desc">Single file processing with standard redaction. Supported by contextual ads.</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-features">
+        <li><span class="feat-yes">✓</span>Single file processing</li>
+        <li><span class="feat-yes">✓</span>4 redaction modes</li>
+        <li><span class="feat-yes">✓</span>PDF + DOCX support</li>
+        <li><span class="feat-yes">✓</span>Basic audit log (JSON)</li>
+        <li><span class="feat-yes">✓</span>100% client-side processing</li>
+        <li><span class="feat-no">—</span><span style="color:var(--ink3)">Batch processing</span></li>
+        <li><span class="feat-no">—</span><span style="color:var(--ink3)">GDPR audit log</span></li>
+        <li><span class="feat-no">—</span><span style="color:var(--ink3)">Ad-free</span></li>
+      </ul>
+      <a href="/" class="tier-btn free">Use for free →</a>
+    </div>
+
+    <!-- Job Seeker -->
+    <div class="tier-card featured">
+      <div class="featured-badge">Most popular</div>
+      <div class="tier-name">Job Seeker</div>
+      <div class="tier-price"><sup>$</sup>1.99<span> / one-time</span></div>
+      <div class="tier-desc">30 days of unlimited access. All modes, ad-free. No subscription — pay once.</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-features">
+        <li><span class="feat-yes">✓</span>Everything in Free</li>
+        <li><span class="feat-yes">✓</span>All 8 redaction targets</li>
+        <li><span class="feat-yes">✓</span>All modes incl. EEOC</li>
+        <li><span class="feat-yes">✓</span>Ad-free experience</li>
+        <li><span class="feat-yes">✓</span>30 days unlimited use</li>
+        <li><span class="feat-yes">✓</span>No subscription</li>
+        <li><span class="feat-no">—</span><span style="color:var(--ink3)">Batch processing</span></li>
+        <li><span class="feat-no">—</span><span style="color:var(--ink3)">GDPR audit log export</span></li>
+      </ul>
+      <a href="https://buy.stripe.com/3cIeVef5wgxj5A0bsx18c01" class="tier-btn seeker">Get Job Seeker — $1.99 →</a>
+    </div>
+
+    <!-- Pro -->
+    <div class="tier-card">
+      <div class="tier-name">Pro</div>
+
+      <div class="price-monthly">
+        <div class="tier-price"><sup>$</sup>9<span> / month</span></div>
+      </div>
+      <div class="price-annual">
+        <div class="tier-price"><sup>$</sup>90<span> / year</span></div>
+      </div>
+
+      <div class="tier-desc">For recruiters and HR teams. Batch processing, saved profiles, compliance audit logs.</div>
+      <div class="tier-divider"></div>
+      <ul class="tier-features">
+        <li><span class="feat-yes">✓</span>Everything in Job Seeker</li>
+        <li><span class="feat-yes">✓</span>Batch up to 200 files</li>
+        <li><span class="feat-yes">✓</span>Saved redaction profiles</li>
+        <li><span class="feat-yes">✓</span>GDPR / CCPA annotated audit log</li>
+        <li><span class="feat-yes">✓</span>Regulatory article mapping</li>
+        <li><span class="feat-yes">✓</span>DPO report export</li>
+        <li><span class="feat-yes">✓</span>Ad-free experience</li>
+        <li><span class="feat-yes annual-show">✓</span><span class="annual-show" style="color:var(--green-dark);font-weight:600">2 months free vs monthly</span></li>
+      </ul>
+
+      <a href="https://buy.stripe.com/fZu6oI6z0a8Vd2s8gl18c02" class="tier-btn primary price-monthly" id="pro-btn-monthly">Get Pro — $9/mo →</a>
+      <a href="https://buy.stripe.com/7sYfZif5w1Cpe6w7ch18c03" class="tier-btn primary price-annual" id="pro-btn-annual">Get Pro — $90/yr →</a>
+    </div>
+
+  </div>
+
+  <!-- ── TRUST SIGNALS ── -->
+  <div class="trust-section">
+    <div class="trust-item">
+      <div class="trust-item-icon">🔒</div>
+      <h3>Files never leave your device</h3>
+      <p>All processing happens in your browser. Zero bytes of document data transmitted — on any plan.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-item-icon">↩️</div>
+      <h3>Cancel anytime</h3>
+      <p>Pro subscriptions cancel instantly via Stripe. No lock-in, no questions asked.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-item-icon">🔓</div>
+      <h3>Open source</h3>
+      <p>Every line of code that handles your documents is public on GitHub. Audit it yourself.</p>
+    </div>
+  </div>
+
+  <!-- ── COMPARISON TABLE ── -->
+  <div class="compare-section">
+    <div class="compare-title">Full feature comparison</div>
+    <div class="compare-sub">Everything you get on each plan.</div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free</th>
+          <th>Job Seeker</th>
+          <th>Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Single file processing</td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>PDF + DOCX support</td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>Redaction modes</td>
+          <td><span class="check-p">4 modes</span></td>
+          <td><span class="check-p">All modes</span></td>
+          <td><span class="check-p">All modes</span></td>
+        </tr>
+        <tr>
+          <td>Redaction targets</td>
+          <td><span class="check-p">4 targets</span></td>
+          <td><span class="check-p">All 8</span></td>
+          <td><span class="check-p">All 8</span></td>
+        </tr>
+        <tr>
+          <td>Black bar PDF redaction</td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>Ad-free experience</td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>Batch processing</td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-p">Up to 200 files</span></td>
+        </tr>
+        <tr>
+          <td>Saved redaction profiles</td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>GDPR / CCPA audit log</td>
+          <td><span class="check-p">Basic</span></td>
+          <td><span class="check-p">Basic</span></td>
+          <td><span class="check-p">Full annotated</span></td>
+        </tr>
+        <tr>
+          <td>Regulatory article mapping</td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>DPO compliance report (PDF)</td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-n">—</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+        <tr>
+          <td>100% client-side processing</td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+          <td><span class="check-y">✓</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <div class="faq-title">Frequently asked questions</div>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        Do my files get uploaded when I upgrade?
+        <span class="faq-arrow">↓</span>
+      </button>
+      <div class="faq-a">No — on every plan, including Pro, all file processing happens entirely in your browser. Upgrading unlocks additional features but does not change how your files are handled. Zero bytes of document data are ever transmitted to any server.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        What does the Job Seeker plan give me?
+        <span class="faq-arrow">↓</span>
+      </button>
+      <div class="faq-a">The Job Seeker plan is a one-time $1.99 payment that gives you 30 days of ad-free access to all redaction modes and targets. There's no subscription — you pay once and that's it. It's designed for candidates who want to protect their personal data before sharing their resume with recruiters or agencies.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        Can I cancel Pro at any time?
+        <span class="faq-arrow">↓</span>
+      </button>
+      <div class="faq-a">Yes — Pro subscriptions are managed by Stripe and can be cancelled instantly from your Stripe customer portal. No lock-in, no cancellation fees, no questions asked. You keep access until the end of your current billing period.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        How does batch processing work on Pro?
+        <span class="faq-arrow">↓</span>
+      </button>
+      <div class="faq-a">Pro users can drop up to 200 PDF or DOCX files at once into the batch queue. The tool processes them sequentially in the browser, applies your saved redaction profile, and lets you download all redacted files as a ZIP — along with a combined audit log for the full batch.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        What is the GDPR audit log?
+        <span class="faq-arrow">↓</span>
+      </button>
+      <div class="faq-a">The Pro GDPR audit log is a detailed JSON or PDF report documenting every PII item redacted, which regulatory article it maps to (GDPR Art. 5(1)(c), CCPA §1798, etc.), the confidence score, and a timestamp. It's designed to be attached to EEOC blind review documentation or presented to your Data Protection Officer as evidence of a data minimisation workflow.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        Is the annual plan worth it?
+        <span class="faq-arrow">↓</span>
+      </button>
+      <div class="faq-a">If you use NullifyCV regularly — processing candidate batches weekly or monthly — the annual plan saves you $18 compared to paying monthly, effectively giving you 2 months free. It also means one less subscription renewal to manage.</div>
+    </div>
+
+  </div>
+
+  <!-- ── BOTTOM CTA ── -->
+  <div class="bottom-cta">
+    <h2>Start free. Upgrade when you need to.</h2>
+    <p>No account required on the free plan. Files never leave your browser on any plan.</p>
+    <a href="/">Try the tool free →</a>
+    <div class="disclaimer">
+      Payments processed securely by Stripe. NullifyCV never stores payment details.<br>
+      Pro subscriptions cancel anytime · Job Seeker is a one-time charge · All plans include client-side-only processing.
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="foot" role="contentinfo">
+  <span class="foot-brand">nullifycv.com</span>
+  <span>·</span>
+  <a href="/about.html">How it works</a>
+  <span>·</span>
+  <a href="https://github.com/AVR-cpu/nullifyCV" target="_blank" rel="noopener">GitHub</a>
+  <span>·</span>
+  <a href="/">Try the tool</a>
+  <span>·</span>
+  <small>Not legal advice · GDPR-consistent</small>
+</footer>
+
+<script>
+let isAnnual = false;
+
+function toggleBilling() {
+  isAnnual = !isAnnual;
+  const btn    = document.getElementById('billingToggle');
+  const lbMon  = document.getElementById('label-monthly');
+  const lbAnn  = document.getElementById('label-annual');
+
+  btn.classList.toggle('annual', isAnnual);
+  lbMon.classList.toggle('active', !isAnnual);
+  lbAnn.classList.toggle('active', isAnnual);
+  document.body.classList.toggle('body-annual', isAnnual);
+}
+
+function toggleFAQ(btn) {
+  const item   = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
