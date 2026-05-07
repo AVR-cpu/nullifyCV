@@ -90,9 +90,9 @@
     <p class="slabel">Redaction mode</p>
     <div class="tabs" role="tablist" aria-label="Redaction mode">
       <button class="tab on" role="tab" aria-selected="true" onclick="setMode('standard',this)">Standard PII</button>
-      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Bias strip 🔒</button>
-      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Client sub. 🔒</button>
-      <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">EEOC 🔒</button>
+      <button class="tab" role="tab" aria-selected="false" onclick="setMode('bias',this)">Bias strip</button>
+      <button class="tab" role="tab" aria-selected="false" onclick="setMode('client',this)">Client sub.</button>
+      <button class="tab" role="tab" aria-selected="false" onclick="setMode('eeoc',this)">EEOC</button>
     </div>
 
     <!-- Redaction targets -->
@@ -102,10 +102,10 @@
       <div class="tcard on" data-key="contact" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Contact info</div><div class="tdesc">Email, phone, address</div></div></div>
       <div class="tcard on" data-key="location" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Location / zip</div><div class="tdesc">Demographic proxy</div></div></div>
       <div class="tcard on" data-key="gradyear" onclick="toggleCard(this)" role="checkbox" aria-checked="true" tabindex="0"><div class="tbox">✓</div><div><div class="tlabel">Graduation year</div><div class="tdesc">Age proxy</div></div></div>
-      <div class="tcard tcard-locked" data-key="school" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias · paid</div></div></div>
-      <div class="tcard tcard-locked" data-key="pronouns" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they · paid</div></div></div>
-      <div class="tcard tcard-locked" data-key="urls" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links · paid</div></div></div>
-      <div class="tcard tcard-locked" data-key="metadata" onclick="showUpgrade('target')" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox">🔒</div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX · paid</div></div></div>
+      <div class="tcard" data-key="school" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">School names</div><div class="tdesc">Prestige bias</div></div></div>
+      <div class="tcard" data-key="pronouns" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">Gender pronouns</div><div class="tdesc">He/she/they in bio</div></div></div>
+      <div class="tcard" data-key="urls" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">LinkedIn / URLs</div><div class="tdesc">Profile links</div></div></div>
+      <div class="tcard" data-key="metadata" onclick="toggleCard(this)" role="checkbox" aria-checked="false" tabindex="0"><div class="tbox"></div><div><div class="tlabel">File metadata</div><div class="tdesc">Author in DOCX props</div></div></div>
     </div>
 
     <!-- UPGRADE MODAL -->
