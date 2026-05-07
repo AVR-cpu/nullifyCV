@@ -608,22 +608,12 @@ async function activateLicenceKey() {
 
 /* ── Check URL for auto-activation from success page ── */
 function checkURLLicence() {
-  const params  = new URLSearchParams(window.location.search);
-  const urlKey  = params.get('licence_key');
-  const urlPlan = params.get('plan') || 'week';
-
-  if (urlKey) {
-    const days   = PLAN_DAYS[urlPlan] || 30;
-    const tier   = PLAN_TIERS[urlPlan] || 'seeker';
-    const expiry = Date.now() + (days * 24 * 60 * 60 * 1000);
-    const licenceData = { key: urlKey, tier, plan: urlPlan, issued: Date.now(), expires: expiry, days };
-    localStorage.setItem('ncv_licence', JSON.stringify(licenceData));
-    activeLicence = licenceData;
-    applyLicence(tier);
-    showLicenceStatus(licenceData);
-    // Clean URL
+  const params    = new URLSearchParams(window.location.search);
+  const activated = params.get('activated');
+  if (activated) {
+    const loaded = loadStoredLicence();
     window.history.replaceState({}, '', '/');
-    return true;
+    return loaded;
   }
   return false;
 }

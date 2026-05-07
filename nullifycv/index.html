@@ -98,16 +98,6 @@
     <!-- Licence status bar -->
     <div id="licence-status" style="display:none;align-items:center;gap:8px;font-size:12px;font-family:var(--mono);color:var(--ink2);background:var(--green-bg);border:1px solid var(--green-bg2);border-radius:var(--r);padding:8px 12px;margin-top:8px;"></div>
 
-    <!-- Licence key input -->
-    <div id="licence-box" style="margin-top:8px;background:var(--paper2);border:1px dashed var(--border);border-radius:var(--r);padding:12px 14px;">
-      <div style="font-size:11px;color:var(--ink3);margin-bottom:8px;font-family:var(--mono);">Have a licence key? Enter it to unlock paid features.</div>
-      <div style="display:flex;gap:8px;">
-        <input id="licence-input" type="text" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" style="flex:1;font-family:var(--mono);font-size:12px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--paper);color:var(--ink);outline:none;" />
-        <button id="licence-activate-btn" onclick="activateLicenceKey()" style="background:var(--green-dark);color:white;border:none;border-radius:var(--r);padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap;">Activate</button>
-      </div>
-      <div id="licence-err" style="font-size:11px;color:#c0392b;margin-top:6px;font-family:var(--mono);"></div>
-    </div>
-
     <!-- Redaction targets -->
     <p class="slabel">Redaction targets</p>
     <div class="tgrid" id="tgrid">
@@ -132,7 +122,11 @@
         <a href="https://buy.stripe.com/fZu28s9Lc0yl1jKfIN18c05" style="display:block;background:var(--green-dark);color:white;text-align:center;padding:10px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;">Week pass — $4.99 &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">7 days unlimited</span></a>
         <a href="https://buy.stripe.com/eVq9AUbTkftfgeE40518c06" style="display:block;background:transparent;color:var(--green-dark);border:1px solid var(--border);text-align:center;padding:10px;border-radius:var(--r);font-size:12px;font-weight:600;text-decoration:none;">Month pass — $9.99 &nbsp;·&nbsp; <span style="text-decoration:underline;">or see all Pro plans</span></a>
       </div>
-      <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:4px;">No thanks — stay on free plan</button>
+      <div style="border-top:1px solid var(--border);margin-top:4px;padding-top:12px;">
+        <p style="font-size:11px;color:var(--ink3);font-family:var(--mono);margin-bottom:4px;">Previously purchased? Lost access?</p>
+        <a href="mailto:support@nullifycv.com?subject=Restore%20NullifyCV%20Access&body=Hi%2C%20I%20purchased%20NullifyCV%20and%20lost%20access.%20My%20Stripe%20receipt%20is%3A%20" style="font-size:11px;color:var(--green-dark);font-weight:600;text-decoration:underline;">Email support@nullifycv.com with your Stripe receipt →</a>
+      </div>
+      <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:8px 4px 0;">No thanks — stay on free plan</button>
     </div>
 
     <!-- UPGRADE MODAL -->
@@ -150,7 +144,11 @@
         <span style="font-size:11px;color:var(--ink3);font-family:var(--mono);">Already paid? </span>
         <button onclick="closeUpgrade();document.getElementById('licence-box').scrollIntoView({behavior:'smooth'});" style="background:none;border:none;color:var(--green-dark);font-size:11px;font-weight:600;cursor:pointer;text-decoration:underline;">Enter licence key →</button>
       </div>
-      <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:4px;">No thanks — stay on free plan</button>
+      <div style="border-top:1px solid var(--border);margin-top:4px;padding-top:12px;">
+        <p style="font-size:11px;color:var(--ink3);font-family:var(--mono);margin-bottom:4px;">Previously purchased? Lost access?</p>
+        <a href="mailto:support@nullifycv.com?subject=Restore%20NullifyCV%20Access&body=Hi%2C%20I%20purchased%20NullifyCV%20and%20lost%20access.%20My%20Stripe%20receipt%20is%3A%20" style="font-size:11px;color:var(--green-dark);font-weight:600;text-decoration:underline;">Email support@nullifycv.com with your Stripe receipt →</a>
+      </div>
+      <button onclick="closeUpgrade()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:12px;cursor:pointer;padding:8px 4px 0;">No thanks — stay on free plan</button>
     </div>
 
     <!-- File loaded state -->
