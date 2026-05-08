@@ -51,6 +51,30 @@
     <a href="https://github.com/NullifyCV/nullifyCV" target="_blank" rel="noopener">GitHub</a>
     <a href="/" class="nav-pro">Try the tool →</a>
   </nav>
+  <div class="lang-switcher" id="lang-switcher">
+    <button class="lang-btn" id="lang-btn" aria-label="Select language" aria-expanded="false">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.4"/>
+      <ellipse cx="10" cy="10" rx="3.5" ry="8" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="3.5" y1="6" x2="16.5" y2="6" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="3.5" y1="14" x2="16.5" y2="14" stroke="currentColor" stroke-width="1.4"/>
+    </svg>
+      Language
+    </button>
+    <div class="lang-dropdown" id="lang-dropdown" role="menu">
+      <a href="/" class="lang-current">English</a>
+      <a href="/nl.html">Nederlands</a>
+      <a href="/de.html">Deutsch</a>
+      <a href="/fr.html">Français</a>
+      <a href="/es.html">Español</a>
+      <a href="/uk.html">English UK</a>
+      <a href="/ca.html">English CA</a>
+      <a href="/kr.html">한국어</a>
+      <a href="/se.html">Svenska</a>
+      <a href="/fi.html">Suomi</a>
+    </div>
+  </div>
   <div class="offline-pill"><span class="pulse"></span><span>Processing locally — no uploads</span></div>
 </header>
 
@@ -158,5 +182,28 @@
 </footer>
 
 <script defer src="/_vercel/insights/script.js"></script>
+
+<script>
+(function() {
+  var btn = document.getElementById('lang-btn');
+  var sw  = document.getElementById('lang-switcher');
+  if (!btn || !sw) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var open = sw.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', function() {
+    sw.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      sw.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+</script>
 </body>
 </html>
