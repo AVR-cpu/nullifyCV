@@ -371,6 +371,394 @@
       .privacy-grid { grid-template-columns: 1fr; }
       .step { grid-template-columns: 36px 1fr; }
     }
+
+    /* ──────────────────────────────────────────────────────────
+       DEMO SECTION (See it in action)
+       ────────────────────────────────────────────────────────── */
+    .demo-section {
+      max-width: 1280px;
+      margin: 0 auto 72px;
+      padding: 0 24px;
+    }
+    .demo-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      color: var(--green-muted);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .demo-h2 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: -0.6px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .demo-sub {
+      font-size: 15px;
+      color: var(--ink3);
+      line-height: 1.6;
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto 44px;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 56px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+    .demo-stage {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+    }
+    .demo-stage.before { color: #a14242; }
+    .demo-stage.after  { color: var(--green-dark); }
+    .demo-stage-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .demo-stage.before .demo-stage-dot { background: #d96d6d; }
+    .demo-stage.after  .demo-stage-dot { background: var(--green-mid); }
+    .cv-paper {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: #2a2a2a;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      box-shadow: 0 1px 2px rgba(30,77,53,0.04), 0 8px 28px rgba(30,77,53,0.08), 0 24px 48px rgba(30,77,53,0.04);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 38% 62%;
+    }
+    .cv-sidebar {
+      background: #1e3a4a;
+      color: #e8eef2;
+      padding: 32px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .cv-photo {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #c8d0d8 0%, #94a0ac 60%, #6f7d8a 100%);
+      overflow: hidden;
+      position: relative;
+      margin: 0 auto 4px;
+      max-width: 140px;
+    }
+    .cv-photo::before {
+      content: '';
+      position: absolute;
+      top: 22%; left: 50%;
+      transform: translateX(-50%);
+      width: 38%; height: 38%;
+      background: rgba(255,255,255,0.32);
+      border-radius: 50%;
+    }
+    .cv-photo::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 70%; height: 45%;
+      background: rgba(255,255,255,0.32);
+      border-radius: 50% 50% 0 0;
+    }
+    .cv-photo-redacted {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background: #0a0a0a;
+      margin: 0 auto 4px;
+      max-width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+    }
+    .sb-block {
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding-bottom: 18px;
+    }
+    .sb-block:last-child { border-bottom: none; padding-bottom: 0; }
+    .sb-title {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: #94b3c4;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .sb-line {
+      font-size: 11px;
+      line-height: 1.55;
+      color: #d8e2ea;
+      margin-bottom: 4px;
+    }
+    .sb-line:last-child { margin-bottom: 0; }
+    .sb-line strong { color: #fff; font-weight: 600; }
+    .sb-line.small { font-size: 10px; color: #a8bcc8; }
+    .sb-skill-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      margin-bottom: 5px;
+      color: #d8e2ea;
+    }
+    .sb-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      margin-bottom: 9px;
+      overflow: hidden;
+    }
+    .sb-bar-fill {
+      height: 100%;
+      background: #6fb89a;
+      border-radius: 2px;
+    }
+    .cv-main {
+      padding: 32px 30px;
+      background: white;
+    }
+    .cv-name {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1a1a1a;
+      letter-spacing: -0.6px;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+    .cv-role {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #1e3a4a;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      font-weight: 500;
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid #1e3a4a;
+    }
+    .cv-h {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #1e3a4a;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+    }
+    .cv-h:first-child { margin-top: 0; }
+    .cv-para {
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #444;
+      margin-bottom: 6px;
+    }
+    .cv-job { margin-bottom: 14px; }
+    .cv-job-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+    .cv-job-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .cv-job-date {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #888;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cv-job-company {
+      font-size: 11px;
+      color: #1e3a4a;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .cv-job-desc {
+      font-size: 10.5px;
+      line-height: 1.55;
+      color: #555;
+    }
+    .cv-edu {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .cv-edu-text { font-size: 11px; color: #333; }
+    .cv-edu-text strong { font-weight: 700; color: #1a1a1a; }
+    .cv-edu-date {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #888;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .redact {
+      display: inline-block;
+      background: #0a0a0a;
+      color: transparent;
+      border-radius: 2px;
+      user-select: none;
+      line-height: 1;
+      vertical-align: middle;
+      position: relative;
+    }
+    .redact::after {
+      content: attr(data-label);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .redact-block {
+      display: block;
+      background: #0a0a0a;
+      border-radius: 2px;
+      user-select: none;
+      position: relative;
+    }
+    .redact-block::after {
+      content: attr(data-label);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .demo-arrow {
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-mid);
+      margin-top: 320px;
+    }
+    .demo-arrow-circle {
+      width: 36px;
+      height: 36px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-bg2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green-dark);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .demo-arrow-label {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--green-muted);
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    .demo-legend {
+      margin-top: 32px;
+      padding: 20px 24px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-bg2);
+      border-radius: var(--rl);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 22px;
+      justify-content: center;
+      align-items: center;
+    }
+    .demo-legend-title {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--ink2);
+      font-weight: 500;
+    }
+    .legend-chip-bar {
+      display: inline-block;
+      width: 20px;
+      height: 10px;
+      background: #0a0a0a;
+      border-radius: 2px;
+    }
+    .demo-meta {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink3);
+      font-family: var(--mono);
+    }
+    .demo-meta strong { color: var(--green-dark); font-weight: 700; }
+    @media (max-width: 980px) {
+      .demo-grid { grid-template-columns: 1fr; gap: 32px; }
+      .demo-arrow { margin-top: 0; flex-direction: row; }
+      .demo-arrow-circle { transform: rotate(90deg); }
+      .demo-h2 { font-size: 26px; }
+    }
+    @media (max-width: 560px) {
+      .cv-paper { grid-template-columns: 42% 58%; }
+      .cv-sidebar { padding: 20px 14px; gap: 16px; }
+      .cv-main { padding: 22px 18px; }
+      .cv-name { font-size: 20px; }
+      .sb-line, .sb-skill-row { font-size: 9.5px; }
+      .cv-para, .cv-job-desc { font-size: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -410,6 +798,331 @@
     <p class="about-hero-sub">NullifyCV removes identifying information from CVs so hiring teams can focus purely on skills and experience. Your files never leave your device — not even for a millisecond.</p>
     <a href="/" class="about-cta">Try it free →</a>
   </div>
+
+</div>
+
+<!-- ── DEMO SECTION (full width, breaks out of .about-wrap) ── -->
+<section class="demo-section" aria-labelledby="demo-title">
+
+  <div class="demo-tag">Live example</div>
+  <h2 class="demo-h2" id="demo-title">See it in action</h2>
+  <p class="demo-sub">
+    Here's a real CV before and after running through NullifyCV.
+    Black bars replace every piece of identifying information &mdash;
+    everything else stays exactly where it was.
+  </p>
+
+  <div class="demo-grid">
+
+    <!-- ════ BEFORE ════ -->
+    <div>
+      <div class="demo-stage before">
+        <span class="demo-stage-dot"></span>
+        <span>Before &mdash; original CV</span>
+      </div>
+
+      <div class="cv-paper" aria-label="Original CV with personal information visible">
+
+        <aside class="cv-sidebar">
+          <div class="cv-photo" aria-hidden="true"></div>
+
+          <div class="sb-block">
+            <div class="sb-title">Contact</div>
+            <div class="sb-line">Prinsengracht 142</div>
+            <div class="sb-line">1015 EA Amsterdam</div>
+            <div class="sb-line">The Netherlands</div>
+            <div class="sb-line" style="margin-top:8px">+31 6 41 28 39 55</div>
+            <div class="sb-line">sophie.janssen@gmail.com</div>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-title">Personal</div>
+            <div class="sb-line"><strong>Date of birth</strong></div>
+            <div class="sb-line small">14 March 1987</div>
+            <div class="sb-line" style="margin-top:6px"><strong>Nationality</strong></div>
+            <div class="sb-line small">Dutch</div>
+            <div class="sb-line" style="margin-top:6px"><strong>Pronouns</strong></div>
+            <div class="sb-line small">she / her</div>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-title">Skills</div>
+            <div class="sb-skill-row"><span>Brand strategy</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:92%"></div></div>
+            <div class="sb-skill-row"><span>Campaign mgmt</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:88%"></div></div>
+            <div class="sb-skill-row"><span>Market research</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:80%"></div></div>
+            <div class="sb-skill-row"><span>Stakeholder mgmt</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:85%"></div></div>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-title">Languages</div>
+            <div class="sb-line">Dutch &mdash; native</div>
+            <div class="sb-line">English &mdash; fluent</div>
+            <div class="sb-line">German &mdash; conversational</div>
+          </div>
+        </aside>
+
+        <main class="cv-main">
+          <div class="cv-name">Sophie Janssen</div>
+          <div class="cv-role">Marketing Communications Manager</div>
+
+          <div class="cv-h">Profile</div>
+          <p class="cv-para">
+            Marketing leader with twelve years of experience building consumer
+            brand campaigns across the Benelux region. Track record of launching
+            integrated communications programmes that translate brand strategy
+            into measurable commercial outcomes.
+          </p>
+
+          <div class="cv-h">Experience</div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Senior Marketing Manager</div>
+              <div class="cv-job-date">2019 &mdash; present</div>
+            </div>
+            <div class="cv-job-company">Heineken N.V. &middot; Amsterdam</div>
+            <div class="cv-job-desc">
+              Lead premium portfolio marketing across NL &amp; BE. Delivered 18%
+              category share growth and a top-3 industry ranking in 2023.
+            </div>
+          </div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Brand Manager</div>
+              <div class="cv-job-date">2014 &mdash; 2019</div>
+            </div>
+            <div class="cv-job-company">Unilever &middot; Rotterdam</div>
+            <div class="cv-job-desc">
+              Managed €40M media budget across personal care portfolio.
+              Repositioned Andrélon brand &mdash; +12% volume in two years.
+            </div>
+          </div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Marketing Specialist</div>
+              <div class="cv-job-date">2011 &mdash; 2014</div>
+            </div>
+            <div class="cv-job-company">Philips &middot; Eindhoven</div>
+            <div class="cv-job-desc">
+              Coordinated pan-European product launches for the consumer
+              lifestyle division. Owned €8M annual digital marketing budget.
+            </div>
+          </div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Marketing Intern</div>
+              <div class="cv-job-date">2010 &mdash; 2011</div>
+            </div>
+            <div class="cv-job-company">Albert Heijn &middot; Zaandam</div>
+            <div class="cv-job-desc">
+              Supported private-label rebrand initiative. Conducted consumer
+              research across 200 stores informing the 2012 packaging refresh.
+            </div>
+          </div>
+
+          <div class="cv-h">Selected achievements</div>
+          <p class="cv-para" style="margin-bottom:4px">
+            &middot; Effie Awards Netherlands &mdash; Gold, Sustained Success (2023)
+          </p>
+          <p class="cv-para" style="margin-bottom:4px">
+            &middot; Adformatie Marketeer of the Year shortlist (2022)
+          </p>
+          <p class="cv-para">
+            &middot; Cannes Lions &mdash; Bronze, Brand Experience (2021)
+          </p>
+
+          <div class="cv-h">Education</div>
+
+          <div class="cv-edu">
+            <div class="cv-edu-text"><strong>MSc Marketing</strong> &middot; Erasmus University</div>
+            <div class="cv-edu-date">2011</div>
+          </div>
+          <div class="cv-edu">
+            <div class="cv-edu-text"><strong>BSc Business</strong> &middot; University of Amsterdam</div>
+            <div class="cv-edu-date">2009</div>
+          </div>
+        </main>
+
+      </div>
+    </div>
+
+    <!-- ════ ARROW ════ -->
+    <div class="demo-arrow" aria-hidden="true">
+      <div class="demo-arrow-circle">&rarr;</div>
+      <div class="demo-arrow-label">Nullified</div>
+    </div>
+
+    <!-- ════ AFTER ════ -->
+    <div>
+      <div class="demo-stage after">
+        <span class="demo-stage-dot"></span>
+        <span>After &mdash; ready to send</span>
+      </div>
+
+      <div class="cv-paper" aria-label="Same CV with personal information redacted">
+
+        <aside class="cv-sidebar">
+          <div class="cv-photo-redacted" aria-hidden="true">PHOTO</div>
+
+          <div class="sb-block">
+            <div class="sb-title">Contact</div>
+            <span class="redact-block" data-label="ADDRESS" style="height:14px;width:90%;margin-bottom:5px"></span>
+            <span class="redact-block" style="height:14px;width:80%;margin-bottom:5px"></span>
+            <span class="redact-block" style="height:14px;width:60%;margin-bottom:10px"></span>
+            <span class="redact-block" data-label="PHONE" style="height:14px;width:75%;margin-bottom:5px"></span>
+            <span class="redact-block" data-label="EMAIL" style="height:14px;width:95%"></span>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-title">Personal</div>
+            <div class="sb-line"><strong>Date of birth</strong></div>
+            <span class="redact-block" data-label="DOB" style="height:13px;width:60%;margin-top:2px;margin-bottom:8px"></span>
+            <div class="sb-line"><strong>Nationality</strong></div>
+            <span class="redact-block" data-label="NATIONALITY" style="height:13px;width:50%;margin-top:2px;margin-bottom:8px"></span>
+            <div class="sb-line"><strong>Pronouns</strong></div>
+            <span class="redact-block" data-label="PRONOUNS" style="height:13px;width:45%;margin-top:2px"></span>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-title">Skills</div>
+            <div class="sb-skill-row"><span>Brand strategy</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:92%"></div></div>
+            <div class="sb-skill-row"><span>Campaign mgmt</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:88%"></div></div>
+            <div class="sb-skill-row"><span>Market research</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:80%"></div></div>
+            <div class="sb-skill-row"><span>Stakeholder mgmt</span></div>
+            <div class="sb-bar"><div class="sb-bar-fill" style="width:85%"></div></div>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-title">Languages</div>
+            <div class="sb-line">Dutch &mdash; native</div>
+            <div class="sb-line">English &mdash; fluent</div>
+            <div class="sb-line">German &mdash; conversational</div>
+          </div>
+        </aside>
+
+        <main class="cv-main">
+          <div class="cv-name">
+            <span class="redact-block" data-label="NAME" style="height:26px;width:78%"></span>
+          </div>
+          <div class="cv-role">Marketing Communications Manager</div>
+
+          <div class="cv-h">Profile</div>
+          <p class="cv-para">
+            Marketing leader with twelve years of experience building consumer
+            brand campaigns across the Benelux region. Track record of launching
+            integrated communications programmes that translate brand strategy
+            into measurable commercial outcomes.
+          </p>
+
+          <div class="cv-h">Experience</div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Senior Marketing Manager</div>
+              <div class="cv-job-date">2019 &mdash; present</div>
+            </div>
+            <div class="cv-job-company">Heineken N.V. &middot; Amsterdam</div>
+            <div class="cv-job-desc">
+              Lead premium portfolio marketing across NL &amp; BE. Delivered 18%
+              category share growth and a top-3 industry ranking in 2023.
+            </div>
+          </div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Brand Manager</div>
+              <div class="cv-job-date">2014 &mdash; 2019</div>
+            </div>
+            <div class="cv-job-company">Unilever &middot; Rotterdam</div>
+            <div class="cv-job-desc">
+              Managed €40M media budget across personal care portfolio.
+              Repositioned Andrélon brand &mdash; +12% volume in two years.
+            </div>
+          </div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Marketing Specialist</div>
+              <div class="cv-job-date">2011 &mdash; 2014</div>
+            </div>
+            <div class="cv-job-company">Philips &middot; Eindhoven</div>
+            <div class="cv-job-desc">
+              Coordinated pan-European product launches for the consumer
+              lifestyle division. Owned €8M annual digital marketing budget.
+            </div>
+          </div>
+
+          <div class="cv-job">
+            <div class="cv-job-head">
+              <div class="cv-job-title">Marketing Intern</div>
+              <div class="cv-job-date">2010 &mdash; 2011</div>
+            </div>
+            <div class="cv-job-company">Albert Heijn &middot; Zaandam</div>
+            <div class="cv-job-desc">
+              Supported private-label rebrand initiative. Conducted consumer
+              research across 200 stores informing the 2012 packaging refresh.
+            </div>
+          </div>
+
+          <div class="cv-h">Selected achievements</div>
+          <p class="cv-para" style="margin-bottom:4px">
+            &middot; Effie Awards Netherlands &mdash; Gold, Sustained Success (2023)
+          </p>
+          <p class="cv-para" style="margin-bottom:4px">
+            &middot; Adformatie Marketeer of the Year shortlist (2022)
+          </p>
+          <p class="cv-para">
+            &middot; Cannes Lions &mdash; Bronze, Brand Experience (2021)
+          </p>
+
+          <div class="cv-h">Education</div>
+
+          <div class="cv-edu">
+            <div class="cv-edu-text"><strong>MSc Marketing</strong> &middot; Erasmus University</div>
+            <div class="cv-edu-date"><span class="redact" data-label="YEAR" style="width:36px;height:12px"></span></div>
+          </div>
+          <div class="cv-edu">
+            <div class="cv-edu-text"><strong>BSc Business</strong> &middot; University of Amsterdam</div>
+            <div class="cv-edu-date"><span class="redact" data-label="YEAR" style="width:36px;height:12px"></span></div>
+          </div>
+        </main>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="demo-legend">
+    <span class="demo-legend-title">Removed:</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Name</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Photo</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Address</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Email</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Phone</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Date of birth</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Nationality</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Pronouns</span>
+    <span class="legend-chip"><span class="legend-chip-bar"></span>Graduation years</span>
+  </div>
+
+  <div class="demo-meta">
+    9 redaction categories applied &middot; <strong>0 bytes uploaded</strong> &middot; processed entirely in your browser
+  </div>
+
+</section>
+
+<!-- ── Resume the narrow .about-wrap for the rest of the page ── -->
+<div class="about-wrap">
 
   <!-- ── STEP BY STEP ── -->
   <div class="about-section">
