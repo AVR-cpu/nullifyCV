@@ -760,6 +760,114 @@
       .cv-para, .cv-job-desc { font-size: 10px; }
     }
   </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "@id": "https://nullifycv.com/about.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is NullifyCV really free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — the core tool is completely free with no account required. Paid plans start at $1.99 (Single File pass) and go up to Pro at $49/month for recruiters and HR teams who need batch processing, saved profiles, and GDPR-annotated audit logs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do my files ever get stored or transmitted?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Processing happens entirely inside your browser using pdf.js and mammoth.js. The file is read into browser memory, processed, and the redacted version is downloaded directly to your device. Zero bytes of your document data travel across the internet. You can verify this by opening your browser's DevTools → Network tab while processing a file."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What file formats are supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PDF and DOCX (Word) files are fully supported. For PDFs, the tool extracts the text layer and draws black redaction bars over PII positions in the original file — preserving your layout. For DOCX files, the text is extracted and redacted. Scanned PDFs (images without a text layer) should be exported as DOCX first."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What personal information does NullifyCV detect?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NullifyCV detects: full names, email addresses, phone numbers (including Dutch 06 format), street addresses, postcodes (Dutch, US, UK), city names, graduation years and age proxies, LinkedIn and other URLs, gender pronouns, school and university names, profile photos (in EEOC mode), file author metadata, dates of birth, and BSN / national ID numbers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does NullifyCV work for non-English CVs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — NullifyCV has specific support for Dutch CVs including Dutch phone formats, Dutch city names, Dutch postcodes (1234 AB format), Dutch month names in graduation dates, Dutch field labels like geboortedatum and nationaliteit, and BSN detection. English and other European CV formats are also well supported."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is NullifyCV GDPR compliant?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NullifyCV supports GDPR data minimisation principles under Article 5(1)(c) — processing files locally means no personal data is transmitted or stored by the tool. Whether your overall hiring process is fully GDPR compliant depends on many other factors. Consult your Data Protection Officer for a formal assessment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use NullifyCV for batch processing — many CVs at once?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Batch processing of up to 200 files at once is available on the Pro plan at $49/month. The Pro plan also includes saved redaction profiles and GDPR-annotated audit logs suitable for DPO filing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I verify the privacy claims?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Open your browser DevTools (F12) → Network tab. Process a file. You will see no outbound requests containing file data. The only network requests are for loading the page assets (CSS, JS libraries) — none contain your document content. The source code is also fully open source and auditable at github.com/NullifyCV/nullifyCV."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://nullifycv.com/about.html",
+      "name": "How NullifyCV Works — Simple, Private, Bias-Free",
+      "description": "Learn how NullifyCV removes personally identifying information from CVs entirely in your browser. No uploads, no storage, GDPR-consistent.",
+      "url": "https://nullifycv.com/about.html",
+      "isPartOf": {
+        "@id": "https://nullifycv.com/#app"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://nullifycv.com/#organization",
+        "name": "NullifyCV",
+        "url": "https://nullifycv.com",
+        "logo": "https://nullifycv.com/icons/favicon.svg",
+        "sameAs": [
+          "https://github.com/NullifyCV/nullifyCV"
+        ]
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://nullifycv.com/#organization",
+      "name": "NullifyCV",
+      "url": "https://nullifycv.com",
+      "logo": "https://nullifycv.com/icons/favicon.svg",
+      "sameAs": [
+        "https://github.com/NullifyCV/nullifyCV"
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 

@@ -16,17 +16,100 @@
   
   <!-- Structured data for SEO -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "NullifyCV",
-    "url": "https://nullifycv.com",
-    "description": "Privacy-first resume de-identifier for blind hiring. 100% client-side processing.",
-    "applicationCategory": "BusinessApplication",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "featureList": ["Client-side PDF processing", "DOCX redaction", "GDPR compliance support", "Blind hiring workflow"]
-  }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://nullifycv.com/#app",
+      "name": "NullifyCV",
+      "url": "https://nullifycv.com/",
+      "description": "Privacy-first CV redaction tool. Removes personally identifying information from PDF and DOCX resumes entirely in your browser — no uploads, no server, no data stored.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any (browser-based)",
+      "browserRequirements": "Requires JavaScript",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Free",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Unlimited single-file processing, no account required"
+        },
+        {
+          "@type": "Offer",
+          "name": "Single File Pass",
+          "price": "1.99",
+          "priceCurrency": "USD",
+          "description": "One-time single file pass for job seekers"
+        },
+        {
+          "@type": "Offer",
+          "name": "Week Pass",
+          "price": "4.99",
+          "priceCurrency": "USD",
+          "description": "7-day unlimited access pass"
+        },
+        {
+          "@type": "Offer",
+          "name": "Month Pass",
+          "price": "9.99",
+          "priceCurrency": "USD",
+          "description": "30-day unlimited access pass"
+        },
+        {
+          "@type": "Offer",
+          "name": "Pro Monthly",
+          "price": "49",
+          "priceCurrency": "USD",
+          "description": "Batch processing up to 200 CVs, saved redaction profiles, GDPR audit logs"
+        },
+        {
+          "@type": "Offer",
+          "name": "Team",
+          "price": "149",
+          "priceCurrency": "USD",
+          "description": "Multi-user team plan with priority support"
+        }
+      ],
+      "featureList": [
+        "Client-side processing — files never leave your browser",
+        "PDF and DOCX redaction",
+        "Detects names, email, phone, address, DOB, nationality, pronouns, graduation year",
+        "Dutch CV support (BSN, Dutch postcodes, Dutch city names)",
+        "GDPR data minimisation support",
+        "Blind hiring / structured interview support",
+        "Audit log export for DPO filing",
+        "No account required",
+        "No ads",
+        "Open source"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "@id": "https://nullifycv.com/#organization",
+        "name": "NullifyCV",
+        "url": "https://nullifycv.com",
+        "logo": "https://nullifycv.com/icons/favicon.svg",
+        "sameAs": [
+          "https://github.com/NullifyCV/nullifyCV"
+        ]
+      },
+      "isAccessibleForFree": true,
+      "privacyPolicyUrl": "https://nullifycv.com/privacy.html"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://nullifycv.com/#organization",
+      "name": "NullifyCV",
+      "url": "https://nullifycv.com",
+      "logo": "https://nullifycv.com/icons/favicon.svg",
+      "sameAs": [
+        "https://github.com/NullifyCV/nullifyCV"
+      ]
+    }
+  ]
+}
+</script>
   <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
