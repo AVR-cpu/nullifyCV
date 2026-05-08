@@ -1304,10 +1304,10 @@
       </div>
       <div class="privacy-card">
         <div class="privacy-card-icon">
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M4 6h12M4 14h8" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2L3 5.5v5C3 14.5 6 18 10 19c4-1 7-4.5 7-8.5v-5L10 2z" stroke="#2d6b4a" stroke-width="1.3" fill="none"/><path d="M7 10l2 2 4-4" stroke="#2d6b4a" stroke-width="1.3" stroke-linecap="round"/></svg>
         </div>
-        <h3>Isolated ad scripts</h3>
-        <p>Ads on this site run in a separate browser context. A strict Content Security Policy prevents ad network scripts from accessing the file processing layer.</p>
+        <h3>A-rated security headers</h3>
+        <p>NullifyCV scores an A on Security Headers (by Snyk), with Content Security Policy, Subresource Integrity on all external scripts, and strict transport security enforced on every request.</p>
       </div>
       <div class="privacy-card">
         <div class="privacy-card-icon">
@@ -1346,6 +1346,11 @@
           <td>File output</td>
           <td><span class="tech-tag">Blob URL</span></td>
           <td>Redacted file created in memory and downloaded locally — URL revoked after 5 seconds</td>
+        </tr>
+        <tr>
+          <td>Security</td>
+          <td><span class="tech-tag">SRI + CSP</span></td>
+          <td>Subresource Integrity locks all external scripts to verified hashes; Content Security Policy enforced on every request — A rating on Security Headers (Snyk)</td>
         </tr>
         <tr>
           <td>Hosting</td>
