@@ -12,6 +12,7 @@ function initPdfJs() {
 
 let currentFile=null,detectedPII=[],redactedText='',auditData=null;
 let pdfPositions=[];  // stores {text, x, y, w, h, page} for PDF coordinate redaction
+let currentMode='standard';  // tracks the active redaction mode (standard/bias/client/eeoc)
 
 const MODES={
   standard:{name:1,contact:1,location:1,gradyear:1},
@@ -68,7 +69,28 @@ const slp=ms=>new Promise(r=>setTimeout(r,ms));
 function setStatus(msg,pct){$('stxt').textContent=msg;$('pbar').style.width=pct+'%';}
 function showError(msg){const e=$('err');e.textContent='⚠ '+msg;e.classList.add('show');}
 function clearError(){$('err').classList.remove('show');}
-function getActiveKeys(){const k={};document.querySelectorAll('.tcard.on').forEach(c=>{k[c.dataset.key]=1});return k;}
+function getActiveKeys(){
+  const k={};
+  // Keys from UI toggle cards (visible categories the user can toggle)
+  document.querySelectorAll('.tcard.on').forEach(c=>{k[c.dataset.key]=1});
+  // Mode-only keys that have no UI card (e.g. photos — driven entirely by mode selection)
+  const modeKeys = MODES[currentMode] || {};
+  if (modeKeys.photos) k.photos = 1;
+  return k;
+}
+
+function setMode(mode,btn){
+  currentMode = mode;
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('on');t.setAttribute('aria-selected','false');});
+  btn.classList.add('on');btn.setAttribute('aria-selected','true');
+  const cfg=MODES[mode]||{};
+  document.querySelectorAll('.tcard').forEach(card=>{
+    const on=!!cfg[card.dataset.key];
+    card.classList.toggle('on',on);
+    card.setAttribute('aria-checked',on?'true':'false');
+    card.querySelector('.tbox').textContent=on?'✓':'';
+  });
+}
 
 /* Photo warning: surfaces when PDF contains photos that won't be redacted in current mode.
    Injects a warning banner above the status area, idempotent (safe to call multiple times). */
@@ -88,18 +110,6 @@ function showPhotoWarning(count) {
 function hidePhotoWarning() {
   const w = $('photoWarn');
   if (w) w.style.display = 'none';
-}
-
-function setMode(mode,btn){
-  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('on');t.setAttribute('aria-selected','false');});
-  btn.classList.add('on');btn.setAttribute('aria-selected','true');
-  const cfg=MODES[mode]||{};
-  document.querySelectorAll('.tcard').forEach(card=>{
-    const on=!!cfg[card.dataset.key];
-    card.classList.toggle('on',on);
-    card.setAttribute('aria-checked',on?'true':'false');
-    card.querySelector('.tbox').textContent=on?'✓':'';
-  });
 }
 
 function toggleCard(el){
