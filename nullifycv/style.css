@@ -99,6 +99,7 @@ body {
 }
 
 .top-nav a:hover { color: #ffffff; }
+.top-nav a.nav-active { color: var(--green-muted); font-weight: 600; }
 
 .top-nav .nav-pro {
   color: #ffffff;
