@@ -15,9 +15,9 @@ let pdfPositions=[];  // stores {text, x, y, w, h, page} for PDF coordinate reda
 
 const MODES={
   standard:{name:1,contact:1,location:1,gradyear:1},
-  bias:{name:1,contact:1,location:1,gradyear:1,school:1,pronouns:1},
-  client:{name:1,contact:1,urls:1,metadata:1},
-  eeoc:{name:1,contact:1,location:1,gradyear:1,school:1,pronouns:1,urls:1,metadata:1},
+  bias:{name:1,contact:1,location:1,gradyear:1,school:1,pronouns:1,photos:1},
+  client:{name:1,contact:1,urls:1,metadata:1,photos:1},
+  eeoc:{name:1,contact:1,location:1,gradyear:1,school:1,pronouns:1,urls:1,metadata:1,photos:1},
 };
 
 const PII_PATTERNS=[
@@ -70,6 +70,26 @@ function showError(msg){const e=$('err');e.textContent='⚠ '+msg;e.classList.ad
 function clearError(){$('err').classList.remove('show');}
 function getActiveKeys(){const k={};document.querySelectorAll('.tcard.on').forEach(c=>{k[c.dataset.key]=1});return k;}
 
+/* Photo warning: surfaces when PDF contains photos that won't be redacted in current mode.
+   Injects a warning banner above the status area, idempotent (safe to call multiple times). */
+function showPhotoWarning(count) {
+  let w = $('photoWarn');
+  if (!w) {
+    w = document.createElement('div');
+    w.id = 'photoWarn';
+    w.style.cssText = 'background:#fff8e1;border:1px solid #f0d585;color:#6b5418;padding:11px 14px;border-radius:6px;font-size:12px;line-height:1.55;margin:10px 0;display:flex;gap:10px;align-items:flex-start;';
+    const status = $('ss') || $('stxt');
+    if (status && status.parentNode) status.parentNode.insertBefore(w, status);
+  }
+  const plural = count === 1 ? '' : 's';
+  w.innerHTML = '<span style="font-size:14px;line-height:1;">⚠</span><div><strong>'+count+' photo'+plural+' detected but not redacted.</strong> Photos are kept in <em>Standard</em> mode. Switch to <strong>Bias Strip</strong>, <strong>Client Submission</strong>, or <strong>EEOC Blind Review</strong> mode and re-process to remove them.</div>';
+  w.style.display = 'flex';
+}
+function hidePhotoWarning() {
+  const w = $('photoWarn');
+  if (w) w.style.display = 'none';
+}
+
 function setMode(mode,btn){
   document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('on');t.setAttribute('aria-selected','false');});
   btn.classList.add('on');btn.setAttribute('aria-selected','true');
@@ -98,6 +118,7 @@ function loadFile(file){
   if(!['pdf','docx','doc'].includes(ext)){showError('Please upload a PDF or DOCX file.');return;}
   clearError();
   currentFile=file;detectedPII=[];redactedText='';auditData=null;pdfPositions=[];
+  hidePhotoWarning();
   $('fext').textContent=ext.toUpperCase();
   $('fname').textContent=file.name;
   $('fsize').textContent=fmtSize(file.size)+' · Ready to nullify';
@@ -110,6 +131,7 @@ function loadFile(file){
 function clearFile(){
   currentFile=null;$('frow').classList.remove('show');$('drop').style.display='';
   $('pbtn').disabled=true;$('fi').value='';clearError();pdfPositions=[];
+  hidePhotoWarning();
   ['piiwrap','ss','prev','pad'].forEach(id=>$(id).classList.remove('show'));
 }
 
@@ -125,6 +147,7 @@ async function extractPDFData(file){
   const pdf=await pdfjsLib.getDocument({data:ab}).promise;
   let fullText='';
   const allItems=[];  // {str, x, y, w, h, pageNum, pageHeight}
+  const allImages=[]; // {x, y, w, h, pageNum} — positions of embedded images
 
   for(let p=1;p<=pdf.numPages;p++){
     const page=await pdf.getPage(p);
@@ -149,12 +172,72 @@ async function extractPDFData(file){
       allItems.push({str:item.str,x,y,w,h,pageNum:p,pageHeight});
     }
     fullText+=pageText.trim()+'\n\n';
+
+    /* ── Detect embedded images on this page ─────────────────────────────── */
+    /* pdf.js exposes images via the operator list. Each "paintImageXObject"
+       op is preceded by transform ops that determine where the image lands
+       on the page. We walk the operator list maintaining a transform stack
+       and capture the resulting bounding box for every image draw call. */
+    try {
+      const ops = await page.getOperatorList();
+      const OPS = pdfjsLib.OPS;
+      // Transform stack — each entry is [a, b, c, d, e, f] (PDF transform matrix)
+      let ctm = [1, 0, 0, 1, 0, 0];
+      const stack = [];
+
+      const multiply = (m1, m2) => [
+        m1[0]*m2[0] + m1[2]*m2[1],
+        m1[1]*m2[0] + m1[3]*m2[1],
+        m1[0]*m2[2] + m1[2]*m2[3],
+        m1[1]*m2[2] + m1[3]*m2[3],
+        m1[0]*m2[4] + m1[2]*m2[5] + m1[4],
+        m1[1]*m2[4] + m1[3]*m2[5] + m1[5],
+      ];
+
+      for (let i = 0; i < ops.fnArray.length; i++) {
+        const fn = ops.fnArray[i];
+        const args = ops.argsArray[i];
+        if (fn === OPS.save) {
+          stack.push(ctm.slice());
+        } else if (fn === OPS.restore) {
+          if (stack.length) ctm = stack.pop();
+        } else if (fn === OPS.transform) {
+          ctm = multiply(ctm, args);
+        } else if (fn === OPS.paintImageXObject || fn === OPS.paintInlineImageXObject || fn === OPS.paintJpegXObject) {
+          // The image is drawn from (0,0) to (1,1) in its local coord space,
+          // then mapped through the current transform matrix.
+          // Image placed at (e, f) with width=a, height=d (assuming no rotation/skew).
+          const [a, b, c, d, e, f] = ctm;
+          // Compute the four corners in page space
+          const corners = [
+            [e, f],                       // (0,0)
+            [a + e, b + f],              // (1,0)
+            [c + e, d + f],              // (0,1)
+            [a + c + e, b + d + f],      // (1,1)
+          ];
+          const xs = corners.map(c => c[0]);
+          const ys = corners.map(c => c[1]);
+          const x = Math.min(...xs);
+          const y = Math.min(...ys);
+          const w = Math.max(...xs) - x;
+          const h = Math.max(...ys) - y;
+          // Filter out tiny decorative images (icons, bullets, separators) — too small to be a photo
+          if (w >= 30 && h >= 30) {
+            allImages.push({x, y, w, h, pageNum: p});
+          }
+        }
+      }
+    } catch (e) {
+      // If we can't read the operator list (corrupted PDF, unusual format),
+      // we degrade gracefully — text redaction still works, photos may survive.
+      console.warn('Image detection failed for page ' + p + ':', e);
+    }
   }
 
   if(!fullText.trim())
     throw new Error('No text layer found in this PDF. It may be a scanned image — please export as DOCX.');
 
-  return {text:fullText.trim(), items:allItems, rawBytes:ab2, numPages:pdf.numPages};
+  return {text:fullText.trim(), items:allItems, images:allImages, rawBytes:ab2, numPages:pdf.numPages};
 }
 
 /* ── Find which text items contain PII ──────────────────────────────────────*/
@@ -206,17 +289,17 @@ function findPIIPositions(items, piiValues){
 }
 
 /* ── Draw black redaction bars on PDF using pdf-lib ─────────────────────── */
-async function buildRedactedPDF(rawBytes, positions){
+async function buildRedactedPDF(rawBytes, positions, imagePositions){
   if(typeof PDFLib==='undefined')
     throw new Error('pdf-lib not loaded — please reload the page.');
 
   const pdfDoc=await PDFLib.PDFDocument.load(rawBytes,{ignoreEncryption:true});
   const pages=pdfDoc.getPages();
 
+  // Text PII redactions
   for(const pos of positions){
     const page=pages[pos.pageNum-1];
     if(!page)continue;
-    // Draw solid black rectangle over PII position
     page.drawRectangle({
       x:pos.x,
       y:pos.y,
@@ -225,6 +308,24 @@ async function buildRedactedPDF(rawBytes, positions){
       color:PDFLib.rgb(0,0,0),
       opacity:1,
     });
+  }
+
+  // Image redactions (photos, logos, embedded figures)
+  if (imagePositions && imagePositions.length) {
+    for (const img of imagePositions) {
+      const page = pages[img.pageNum - 1];
+      if (!page) continue;
+      // Add a small padding around the image so antialiased edges are fully covered
+      const pad = 2;
+      page.drawRectangle({
+        x: img.x - pad,
+        y: img.y - pad,
+        width: img.w + pad * 2,
+        height: img.h + pad * 2,
+        color: PDFLib.rgb(0, 0, 0),
+        opacity: 1,
+      });
+    }
   }
 
   const pdfBytes=await pdfDoc.save();
@@ -347,7 +448,7 @@ async function go(){
     if(ext==='pdf'){
       /* ── PDF path: extract text+positions, find PII, draw black bars ── */
       setStatus('Extracting text and positions from PDF...',12);
-      const {text,items,rawBytes,numPages}=await extractPDFData(currentFile);
+      const {text,items,images,rawBytes,numPages}=await extractPDFData(currentFile);
 
       setStatus('Scanning for PII...',35);
       await slp(100);
@@ -360,12 +461,19 @@ async function go(){
       const positions=findPIIPositions(items,piiValues);
       pdfPositions=positions;
 
+      // Gate image redaction on the `photos` key — only active in bias/client/eeoc modes.
+      // Standard mode keeps photos so a candidate's own photo isn't unexpectedly removed.
+      const imagesToRedact = activeKeys.photos ? images : [];
+
       setStatus('Drawing redaction bars on PDF...',72);
       await slp(100);
 
-      if(positions.length>0){
-        _redactedPdfBytes=await buildRedactedPDF(rawBytes,positions);
-        setStatus('Redacted PDF ready — '+detectedPII.length+' items nullified',90);
+      if(positions.length>0 || imagesToRedact.length>0){
+        _redactedPdfBytes=await buildRedactedPDF(rawBytes,positions,imagesToRedact);
+        const photoNote = imagesToRedact.length > 0
+          ? ' + ' + imagesToRedact.length + ' image' + (imagesToRedact.length===1?'':'s')
+          : '';
+        setStatus('Redacted PDF ready — '+detectedPII.length+' items'+photoNote+' nullified',90);
       }else{
         setStatus('PII found in text — PDF bars could not be placed (complex layout)',90);
       }
@@ -373,16 +481,32 @@ async function go(){
 
       showPreview(redactedText,detectedPII);
       showPIIList(detectedPII);
-      setStatus('✓ Complete — '+detectedPII.length+' items nullified',100);if(window.markBytesVerified)markBytesVerified();
+      const completeMsg = imagesToRedact.length > 0
+        ? '✓ Complete — '+detectedPII.length+' items + '+imagesToRedact.length+' image'+(imagesToRedact.length===1?'':'s')+' nullified'
+        : '✓ Complete — '+detectedPII.length+' items nullified';
+      setStatus(completeMsg,100);
+      if(window.markBytesVerified)markBytesVerified();
       $('spin').style.display='none';
 
-      auditData={tool:'NullifyCV v2.0.0',site:'nullifycv.com',
+      // ── Photo warning banner ─────────────────────────────────────────────
+      // If photos were detected but not redacted (standard mode), warn the user.
+      // This is a credibility issue — many CVs include photos that the user
+      // probably wants removed.
+      if (images.length > 0 && !activeKeys.photos) {
+        showPhotoWarning(images.length);
+      } else {
+        hidePhotoWarning();
+      }
+
+      auditData={tool:'NullifyCV v2.1.0',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
         output_format:_redactedPdfBytes?'redacted PDF (black bars)':'plain text',
         server_transmissions:0,
         items_nullified:detectedPII.length,
+        images_nullified:imagesToRedact.length,
+        images_detected:images.length,
         redaction_positions:positions.length,
         active_redaction_keys:Object.keys(activeKeys),
         items:detectedPII.map(p=>({type:p.type,label:p.label,confidence:p.conf})),
