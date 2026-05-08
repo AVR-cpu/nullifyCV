@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/blog/blog.css">
   <style>
     .blog-wrap { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
     .blog-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-muted); margin-bottom: 12px; }
@@ -46,9 +47,9 @@
       <span class="wm-nullify">Nullify</span><span class="wm-cv">CV</span><span class="wm-com">.com</span>
     </span>
   </a>
-  <nav class="top-nav">
+  <nav class="top-nav" aria-label="Main navigation">
     <a href="/about.html">How it works</a>
-    <a href="/blog/">Blog</a>
+    <a href="/blog/" class="nav-active">Blog</a>
     <a href="/glossary.html">Glossary</a>
     <a href="https://github.com/NullifyCV/nullifyCV" target="_blank" rel="noopener">GitHub</a>
     <a href="/" class="nav-pro">Try the tool →</a>
@@ -192,12 +193,22 @@
 
 <footer class="foot" role="contentinfo">
   <span class="foot-brand">nullifycv.com</span>
-  <span>·</span>
+  <span aria-hidden="true">·</span>
   <a href="/about.html">How it works</a>
-  <span>·</span>
+  <span aria-hidden="true">·</span>
+  <a href="/blog/">Blog</a>
+  <span aria-hidden="true">·</span>
+  <a href="/glossary.html">Glossary</a>
+  <span aria-hidden="true">·</span>
+  <a href="/case-study.html">Case study</a>
+  <span aria-hidden="true">·</span>
   <a href="https://github.com/NullifyCV/nullifyCV" target="_blank" rel="noopener">GitHub</a>
-  <span>·</span>
-  <a href="/">Try the tool</a>
+  <span aria-hidden="true">·</span>
+  <a href="/privacy.html">Privacy</a>
+  <span aria-hidden="true">·</span>
+  <a href="/terms.html">Terms</a>
+  <span aria-hidden="true">·</span>
+  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
 </footer>
 
 <div id="post-nav-inject"></div>
