@@ -161,6 +161,7 @@ async function extractPDFData(file){
   const allItems=[];  // {str, x, y, w, h, pageNum, pageHeight}
   const allImages=[]; // {x, y, w, h, pageNum, source} — positions of embedded images
   const pageOpCounts=[]; // per-page operator counts for diagnostics
+  const pageCanvases=[]; // {pageNum, canvas, scale} — for thumbnail extraction
 
   for(let p=1;p<=pdf.numPages;p++){
     const page=await pdf.getPage(p);
@@ -185,6 +186,23 @@ async function extractPDFData(file){
       allItems.push({str:item.str,x,y,w,h,pageNum:p,pageHeight});
     }
     fullText+=pageText.trim()+'\n\n';
+
+    /* ── Render page to canvas for later thumbnail extraction ────────────── */
+    /* We render at moderate scale so we can crop accurate thumbnails of each
+       detected image. Only renders if there are images to thumbnail. The
+       canvas is kept in memory until the user is done with the picker. */
+    try {
+      const renderScale = 1.5; // 1.5× page dimensions for sharp thumbnails
+      const renderViewport = page.getViewport({scale: renderScale});
+      const canvas = document.createElement('canvas');
+      canvas.width = renderViewport.width;
+      canvas.height = renderViewport.height;
+      const ctx = canvas.getContext('2d');
+      await page.render({canvasContext: ctx, viewport: renderViewport}).promise;
+      pageCanvases.push({pageNum: p, canvas, scale: renderScale, height: pageHeight});
+    } catch (e) {
+      console.warn('Page render for thumbnails failed on page ' + p + ':', e);
+    }
 
     /* ── Detect embedded images on this page ─────────────────────────────── */
     /* pdf.js exposes images via the operator list. Each image-painting op is
@@ -289,7 +307,7 @@ async function extractPDFData(file){
   if(!fullText.trim())
     throw new Error('No text layer found in this PDF. It may be a scanned image — please export as DOCX.');
 
-  return {text:fullText.trim(), items:allItems, images:allImages, rawBytes:ab2, numPages:pdf.numPages, pageOpCounts};
+  return {text:fullText.trim(), items:allItems, images:allImages, rawBytes:ab2, numPages:pdf.numPages, pageOpCounts, pageCanvases};
 }
 
 /* ── Photo discrimination heuristic ──────────────────────────────────────── */
@@ -342,6 +360,135 @@ function filterToLikelyPhotos(images, numPages) {
   }
 
   return { kept, rejected, rejectedReasons };
+}
+
+/* ── Crop image thumbnail from rendered page canvas ──────────────────────── */
+/* PDF coordinates have origin at bottom-left; canvas at top-left. We invert Y. */
+function cropImageThumbnail(image, pageCanvases) {
+  const pc = pageCanvases.find(p => p.pageNum === image.pageNum);
+  if (!pc) return null;
+  const {canvas, scale, height: pageHeight} = pc;
+
+  // Transform PDF coords → canvas coords
+  const cx = image.x * scale;
+  const cy = (pageHeight - image.y - image.h) * scale; // flip Y
+  const cw = image.w * scale;
+  const ch = image.h * scale;
+
+  // Clamp to canvas bounds (sometimes coords slightly exceed)
+  const x = Math.max(0, Math.floor(cx));
+  const y = Math.max(0, Math.floor(cy));
+  const w = Math.min(canvas.width - x, Math.ceil(cw));
+  const h = Math.min(canvas.height - y, Math.ceil(ch));
+  if (w <= 0 || h <= 0) return null;
+
+  // Draw to a smaller thumbnail canvas
+  const THUMB_MAX = 140;
+  const aspect = w / h;
+  const thumbW = aspect > 1 ? THUMB_MAX : Math.round(THUMB_MAX * aspect);
+  const thumbH = aspect > 1 ? Math.round(THUMB_MAX / aspect) : THUMB_MAX;
+
+  const thumb = document.createElement('canvas');
+  thumb.width = thumbW;
+  thumb.height = thumbH;
+  const tctx = thumb.getContext('2d');
+  tctx.imageSmoothingQuality = 'high';
+  tctx.drawImage(canvas, x, y, w, h, 0, 0, thumbW, thumbH);
+  return thumb.toDataURL('image/png');
+}
+
+/* ── Image picker UI ─────────────────────────────────────────────────────── */
+/* Shows detected images as thumbnails with checkboxes. User selects which to
+   redact. Returns a Promise that resolves with the array of selected images.
+   Returns null if user cancels. */
+function showImagePicker(images, pageCanvases, suggestedRedactions) {
+  return new Promise((resolve) => {
+    // Build thumbnails
+    const items = images.map(img => ({
+      img,
+      thumb: cropImageThumbnail(img, pageCanvases),
+      suggested: suggestedRedactions.some(s => s.x === img.x && s.y === img.y && s.pageNum === img.pageNum),
+    }));
+
+    // Skip the picker if there are no images at all
+    if (items.length === 0) { resolve([]); return; }
+
+    // Build the modal
+    const overlay = document.createElement('div');
+    overlay.className = 'imgpick-overlay';
+    overlay.innerHTML = `
+      <div class="imgpick-modal" role="dialog" aria-modal="true" aria-labelledby="imgpick-title">
+        <div class="imgpick-header">
+          <h3 id="imgpick-title">Which images should be redacted?</h3>
+          <p class="imgpick-sub">We found ${items.length} image${items.length===1?'':'s'} in this CV. Profile photos are pre-selected. Uncheck any decorative shapes you want to keep.</p>
+        </div>
+        <div class="imgpick-grid" id="imgpick-grid"></div>
+        <div class="imgpick-actions">
+          <button type="button" class="imgpick-btn imgpick-cancel" id="imgpick-cancel">Cancel — don't process</button>
+          <div class="imgpick-action-right">
+            <button type="button" class="imgpick-btn imgpick-toggle" id="imgpick-none">Select none</button>
+            <button type="button" class="imgpick-btn imgpick-toggle" id="imgpick-all">Select all</button>
+            <button type="button" class="imgpick-btn imgpick-confirm" id="imgpick-confirm">Continue with selected →</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const grid = overlay.querySelector('#imgpick-grid');
+    const checkedState = items.map(it => it.suggested);
+
+    items.forEach((it, idx) => {
+      const cell = document.createElement('label');
+      cell.className = 'imgpick-cell';
+      const sizeStr = `${Math.round(it.img.w)}×${Math.round(it.img.h)}`;
+      const pageStr = `Page ${it.img.pageNum}`;
+      cell.innerHTML = `
+        <div class="imgpick-thumb-wrap">
+          ${it.thumb
+            ? `<img class="imgpick-thumb" src="${it.thumb}" alt="Detected image ${idx+1}">`
+            : `<div class="imgpick-thumb imgpick-thumb-missing">no preview</div>`}
+          <div class="imgpick-check"><input type="checkbox" data-idx="${idx}" ${it.suggested?'checked':''} aria-label="Redact image ${idx+1}"></div>
+        </div>
+        <div class="imgpick-meta">${pageStr} · ${sizeStr}</div>
+      `;
+      grid.appendChild(cell);
+    });
+
+    const cleanup = (selected) => {
+      document.body.removeChild(overlay);
+      document.body.style.overflow = '';
+      resolve(selected);
+    };
+
+    grid.addEventListener('change', (e) => {
+      const cb = e.target.closest('input[type="checkbox"]');
+      if (!cb) return;
+      const idx = parseInt(cb.dataset.idx, 10);
+      checkedState[idx] = cb.checked;
+    });
+
+    overlay.querySelector('#imgpick-all').addEventListener('click', () => {
+      grid.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+        cb.checked = true;
+        checkedState[i] = true;
+      });
+    });
+    overlay.querySelector('#imgpick-none').addEventListener('click', () => {
+      grid.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+        cb.checked = false;
+        checkedState[i] = false;
+      });
+    });
+
+    overlay.querySelector('#imgpick-confirm').addEventListener('click', () => {
+      const selected = items.filter((it, i) => checkedState[i]).map(it => it.img);
+      cleanup(selected);
+    });
+    overlay.querySelector('#imgpick-cancel').addEventListener('click', () => cleanup(null));
+
+    document.body.style.overflow = 'hidden';
+  });
 }
 
 /* ── Find which text items contain PII ──────────────────────────────────────*/
@@ -552,7 +699,7 @@ async function go(){
     if(ext==='pdf'){
       /* ── PDF path: extract text+positions, find PII, draw black bars ── */
       setStatus('Extracting text and positions from PDF...',12);
-      const {text,items,images,rawBytes,numPages,pageOpCounts}=await extractPDFData(currentFile);
+      const {text,items,images,rawBytes,numPages,pageOpCounts,pageCanvases}=await extractPDFData(currentFile);
 
       setStatus('Scanning for PII...',35);
       await slp(100);
@@ -566,15 +713,33 @@ async function go(){
       pdfPositions=positions;
 
       // Gate image redaction on the `photos` key — only active in bias/client/eeoc modes.
-      // Standard mode keeps photos so a candidate's own photo isn't unexpectedly removed.
-      // We further filter by heuristics that distinguish profile photos from decorative
-      // shapes (the latter are often embedded as raster PNGs in template-based CVs).
+      // When photos mode is on AND images were detected, show the picker so the user
+      // explicitly selects which images to redact. Heuristic suggests likely photos.
       let imagesToRedact = [];
       let imageFilterReasons = {};
-      if (activeKeys.photos) {
-        const result = filterToLikelyPhotos(images, numPages);
-        imagesToRedact = result.kept;
-        imageFilterReasons = result.rejectedReasons;
+      let pickerSkipped = false;
+      let pickerCancelled = false;
+      if (activeKeys.photos && images.length > 0) {
+        const filtered = filterToLikelyPhotos(images, numPages);
+        imageFilterReasons = filtered.rejectedReasons;
+        // Show picker; user can override the heuristic
+        setStatus('Reviewing detected images...', 60);
+        const userSelection = await showImagePicker(images, pageCanvases, filtered.kept);
+        if (userSelection === null) {
+          // User cancelled — abort the redaction
+          pickerCancelled = true;
+          setStatus('Cancelled by user', 0);
+          $('spin').style.display='none';
+          $('pbtn').disabled=false;
+          return;
+        }
+        imagesToRedact = userSelection;
+      } else if (activeKeys.photos) {
+        // Photos mode is on but no images detected — nothing to do
+        const filtered = filterToLikelyPhotos(images, numPages);
+        imageFilterReasons = filtered.rejectedReasons;
+      } else {
+        pickerSkipped = true;
       }
 
       setStatus('Drawing redaction bars on PDF...',72);
@@ -618,7 +783,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.1.2',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.2.0',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
