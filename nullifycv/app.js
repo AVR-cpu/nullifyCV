@@ -1,4 +1,4 @@
-/* ── NullifyCV · app.js v2.0.0 ───────────────────────────────────────────── */
+/* ── NullifyCV · app.js v2.2.3 ───────────────────────────────────────────── */
 /* Real PDF redaction: pdf.js finds PII positions, pdf-lib draws black bars   */
 /* mammoth.js handles DOCX → clean text output                                */
 'use strict';
@@ -103,6 +103,19 @@ function setMode(mode,btn){
     card.setAttribute('aria-checked',on?'true':'false');
     card.querySelector('.tbox').textContent=on?'✓':'';
   });
+  updateBatchModeBanner();
+}
+
+/* Updates the mode-indicator banner in the batch section so users always see
+   which mode their next batch run will use. Called on init and after setMode. */
+function updateBatchModeBanner(){
+  const nameEl=document.getElementById('batch-mode-name');
+  const targetsEl=document.getElementById('batch-mode-targets');
+  if(!nameEl||!targetsEl)return;
+  const labels={standard:'Standard PII',bias:'Bias Strip',client:'Client Submission',eeoc:'EEOC Blind Review'};
+  nameEl.textContent=labels[currentMode]||'Standard PII';
+  const keys=Object.keys(getActiveKeys());
+  targetsEl.textContent=keys.length?keys.join(', '):'(no targets selected)';
 }
 
 /* Photo warning: surfaces when PDF contains photos that won't be redacted in current mode.
@@ -130,6 +143,7 @@ function toggleCard(el){
   const on=el.classList.contains('on');
   el.setAttribute('aria-checked',on?'true':'false');
   el.querySelector('.tbox').textContent=on?'✓':'';
+  updateBatchModeBanner();
 }
 
 function dov(e){e.preventDefault();$('drop').classList.add('over');}
@@ -789,7 +803,7 @@ function downloadRedactedText(){
 }
 
 function dlAudit(){
-  const data=auditData||{tool:'NullifyCV v2.0.0',site:'nullifycv.com',
+  const data=auditData||{tool:'NullifyCV v2.2.3',site:'nullifycv.com',
     timestamp:new Date().toISOString(),file:currentFile?currentFile.name:'none',
     server_transmissions:0,items_nullified:detectedPII.length,
     disclaimer:'Consistent with GDPR Article 5. Not legal advice.'};
@@ -955,7 +969,7 @@ async function go(){
         items_nullified: detectedPII.length,
       });
 
-      auditData={tool:'NullifyCV v2.0.0',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.2.3',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,processing_engine:'mammoth@1.6.0',
         server_transmissions:0,items_nullified:detectedPII.length,
@@ -988,6 +1002,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   // Init batch UI (shows only for pro/team)
   initBatchUI();
+  // Initialize the batch mode banner with the default mode
+  updateBatchModeBanner();
   // Bytes counter — stays at 0, proves nothing is transmitted
   const bc = document.getElementById('bytes-counter');
   if (bc) {
@@ -1265,14 +1281,35 @@ async function batchProcessFile(file, activeKeys) {
   const ext = file.name.split('.').pop().toLowerCase();
 
   if (ext === 'pdf') {
-    const { text, items, rawBytes } = await extractPDFData(file);
+    const { text, items, images, rawBytes, numPages } = await extractPDFData(file);
     const pii       = scanForPII(text, activeKeys);
     const positions = findPIIPositions(items, pii.map(p => p.value));
-    let outBytes    = rawBytes;
-    if (positions.length > 0) {
-      outBytes = await buildRedactedPDF(rawBytes, positions);
+
+    // Photos: in batch mode there's no per-file picker (impractical for 100+ files).
+    // We use the heuristic filter to identify likely profile photos. Trade-off:
+    // dramatically faster than picker workflow, but may produce false positives
+    // on template-heavy CVs (Canva-style decorative shapes). For sensitive cases,
+    // users can re-process individual files via the single-file flow which has the picker.
+    let imagesToRedact = [];
+    let imagesNullified = 0;
+    if (activeKeys.photos && images && images.length > 0) {
+      const filtered = filterToLikelyPhotos(images, numPages);
+      imagesToRedact = filtered.kept;
+      imagesNullified = imagesToRedact.length;
     }
-    return { name: file.name.replace(/\.pdf$/i, '_NULLIFIED.pdf'), bytes: outBytes, piiCount: pii.length, type: 'pdf' };
+
+    let outBytes = rawBytes;
+    if (positions.length > 0 || imagesToRedact.length > 0) {
+      outBytes = await buildRedactedPDF(rawBytes, positions, imagesToRedact);
+    }
+    return {
+      name: file.name.replace(/\.pdf$/i, '_NULLIFIED.pdf'),
+      bytes: outBytes,
+      piiCount: pii.length,
+      imagesNullified,
+      imagesDetected: images ? images.length : 0,
+      type: 'pdf'
+    };
 
   } else {
     const text    = await extractDOCXText(file);
@@ -1328,8 +1365,19 @@ async function batchRun() {
     try {
       const result = await batchProcessFile(file, activeKeys);
       results.push(result);
-      auditItems.push({ file: file.name, pii_nullified: result.piiCount, status: 'success' });
-      if (statEl) { statEl.textContent = '✓ ' + result.piiCount + ' items'; statEl.style.color = 'var(--green-mid)'; }
+      const auditEntry = { file: file.name, pii_nullified: result.piiCount, status: 'success' };
+      if (typeof result.imagesNullified === 'number') {
+        auditEntry.images_nullified = result.imagesNullified;
+        auditEntry.images_detected = result.imagesDetected;
+      }
+      auditItems.push(auditEntry);
+      if (statEl) {
+        const photoNote = result.imagesNullified > 0
+          ? ' + ' + result.imagesNullified + ' image' + (result.imagesNullified === 1 ? '' : 's')
+          : '';
+        statEl.textContent = '✓ ' + result.piiCount + ' items' + photoNote;
+        statEl.style.color = 'var(--green-mid)';
+      }
       if (rowEl)  rowEl.style.opacity = '0.7';
     } catch (err) {
       errors++;
@@ -1374,7 +1422,7 @@ async function batchRun() {
       })();
 
       const auditLog = {
-        tool: 'NullifyCV v2.0.0',
+        tool: 'NullifyCV v2.2.3',
         site: 'nullifycv.com',
         batch_id: 'BATCH-' + Date.now(),
         timestamp: new Date().toISOString(),
@@ -1384,6 +1432,9 @@ async function batchRun() {
         errors,
         server_transmissions: 0,
         active_keys: Object.keys(activeKeys),
+        notes: activeKeys.photos
+          ? 'Batch mode redacts photos using a heuristic filter (no per-file picker). For tricky cases, re-process individual files via the single-file flow which has the image picker.'
+          : 'Standard mode keeps photos. Switch to Bias Strip, Client Submission, or EEOC Blind Review to remove photos.',
         files: auditItems,
         disclaimer: 'Consistent with GDPR Article 5. Not legal advice.'
       };

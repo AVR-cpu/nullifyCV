@@ -201,7 +201,7 @@
 
     <!-- Mode tabs -->
     <p class="slabel">Redaction mode</p>
-    <div class="tabs" role="tablist" aria-label="Redaction mode">
+    <div id="mode-tabs" class="tabs" role="tablist" aria-label="Redaction mode">
       <button class="tab on" role="tab" aria-selected="true" onclick="setMode('standard',this)">Standard PII</button>
       <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Bias strip 🔒</button>
       <button class="tab tab-locked" role="tab" aria-selected="false" onclick="showUpgrade('mode')">Client sub. 🔒</button>
@@ -437,7 +437,20 @@
   <div style="height:1px;background:var(--border);margin-bottom:32px;"></div>
   <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--green-muted);margin-bottom:6px;">Pro feature</div>
   <h2 style="font-size:20px;font-weight:800;color:var(--green-dark);letter-spacing:-0.5px;margin-bottom:6px;">Batch processing</h2>
-  <p style="font-size:13px;color:var(--ink3);margin-bottom:24px;line-height:1.6;">Upload up to 200 PDF or DOCX files at once. All files are processed locally in your browser using your current redaction settings. Download everything as a single ZIP with a combined audit log.</p>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px;line-height:1.6;">Upload up to 200 PDF or DOCX files at once. All files are processed locally in your browser using your current redaction settings. Download everything as a single ZIP with a combined audit log.</p>
+
+  <!-- Current-mode indicator: surfaces the active mode/targets so users don't run a batch without realizing they're in Standard mode -->
+  <div id="batch-mode-banner" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--green-bg);border:1px solid var(--green-mid);border-radius:var(--r);padding:10px 14px;margin-bottom:20px;font-size:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px;">
+      <span style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--green-muted);">Mode</span>
+      <strong id="batch-mode-name" style="color:var(--green-dark);font-size:13px;">Standard PII</strong>
+      <span id="batch-mode-targets" style="color:var(--ink3);font-size:11px;font-family:var(--mono);">name, contact, location, gradyear</span>
+    </div>
+    <button onclick="document.getElementById('mode-tabs').scrollIntoView({behavior:'smooth',block:'center'})"
+            style="background:white;border:1px solid var(--green-mid);color:var(--green-dark);border-radius:var(--r);padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);flex-shrink:0;">
+      Change mode ↑
+    </button>
+  </div>
 
   <!-- Drop zone -->
   <div id="batch-drop"
@@ -514,7 +527,7 @@
   <span aria-hidden="true">·</span>
   <a href="/terms.html">Terms</a>
   <span aria-hidden="true">·</span>
-  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
+  <small>No uploads · No storage · Open source · GDPR-consistent · Not legal advice</small>
 </footer>
 
 <!-- ── LIBRARIES ─────────────────────────────────────────────────────────── -->
