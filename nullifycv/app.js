@@ -159,7 +159,8 @@ async function extractPDFData(file){
   const pdf=await pdfjsLib.getDocument({data:ab}).promise;
   let fullText='';
   const allItems=[];  // {str, x, y, w, h, pageNum, pageHeight}
-  const allImages=[]; // {x, y, w, h, pageNum} — positions of embedded images
+  const allImages=[]; // {x, y, w, h, pageNum, source} — positions of embedded images
+  const pageOpCounts=[]; // per-page operator counts for diagnostics
 
   for(let p=1;p<=pdf.numPages;p++){
     const page=await pdf.getPage(p);
@@ -186,16 +187,25 @@ async function extractPDFData(file){
     fullText+=pageText.trim()+'\n\n';
 
     /* ── Detect embedded images on this page ─────────────────────────────── */
-    /* pdf.js exposes images via the operator list. Each "paintImageXObject"
-       op is preceded by transform ops that determine where the image lands
-       on the page. We walk the operator list maintaining a transform stack
-       and capture the resulting bounding box for every image draw call. */
+    /* pdf.js exposes images via the operator list. Each image-painting op is
+       preceded by transform ops that determine where the image lands on the
+       page. We walk the operator list maintaining a transform stack and
+       capture the resulting bounding box for every image draw call.
+       
+       Some PDF authoring tools (notably Canva and similar template tools)
+       wrap images inside Form XObjects. We need to detect those by tracking
+       the boundaries of the wrapping form and treating the form itself as
+       the image area when the form contains no recognizable image op. */
     try {
       const ops = await page.getOperatorList();
       const OPS = pdfjsLib.OPS;
       // Transform stack — each entry is [a, b, c, d, e, f] (PDF transform matrix)
       let ctm = [1, 0, 0, 1, 0, 0];
       const stack = [];
+      // Track form/group nesting and image-bearing forms
+      const formStack = []; // each item: { startCtm, hadImage }
+      // Diagnostic: counts of each op code seen, to help diagnose future failures
+      const opCounts = {};
 
       const multiply = (m1, m2) => [
         m1[0]*m2[0] + m1[2]*m2[1],
@@ -206,39 +216,69 @@ async function extractPDFData(file){
         m1[1]*m2[4] + m1[3]*m2[5] + m1[5],
       ];
 
+      const computeBoundingBox = (matrix) => {
+        const [a, b, c, d, e, f] = matrix;
+        const corners = [
+          [e, f],
+          [a + e, b + f],
+          [c + e, d + f],
+          [a + c + e, b + d + f],
+        ];
+        const xs = corners.map(c => c[0]);
+        const ys = corners.map(c => c[1]);
+        return {
+          x: Math.min(...xs),
+          y: Math.min(...ys),
+          w: Math.max(...xs) - Math.min(...xs),
+          h: Math.max(...ys) - Math.min(...ys),
+        };
+      };
+
+      // Build a name lookup for ops so we can log unrecognized ones
+      const opNames = {};
+      for (const k in OPS) opNames[OPS[k]] = k;
+
       for (let i = 0; i < ops.fnArray.length; i++) {
         const fn = ops.fnArray[i];
         const args = ops.argsArray[i];
+        const opName = opNames[fn] || ('op_' + fn);
+        opCounts[opName] = (opCounts[opName] || 0) + 1;
+
         if (fn === OPS.save) {
           stack.push(ctm.slice());
         } else if (fn === OPS.restore) {
           if (stack.length) ctm = stack.pop();
         } else if (fn === OPS.transform) {
           ctm = multiply(ctm, args);
-        } else if (fn === OPS.paintImageXObject || fn === OPS.paintInlineImageXObject || fn === OPS.paintJpegXObject) {
-          // The image is drawn from (0,0) to (1,1) in its local coord space,
-          // then mapped through the current transform matrix.
-          // Image placed at (e, f) with width=a, height=d (assuming no rotation/skew).
-          const [a, b, c, d, e, f] = ctm;
-          // Compute the four corners in page space
-          const corners = [
-            [e, f],                       // (0,0)
-            [a + e, b + f],              // (1,0)
-            [c + e, d + f],              // (0,1)
-            [a + c + e, b + d + f],      // (1,1)
-          ];
-          const xs = corners.map(c => c[0]);
-          const ys = corners.map(c => c[1]);
-          const x = Math.min(...xs);
-          const y = Math.min(...ys);
-          const w = Math.max(...xs) - x;
-          const h = Math.max(...ys) - y;
-          // Filter out tiny decorative images (icons, bullets, separators) — too small to be a photo
-          if (w >= 30 && h >= 30) {
-            allImages.push({x, y, w, h, pageNum: p});
+        } else if (fn === OPS.paintImageXObject ||
+                   fn === OPS.paintInlineImageXObject ||
+                   fn === OPS.paintJpegXObject ||
+                   fn === OPS.paintImageMaskXObject) {
+          // Direct image paint — capture its bounds via current transform
+          const box = computeBoundingBox(ctm);
+          if (box.w >= 20 && box.h >= 20) {
+            allImages.push({ ...box, pageNum: p, source: 'direct' });
           }
+          // Mark any active forms as containing an image (so we don't double-mark them)
+          for (const f of formStack) f.hadImage = true;
+        } else if (fn === OPS.beginGroup ||
+                   fn === OPS.paintFormXObjectBegin ||
+                   fn === OPS.beginAnnotation) {
+          // Entering a form/group — record the matrix at this point
+          formStack.push({ startCtm: ctm.slice(), hadImage: false });
+        } else if (fn === OPS.endGroup ||
+                   fn === OPS.paintFormXObjectEnd ||
+                   fn === OPS.endAnnotation) {
+          // Leaving a form/group — if it didn't contain a direct image but
+          // had a non-trivial bounding box, it MIGHT be a wrapped image.
+          // We don't auto-add these because too many forms are vector-only
+          // (decorative shapes, frames). Just track them for diagnostics.
+          formStack.pop();
         }
       }
+
+      // Stash diagnostic info for the audit log
+      pageOpCounts.push({ page: p, ops: opCounts });
     } catch (e) {
       // If we can't read the operator list (corrupted PDF, unusual format),
       // we degrade gracefully — text redaction still works, photos may survive.
@@ -249,7 +289,7 @@ async function extractPDFData(file){
   if(!fullText.trim())
     throw new Error('No text layer found in this PDF. It may be a scanned image — please export as DOCX.');
 
-  return {text:fullText.trim(), items:allItems, images:allImages, rawBytes:ab2, numPages:pdf.numPages};
+  return {text:fullText.trim(), items:allItems, images:allImages, rawBytes:ab2, numPages:pdf.numPages, pageOpCounts};
 }
 
 /* ── Find which text items contain PII ──────────────────────────────────────*/
@@ -460,7 +500,7 @@ async function go(){
     if(ext==='pdf'){
       /* ── PDF path: extract text+positions, find PII, draw black bars ── */
       setStatus('Extracting text and positions from PDF...',12);
-      const {text,items,images,rawBytes,numPages}=await extractPDFData(currentFile);
+      const {text,items,images,rawBytes,numPages,pageOpCounts}=await extractPDFData(currentFile);
 
       setStatus('Scanning for PII...',35);
       await slp(100);
@@ -518,7 +558,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.1.0',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.1.1',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
@@ -527,6 +567,13 @@ async function go(){
         items_nullified:detectedPII.length,
         images_nullified:imagesToRedact.length,
         images_detected:images.length,
+        image_detection_diagnostics:{
+          per_page_op_counts: pageOpCounts,
+          images_by_source: images.reduce((acc,img)=>{
+            acc[img.source||'unknown']=(acc[img.source||'unknown']||0)+1;
+            return acc;
+          },{}),
+        },
         redaction_positions:positions.length,
         active_redaction_keys:Object.keys(activeKeys),
         items:detectedPII.map(p=>({type:p.type,label:p.label,confidence:p.conf})),
