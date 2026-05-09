@@ -1,4 +1,4 @@
-/* ── NullifyCV · app.js v2.2.3 ───────────────────────────────────────────── */
+/* ── NullifyCV · app.js v2.3.0 ───────────────────────────────────────────── */
 /* Real PDF redaction: pdf.js finds PII positions, pdf-lib draws black bars   */
 /* mammoth.js handles DOCX → clean text output                                */
 'use strict';
@@ -533,8 +533,33 @@ function findPIIPositions(items, piiValues){
     allByPageY[key].sort((a,b)=>a.x-b.x);
   }
 
-  // For each detected PII string, find which items contain it
-  for(const piiVal of piiValues){
+  // Normalize input: piiValues may be array of strings OR array of PII objects.
+  // If it's an object with `prelocated` items, use those directly — skip string search.
+  // This is critical for positional name detection: we already know exactly which
+  // items contain the name, so re-scanning the text by string would lose precision.
+  const normalized = piiValues.map(v => {
+    if (typeof v === 'string') return { value: v, prelocated: null };
+    return { value: v.value || '', prelocated: v.prelocated || null };
+  });
+
+  for (const entry of normalized) {
+    // Prelocated items: emit one redaction rectangle per item — no string search.
+    if (entry.prelocated && entry.prelocated.length > 0) {
+      const padding = 2;
+      for (const item of entry.prelocated) {
+        positions.push({
+          pageNum: item.pageNum,
+          x: item.x - padding,
+          y: item.y - padding,
+          w: item.w + padding * 2,
+          h: item.h + padding * 2,
+          piiVal: entry.value,
+        });
+      }
+      continue;
+    }
+
+    const piiVal = entry.value;
     const valLower=piiVal.toLowerCase();
     const valTrim=valLower.trim();
     if(!valTrim)continue;
@@ -697,10 +722,163 @@ const NAME_BLOCKLIST = new Set([
   'curriculum vitae','curriculum vitæ','résumé','resume','cv','personal details',
   'personal information','contact details','contact information','about me',
   'profile','professional summary','executive summary','biography','bio',
+  'work experience','werkervaring','opleiding','opleidingen','education',
+  'skills','vaardigheden','talen','languages','interesses','hobbies','interests',
+  'references','referenties','personalia','contact',
 ]);
 
-function scanForPII(text,activeKeys){
+/* ── Positional name detection ───────────────────────────────────────────── */
+/* Finds the candidate's name by visual position on page 1, not extraction order.
+   Templates (Canva, etc.) often extract sidebar text BEFORE the header containing
+   the name. Regex anchored at document start fails for those. This function
+   searches the visually-topmost lines of page 1 for name-shaped content.
+   Returns an array of {value, items} objects suitable for direct redaction. */
+function findNameByPosition(items) {
+  if (!items || items.length === 0) return [];
+  // Page 1 only — names live there. Drop everything else.
+  const p1 = items.filter(it => it.pageNum === 1);
+  if (p1.length === 0) return [];
+
+  // Group items by line (same Y within ~3pt). PDF Y is bottom-up.
+  const lineMap = new Map();
+  for (const it of p1) {
+    const yKey = Math.round(it.y / 3) * 3; // 3pt buckets
+    if (!lineMap.has(yKey)) lineMap.set(yKey, []);
+    lineMap.get(yKey).push(it);
+  }
+
+  // Build "visual lines" — items at same Y but with large X gaps are distinct
+  // visual columns/blocks (e.g. a label "Naam:" and the value "Roethof, Carlos"
+  // separated by 100+ points of whitespace). Split those into separate lines.
+  const lines = [];
+  for (const [y, its] of lineMap.entries()) {
+    its.sort((a, b) => a.x - b.x);
+    let chunk = [its[0]];
+    for (let i = 1; i < its.length; i++) {
+      const prev = its[i - 1];
+      const cur = its[i];
+      const gap = cur.x - (prev.x + prev.w);
+      // Gap > 30pt = visually distinct block (typical padding is <10pt)
+      if (gap > 30) {
+        // Flush current chunk as a line, start new one
+        const text = chunk.map(i => i.str).join(' ').replace(/\s+/g, ' ').trim();
+        if (text.length >= 2) {
+          const avgH = chunk.reduce((s, i) => s + (i.h || 10), 0) / chunk.length;
+          lines.push({ y, text, items: chunk.slice(), fontSize: avgH });
+        }
+        chunk = [cur];
+      } else {
+        chunk.push(cur);
+      }
+    }
+    // Flush final chunk
+    const text = chunk.map(i => i.str).join(' ').replace(/\s+/g, ' ').trim();
+    if (text.length >= 2) {
+      const avgH = chunk.reduce((s, i) => s + (i.h || 10), 0) / chunk.length;
+      lines.push({ y, text, items: chunk.slice(), fontSize: avgH });
+    }
+  }
+
+  // Sort lines top-to-bottom (highest Y = top of page in PDF coords)
+  lines.sort((a, b) => b.y - a.y);
+  if (lines.length === 0) return [];
+
+  // We look at the top N lines. N=10 is generous — accounts for templates that
+  // stack a tagline, banner, "Curriculum Vitae" header, etc. above the name.
+  const topLines = lines.slice(0, 10);
+
+  // What "looks like a name"? A line of 2-4 capitalized words, alphabetic only,
+  // total 4-60 chars, no digits/punctuation other than spaces/hyphens/commas/dots.
+  // REQUIRES at least 2 words — single-word matches are too unreliable
+  // (could be section headers, job titles, etc.). Multi-line names are handled
+  // separately below.
+  const looksLikeName = (text) => {
+    if (text.length < 4 || text.length > 60) return false;
+    if (/[0-9@:/]/.test(text)) return false; // digits/email/url indicators
+    if (NAME_BLOCKLIST.has(text.toLowerCase())) return false;
+    // Allow letters (incl. accented), spaces, hyphens, single comma, single period
+    if (!/^[A-Za-zÀ-ÿ' .,\-]+$/.test(text)) return false;
+    // Strip trailing comma/period for word counting
+    const cleaned = text.replace(/[,.]+$/g, '').trim();
+    // Split on commas-with-spaces or just whitespace
+    const words = cleaned.split(/[, ]+/).filter(w => w.length > 0);
+    if (words.length < 2 || words.length > 4) return false;
+    // Each word: at least 2 chars, starts with uppercase or is fully uppercase
+    for (const w of words) {
+      if (w.length < 2) return false;
+      // Allow particles like "del", "van", "von" (lowercase) only if NOT first word
+      if (w === w.toLowerCase() && w.length > 4) return false;
+      const first = w[0];
+      if (first !== first.toUpperCase()) return false;
+    }
+    return true;
+  };
+
+  // Scan top lines for the FIRST one that looks like a name.
+  // Also handles multi-line names (Kevin/Nlandu — single capitalized word on
+  // each of two consecutive lines at similar X).
+  const results = [];
+
+  for (let i = 0; i < topLines.length; i++) {
+    const line = topLines[i];
+    const text = line.text;
+
+    // Single-line name match (2+ words)
+    if (looksLikeName(text)) {
+      results.push({ value: text, items: line.items.slice() });
+      break;
+    }
+
+    // Multi-line name: this line is one capitalized word, next visible line is
+    // also one capitalized word, similar X start, similar font size.
+    if (i + 1 < topLines.length) {
+      const nextLine = topLines[i + 1];
+      const oneWord = /^[A-Z][a-zA-ZÀ-ÿ\-]{2,30}$/;
+      if (oneWord.test(text) && oneWord.test(nextLine.text)) {
+        // Same X start (within ~10pt) and Y gap reasonable (within ~3 line heights)
+        const x1 = line.items[0].x;
+        const x2 = nextLine.items[0].x;
+        const yGap = line.y - nextLine.y;
+        const lh = Math.max(line.fontSize, nextLine.fontSize);
+        if (Math.abs(x1 - x2) <= 15 && yGap > 0 && yGap <= lh * 3) {
+          if (!NAME_BLOCKLIST.has(text.toLowerCase()) &&
+              !NAME_BLOCKLIST.has(nextLine.text.toLowerCase())) {
+            results.push({
+              value: text + ' ' + nextLine.text,
+              items: [...line.items, ...nextLine.items],
+            });
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  return results;
+}
+
+function scanForPII(text,activeKeys,items){
   const found=[],seen=new Set();
+
+  // Positional name detection — runs first because it's the most reliable for
+  // template-based CVs. Adds names found visually at the top of page 1.
+  if (activeKeys.name && items && items.length > 0) {
+    const positionalNames = findNameByPosition(items);
+    for (const n of positionalNames) {
+      const dk = 'NAME:' + n.value.toLowerCase();
+      if (seen.has(dk)) continue;
+      seen.add(dk);
+      found.push({
+        type: 'NAME',
+        label: 'Full name (positional)',
+        value: n.value,
+        conf: 'high',
+        // Pass items so the position finder can short-circuit string search
+        prelocated: n.items,
+      });
+    }
+  }
+
   for(const pattern of PII_PATTERNS){
     if(!activeKeys[pattern.key])continue;
     const re=new RegExp(pattern.re.source,pattern.re.flags);
@@ -803,7 +981,7 @@ function downloadRedactedText(){
 }
 
 function dlAudit(){
-  const data=auditData||{tool:'NullifyCV v2.2.3',site:'nullifycv.com',
+  const data=auditData||{tool:'NullifyCV v2.3.0',site:'nullifycv.com',
     timestamp:new Date().toISOString(),file:currentFile?currentFile.name:'none',
     server_transmissions:0,items_nullified:detectedPII.length,
     disclaimer:'Consistent with GDPR Article 5. Not legal advice.'};
@@ -831,13 +1009,12 @@ async function go(){
 
       setStatus('Scanning for PII...',35);
       await slp(100);
-      detectedPII=scanForPII(text,activeKeys);
+      detectedPII=scanForPII(text,activeKeys,items);
       redactedText=applyTextRedactions(text,detectedPII);
 
       setStatus('Locating PII coordinates on PDF pages...',55);
       await slp(100);
-      const piiValues=detectedPII.map(p=>p.value);
-      const positions=findPIIPositions(items,piiValues);
+      const positions=findPIIPositions(items,detectedPII);
       pdfPositions=positions;
 
       // Gate image redaction on the `photos` key — only active in bias/client/eeoc modes.
@@ -911,7 +1088,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.2.3',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.3.0',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
@@ -969,7 +1146,7 @@ async function go(){
         items_nullified: detectedPII.length,
       });
 
-      auditData={tool:'NullifyCV v2.2.3',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.3.0',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,processing_engine:'mammoth@1.6.0',
         server_transmissions:0,items_nullified:detectedPII.length,
@@ -1282,8 +1459,8 @@ async function batchProcessFile(file, activeKeys) {
 
   if (ext === 'pdf') {
     const { text, items, images, rawBytes, numPages } = await extractPDFData(file);
-    const pii       = scanForPII(text, activeKeys);
-    const positions = findPIIPositions(items, pii.map(p => p.value));
+    const pii       = scanForPII(text, activeKeys, items);
+    const positions = findPIIPositions(items, pii);
 
     // Photos: in batch mode there's no per-file picker (impractical for 100+ files).
     // We use the heuristic filter to identify likely profile photos. Trade-off:
@@ -1422,7 +1599,7 @@ async function batchRun() {
       })();
 
       const auditLog = {
-        tool: 'NullifyCV v2.2.3',
+        tool: 'NullifyCV v2.3.0',
         site: 'nullifycv.com',
         batch_id: 'BATCH-' + Date.now(),
         timestamp: new Date().toISOString(),
