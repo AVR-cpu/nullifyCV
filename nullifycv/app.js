@@ -292,6 +292,58 @@ async function extractPDFData(file){
   return {text:fullText.trim(), items:allItems, images:allImages, rawBytes:ab2, numPages:pdf.numPages, pageOpCounts};
 }
 
+/* ── Photo discrimination heuristic ──────────────────────────────────────── */
+/* Profile photos look different from decorative template shapes:
+   - Aspect ratio: roughly square or portrait (0.5–2.0)
+   - Size: between 4% and 30% of an A4 page (around 80×80 px to 350×400 px)
+   - Page: photos are almost always on page 1 only
+   - Position: typically in upper half or in a sidebar
+   We err on the side of redacting — false positives (extra black box) are
+   less harmful than false negatives (photo survives). */
+function filterToLikelyPhotos(images, numPages) {
+  const A4_WIDTH = 595;   // PDF points (1pt = 1/72 inch)
+  const A4_HEIGHT = 842;
+  const A4_AREA = A4_WIDTH * A4_HEIGHT;
+
+  const kept = [];
+  const rejected = [];
+  const rejectedReasons = {};
+
+  for (const img of images) {
+    const reasons = [];
+    const aspect = img.h > 0 ? img.w / img.h : 0;
+    const area = img.w * img.h;
+    const areaPct = (area / A4_AREA) * 100;
+
+    // Reject: too small (icons, tiny decorations)
+    if (img.w < 60 || img.h < 60) {
+      reasons.push('too_small');
+    }
+    // Reject: too large (full-page backgrounds)
+    if (areaPct > 35) {
+      reasons.push('too_large');
+    }
+    // Reject: extreme aspect ratio (banner strips, separator lines)
+    if (aspect < 0.4 || aspect > 2.5) {
+      reasons.push('extreme_aspect_ratio');
+    }
+    // Reject: not on page 1 (decorative template elements that repeat)
+    if (img.pageNum > 1) {
+      reasons.push('not_page_1');
+    }
+
+    if (reasons.length === 0) {
+      kept.push(img);
+    } else {
+      rejected.push({...img, reasons});
+      const key = reasons.join(',');
+      rejectedReasons[key] = (rejectedReasons[key] || 0) + 1;
+    }
+  }
+
+  return { kept, rejected, rejectedReasons };
+}
+
 /* ── Find which text items contain PII ──────────────────────────────────────*/
 function findPIIPositions(items, piiValues){
   const positions=[];
@@ -515,7 +567,15 @@ async function go(){
 
       // Gate image redaction on the `photos` key — only active in bias/client/eeoc modes.
       // Standard mode keeps photos so a candidate's own photo isn't unexpectedly removed.
-      const imagesToRedact = activeKeys.photos ? images : [];
+      // We further filter by heuristics that distinguish profile photos from decorative
+      // shapes (the latter are often embedded as raster PNGs in template-based CVs).
+      let imagesToRedact = [];
+      let imageFilterReasons = {};
+      if (activeKeys.photos) {
+        const result = filterToLikelyPhotos(images, numPages);
+        imagesToRedact = result.kept;
+        imageFilterReasons = result.rejectedReasons;
+      }
 
       setStatus('Drawing redaction bars on PDF...',72);
       await slp(100);
@@ -558,7 +618,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.1.1',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.1.2',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
@@ -573,6 +633,8 @@ async function go(){
             acc[img.source||'unknown']=(acc[img.source||'unknown']||0)+1;
             return acc;
           },{}),
+          images_filtered_out: images.length - imagesToRedact.length,
+          filter_rejection_reasons: imageFilterReasons,
         },
         redaction_positions:positions.length,
         active_redaction_keys:Object.keys(activeKeys),
