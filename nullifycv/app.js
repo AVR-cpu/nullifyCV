@@ -55,13 +55,16 @@ const PII_PATTERNS=[
    re:/\b(?:He\/Him|She\/Her|They\/Them|he\/him|she\/her|they\/them|hij\/hem|zij\/haar)\b/g},
   {key:'school',type:'SCHOOL',label:'School name',conf:'high',
    re:/\b(?:Universiteit\s+(?:van\s+)?[A-Z][a-z]+(?:\s[A-Z][a-z]+)*|Hogeschool\s+[A-Z][a-z]+(?:\s[A-Z][a-z]+)*|University of [A-Z][a-z]+(?:\s[A-Z][a-z]+)*|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*\s+University|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*\s+College|MIT|UCLA|USC|NYU|CMU|TU Delft|TU Eindhoven|UvA|VU Amsterdam)\b/g},
+  // Single-line name as the FIRST line of the document (e.g. "Jane Doe").
+  // Anchored at absolute start of text (no /m flag), so it only matches if the
+  // name is the very first content. Uses literal space (not \s) so it cannot
+  // bleed across newlines into subsequent lines.
   {key:'name',type:'NAME',label:'Full name',conf:'high',
-   re:/^([A-Z][a-zA-Z\u00C0-\u024F\-]+ (?:[A-Z][a-zA-Z\u00C0-\u024F\-]+ )*[A-Z][a-zA-Z\u00C0-\u024F\-]+)$/gm},
-  // Multi-line name: two single capitalized words on consecutive lines (e.g. "Kevin\nNlandu")
-  // Restricted to first 200 chars of the document to avoid false positives mid-CV.
+   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]+(?: [A-Z][a-zA-Z\u00C0-\u024F\-]+){1,3}(?=\n|$)/},
+  // Multi-line name: two single capitalized words on consecutive lines starting at document start.
+  // Anchored at absolute document start to avoid false positives mid-document.
   {key:'name',type:'NAME',label:'Full name (multi-line)',conf:'high',
-   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}\n[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}(?=\n)/g,
-   limit:200},
+   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}\n[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}(?=\n|$)/},
   {key:'contact',type:'DOB',label:'Date of birth',conf:'high',
    re:/\b(?:geboortedatum|geboren op|date of birth|dob):?\s*\d{1,2}[\s\-\/]\d{1,2}[\s\-\/]\d{2,4}\b/gi},
   {key:'contact',type:'DOB',label:'Date of birth',conf:'med',
@@ -673,6 +676,13 @@ async function extractDOCXText(file){
 }
 
 /* ── PII scanning ────────────────────────────────────────────────────────── */
+// Common phrases that look like names but aren't (CV headers, document labels)
+const NAME_BLOCKLIST = new Set([
+  'curriculum vitae','curriculum vitæ','résumé','resume','cv','personal details',
+  'personal information','contact details','contact information','about me',
+  'profile','professional summary','executive summary','biography','bio',
+]);
+
 function scanForPII(text,activeKeys){
   const found=[],seen=new Set();
   for(const pattern of PII_PATTERNS){
@@ -687,6 +697,8 @@ function scanForPII(text,activeKeys){
       let val=match[0].trim();
       if(val.includes('\n'))val=val.replace(/\n+/g,' ');
       if(val.length<2)continue;
+      // Skip common CV header phrases that structurally look like names
+      if(pattern.type==='NAME' && NAME_BLOCKLIST.has(val.toLowerCase()))continue;
       const dk=pattern.type+':'+val.toLowerCase();
       if(seen.has(dk))continue;
       seen.add(dk);
@@ -868,7 +880,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.2.1',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.2.2',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
