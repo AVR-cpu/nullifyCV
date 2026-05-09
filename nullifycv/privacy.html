@@ -7,7 +7,7 @@
   <meta name="description" content="NullifyCV privacy policy. How we handle data, what we collect, and your rights under GDPR.">
   <link rel="canonical" href="https://nullifycv.com/privacy.html">
   <meta property="og:title" content="Privacy Policy — NullifyCV">
-  <meta property="og:description" content="NullifyCV processes files entirely in your browser. Zero data transmitted, no storage, no tracking. Read the full privacy policy.">
+  <meta property="og:description" content="NullifyCV processes files entirely in your browser. Zero document data transmitted, no storage. Read the full privacy policy.">
   <meta property="og:url" content="https://nullifycv.com/privacy.html">
   <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
@@ -137,7 +137,20 @@
     <h3>3.3 Support communications</h3>
     <p>If you contact us at support@nullifycv.com, we will process your email address and the content of your message to respond to your request. The legal basis is our legitimate interest in providing support (GDPR Article 6(1)(f)). We retain support emails for 2 years.</p>
 
-    <h3>3.4 Licence data (localStorage)</h3>
+    <h3>3.4 Error tracking (Sentry)</h3>
+    <p>We use <strong>Sentry</strong> (Functional Software, Inc., trading as Sentry, with EU data hosted by Sentry GmbH in Germany) to capture JavaScript errors that occur in your browser while using the site. This helps us identify and fix bugs we would otherwise never know about.</p>
+    <p>Sentry transmits data <strong>only when an error occurs</strong>. If no error happens during your visit, no data is sent to Sentry. When an error does occur, Sentry transmits:</p>
+    <ul>
+      <li>The error message and JavaScript stack trace</li>
+      <li>Browser type and version, operating system, screen size</li>
+      <li>The URL where the error occurred</li>
+      <li>A short trail of recent activity preceding the error (page navigations, network request URLs, button clicks) — known as "breadcrumbs" — to help us reproduce the bug. Form values and input contents are automatically redacted from breadcrumbs.</li>
+      <li>An anonymous session identifier (regenerated each visit; not linked to any account or persistent identity)</li>
+    </ul>
+    <p><strong>Sentry never receives any document data.</strong> Your CV files, extracted text, and processed output are never included in error reports. Sentry's data scrubbing strips form values, file inputs, and input field contents before transmission. We do not use Sentry's Session Replay feature, which means there is no recording of your screen, mouse movements, or keystrokes.</p>
+    <p>Error data is hosted on Sentry's EU servers (Frankfurt, Germany). The legal basis for this processing is our legitimate interest (GDPR Article 6(1)(f)) in maintaining a working application. Sentry's privacy policy is available at <a href="https://sentry.io/privacy/" target="_blank" rel="noopener">sentry.io/privacy</a>. Error data is retained by Sentry for 90 days.</p>
+
+    <h3>3.5 Licence data (localStorage)</h3>
     <p>If you purchase a paid plan, a licence record is stored in your browser's localStorage. This data never leaves your device — it is not transmitted to NullifyCV. It contains your plan type and expiry date only.</p>
 
     <h2>4. Cookies</h2>
@@ -210,7 +223,7 @@
   <span aria-hidden="true">·</span>
   <a href="/terms.html">Terms</a>
   <span aria-hidden="true">·</span>
-  <small>No uploads · No storage · No tracking · GDPR-consistent · Not legal advice</small>
+  <small>No uploads · No storage · Open source · GDPR-consistent · Not legal advice</small>
 </footer>
 
 <script defer src="/_vercel/insights/script.js"></script>
