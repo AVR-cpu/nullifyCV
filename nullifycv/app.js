@@ -136,6 +136,8 @@ function loadFile(file){
   $('drop').style.display='none';
   $('pbtn').disabled=false;
   ['piiwrap','ss','prev','pad'].forEach(id=>$(id).classList.remove('show'));
+  // Analytics: a file was uploaded (no filename or content sent — just the format)
+  if (window.va) window.va('event', { name: 'file_upload', format: ext });
 }
 
 function clearFile(){
@@ -497,6 +499,14 @@ async function go(){
       setStatus(completeMsg,100);
       if(window.markBytesVerified)markBytesVerified();
       $('spin').style.display='none';
+      // Analytics: processing completed successfully
+      if (window.va) window.va('event', {
+        name: 'file_processed',
+        format: 'pdf',
+        mode: currentMode,
+        items_nullified: detectedPII.length,
+        photos_redacted: imagesToRedact.length,
+      });
 
       // ── Photo warning banner ─────────────────────────────────────────────
       // If photos were detected but not redacted (standard mode), warn the user.
@@ -549,6 +559,13 @@ async function go(){
       showPreview(redactedText,detectedPII);showPIIList(detectedPII);
       setStatus('✓ Complete — '+detectedPII.length+' items nullified',100);if(window.markBytesVerified)markBytesVerified();
       $('spin').style.display='none';
+      // Analytics: processing completed successfully
+      if (window.va) window.va('event', {
+        name: 'file_processed',
+        format: 'docx',
+        mode: currentMode,
+        items_nullified: detectedPII.length,
+      });
 
       auditData={tool:'NullifyCV v2.0.0',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),

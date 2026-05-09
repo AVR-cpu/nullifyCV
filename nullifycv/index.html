@@ -528,6 +528,34 @@
 <script defer src="/_vercel/insights/script.js"></script>
 
 <script>
+// ── Stripe checkout click tracking ─────────────────────────────────────────
+// Captures clicks on any Stripe payment button and reports the plan name to
+// Vercel Analytics. Combined with Stripe dashboard data, this gives us the
+// click → checkout → payment funnel.
+(function() {
+  var PLAN_BY_STRIPE_ID = {
+    'c04': 'single_file',
+    'c05': 'week_pass',
+    'c06': 'month_pass',
+    'c07': 'pro_monthly',
+    'c08': 'pro_annual',
+    'c09': 'team',
+  };
+
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[href*="buy.stripe.com"]');
+    if (!link) return;
+    var match = link.href.match(/(c0[4-9])(?:\?|$)/);
+    var plan = match ? PLAN_BY_STRIPE_ID[match[1]] : 'unknown';
+    var location = window.location.pathname.replace(/^\//, '') || 'home';
+    if (window.va) {
+      window.va('event', { name: 'checkout_click', plan: plan, source: location });
+    }
+  });
+})();
+</script>
+
+<script>
 (function() {
   var btn = document.getElementById('lang-btn');
   var sw  = document.getElementById('lang-switcher');
