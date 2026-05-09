@@ -58,13 +58,15 @@ const PII_PATTERNS=[
   // Single-line name as the FIRST line of the document (e.g. "Jane Doe").
   // Anchored at absolute start of text (no /m flag), so it only matches if the
   // name is the very first content. Uses literal space (not \s) so it cannot
-  // bleed across newlines into subsequent lines.
+  // bleed across newlines into subsequent lines. The /g flag is required for
+  // the scanForPII loop — without it, re.exec stays at lastIndex 0 and
+  // infinite-loops. With /g but no /m, ^ still only matches position 0.
   {key:'name',type:'NAME',label:'Full name',conf:'high',
-   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]+(?: [A-Z][a-zA-Z\u00C0-\u024F\-]+){1,3}(?=\n|$)/},
+   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]+(?: [A-Z][a-zA-Z\u00C0-\u024F\-]+){1,3}(?=\n|$)/g},
   // Multi-line name: two single capitalized words on consecutive lines starting at document start.
   // Anchored at absolute document start to avoid false positives mid-document.
   {key:'name',type:'NAME',label:'Full name (multi-line)',conf:'high',
-   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}\n[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}(?=\n|$)/},
+   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}\n[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}(?=\n|$)/g},
   {key:'contact',type:'DOB',label:'Date of birth',conf:'high',
    re:/\b(?:geboortedatum|geboren op|date of birth|dob):?\s*\d{1,2}[\s\-\/]\d{1,2}[\s\-\/]\d{2,4}\b/gi},
   {key:'contact',type:'DOB',label:'Date of birth',conf:'med',
@@ -688,10 +690,22 @@ function scanForPII(text,activeKeys){
   for(const pattern of PII_PATTERNS){
     if(!activeKeys[pattern.key])continue;
     const re=new RegExp(pattern.re.source,pattern.re.flags);
+    // Defensive: a pattern without /g flag will infinite-loop in re.exec.
+    // We force /g on every pattern to be safe regardless of how it was declared.
+    if(!re.flags.includes('g')){
+      console.warn('PII pattern missing /g flag, this is a bug:', pattern.type);
+      continue;
+    }
     // Some patterns (e.g. multi-line name) are restricted to the start of the document
     const searchSpace = pattern.limit ? text.slice(0, pattern.limit) : text;
     let match;
+    let safetyCounter = 0;
     while((match=re.exec(searchSpace))!==null){
+      // Guard against pathological infinite loops (zero-width matches or bugs).
+      if(++safetyCounter > 1000){
+        console.warn('Pattern exceeded 1000 matches, breaking:', pattern.type);
+        break;
+      }
       // For multi-line matches, replace the newline with a space so the position
       // finder treats it as a phrase (it scans line-by-line and across-2-lines).
       let val=match[0].trim();
@@ -703,6 +717,9 @@ function scanForPII(text,activeKeys){
       if(seen.has(dk))continue;
       seen.add(dk);
       found.push({type:pattern.type,label:pattern.label,value:val,conf:pattern.conf});
+      // Defensive: if the regex matched zero characters, advance lastIndex manually
+      // to prevent an infinite loop on zero-width matches.
+      if(match.index === re.lastIndex)re.lastIndex++;
     }
   }
   return found.sort((a,b)=>b.value.length-a.value.length);
@@ -880,7 +897,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.2.2',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.2.3',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
