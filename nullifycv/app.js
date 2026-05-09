@@ -40,6 +40,9 @@ const PII_PATTERNS=[
    re:/\b[A-Z][a-z]+(?:\s[A-Z][a-z]+)?,\s*(?:AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\b/g},
   {key:'contact',type:'ADDRESS',label:'Street address',conf:'high',
    re:/\b\d{1,5}\s+[A-Z][a-z]+(?:\s[A-Za-z]+){1,4}(?:\s(?:St|Ave|Blvd|Dr|Rd|Ln|Ct|Way|Pl|straat|laan|weg|plein|dreef|singel|kade|dijk|gracht)\.?)\b/gi},
+  // Dutch address format: streetname (ending in straat/laan/weg/etc) + number, sometimes + addition
+  {key:'contact',type:'ADDRESS',label:'Street address',conf:'high',
+   re:/\b[A-Z][a-zA-Z\u00C0-\u024F]+(?:straat|laan|weg|plein|dreef|singel|kade|dijk|gracht|hof|park|baan|hoek|berg|ring|wal)\s+\d{1,5}(?:\s*[A-Z](?:\s+\d{1,4}\s*[A-Z]{0,2})?)?\b/g},
   {key:'gradyear',type:'GRAD_YR',label:'Graduation year',conf:'high',
    re:/\b(?:Class of |Graduated?:?\s*|(?:May|June|December|januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\s+)(?:19|20)\d{2}\b/gi},
   {key:'gradyear',type:'YEAR',label:'Year (age proxy)',conf:'med',
@@ -54,6 +57,11 @@ const PII_PATTERNS=[
    re:/\b(?:Universiteit\s+(?:van\s+)?[A-Z][a-z]+(?:\s[A-Z][a-z]+)*|Hogeschool\s+[A-Z][a-z]+(?:\s[A-Z][a-z]+)*|University of [A-Z][a-z]+(?:\s[A-Z][a-z]+)*|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*\s+University|[A-Z][a-z]+(?:\s[A-Z][a-z]+)*\s+College|MIT|UCLA|USC|NYU|CMU|TU Delft|TU Eindhoven|UvA|VU Amsterdam)\b/g},
   {key:'name',type:'NAME',label:'Full name',conf:'high',
    re:/^([A-Z][a-zA-Z\u00C0-\u024F\-]+ (?:[A-Z][a-zA-Z\u00C0-\u024F\-]+ )*[A-Z][a-zA-Z\u00C0-\u024F\-]+)$/gm},
+  // Multi-line name: two single capitalized words on consecutive lines (e.g. "Kevin\nNlandu")
+  // Restricted to first 200 chars of the document to avoid false positives mid-CV.
+  {key:'name',type:'NAME',label:'Full name (multi-line)',conf:'high',
+   re:/^[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}\n[A-Z][a-zA-Z\u00C0-\u024F\-]{2,30}(?=\n)/g,
+   limit:200},
   {key:'contact',type:'DOB',label:'Date of birth',conf:'high',
    re:/\b(?:geboortedatum|geboren op|date of birth|dob):?\s*\d{1,2}[\s\-\/]\d{1,2}[\s\-\/]\d{2,4}\b/gi},
   {key:'contact',type:'DOB',label:'Date of birth',conf:'med',
@@ -494,42 +502,114 @@ function showImagePicker(images, pageCanvases, suggestedRedactions) {
 /* ── Find which text items contain PII ──────────────────────────────────────*/
 function findPIIPositions(items, piiValues){
   const positions=[];
-  // For each detected PII string, find matching text items
+  // Group items by page and approximate y once (avoids rebuilding per pii value)
+  const allByPageY={};
+  for(const item of items){
+    const key=item.pageNum+'_'+Math.round(item.y);
+    if(!allByPageY[key])allByPageY[key]=[];
+    allByPageY[key].push(item);
+  }
+  // Sort each line left-to-right
+  for(const key of Object.keys(allByPageY)){
+    allByPageY[key].sort((a,b)=>a.x-b.x);
+  }
+
+  // For each detected PII string, find which items contain it
   for(const piiVal of piiValues){
     const valLower=piiVal.toLowerCase();
-    // Try to match across items on same line (same y)
-    // Group items by page and approximate y
-    const byPageY={};
-    for(const item of items){
-      const key=item.pageNum+'_'+Math.round(item.y);
-      if(!byPageY[key])byPageY[key]=[];
-      byPageY[key].push(item);
+    const valTrim=valLower.trim();
+    if(!valTrim)continue;
+
+    // Try same-line match first
+    for(const key of Object.keys(allByPageY)){
+      const lineItems=allByPageY[key];
+      // Build a flat index: for each char in the joined line, which item it belongs to
+      let joined='';
+      const charToItem=[];
+      for(let i=0;i<lineItems.length;i++){
+        if(joined.length>0){joined+=' ';charToItem.push(i);} // separator belongs to next item
+        for(const c of lineItems[i].str){joined+=c;charToItem.push(i);}
+      }
+      const lower=joined.toLowerCase();
+      let searchFrom=0;
+      while(true){
+        const idx=lower.indexOf(valTrim,searchFrom);
+        if(idx===-1)break;
+        const endIdx=idx+valTrim.length-1;
+        const startItem=lineItems[charToItem[idx]];
+        const endItem=lineItems[charToItem[endIdx]];
+        const padding=2;
+        positions.push({
+          pageNum:startItem.pageNum,
+          x:startItem.x-padding,
+          y:Math.min(startItem.y,endItem.y)-padding,
+          w:(endItem.x+endItem.w)-(startItem.x)+(padding*2),
+          h:Math.max(startItem.h,endItem.h)+(padding*2),
+          piiVal,
+        });
+        searchFrom=endIdx+1;
+      }
     }
-    // Check each line group
-    for(const key of Object.keys(byPageY)){
-      const lineItems=byPageY[key].sort((a,b)=>a.x-b.x);
-      const lineText=lineItems.map(i=>i.str).join(' ');
-      if(lineText.toLowerCase().includes(valLower)){
-        // Find start item
-        let accumulated='';
-        let startIdx=-1,endIdx=-1;
-        for(let i=0;i<lineItems.length;i++){
-          accumulated+=lineItems[i].str+' ';
-          if(accumulated.toLowerCase().includes(valLower)){
-            if(startIdx===-1)startIdx=Math.max(0,i-1);
-            endIdx=i;
+
+    // Multi-line match: try matching across two adjacent lines on the same page.
+    // Common case: "Kevin\nNlandu" or "Bijlmerdreef 173C 1102\nBP Amsterdam".
+    // We only try 2-line spans (3+ lines is rare for PII).
+    if(!valTrim.includes(' '))continue; // single-word PII won't span lines
+    const linesByPage={};
+    for(const key of Object.keys(allByPageY)){
+      const [page,y]=key.split('_');
+      if(!linesByPage[page])linesByPage[page]=[];
+      linesByPage[page].push({y:parseFloat(y),items:allByPageY[key]});
+    }
+    for(const page of Object.keys(linesByPage)){
+      const lines=linesByPage[page].sort((a,b)=>b.y-a.y); // top-to-bottom (high y first in PDF coords)
+      for(let i=0;i<lines.length-1;i++){
+        const l1=lines[i],l2=lines[i+1];
+        // Only consider lines that are vertically adjacent (within ~2× line height)
+        const l1h=l1.items[0]?.h||10;
+        if(Math.abs(l1.y-l2.y)>l1h*3)continue;
+        const t1=l1.items.map(it=>it.str).join(' ');
+        const t2=l2.items.map(it=>it.str).join(' ');
+        const combined=(t1+' '+t2).toLowerCase();
+        if(!combined.includes(valTrim))continue;
+        // Match found across the boundary. Mark items from BOTH lines that are
+        // part of the matched substring. We do this by checking if removing each
+        // line's contribution still satisfies the match. Simpler: redact items
+        // on l1 starting from where the match begins, and items on l2 up to where match ends.
+        const matchStart=combined.indexOf(valTrim);
+        const matchEnd=matchStart+valTrim.length;
+        // Find which items on each line are within the matched span
+        let pos=0;
+        const itemsToRedact=[];
+        for(let li=0;li<l1.items.length;li++){
+          const item=l1.items[li];
+          const itemStart=pos;
+          const itemEnd=pos+item.str.length;
+          if(itemEnd>matchStart && itemStart<matchEnd){
+            itemsToRedact.push(item);
           }
+          pos=itemEnd+1; // +1 for the joining space
         }
-        if(startIdx>=0&&endIdx>=startIdx){
-          const startItem=lineItems[startIdx];
-          const endItem=lineItems[endIdx];
-          const padding=2;
+        // l1 ends; +1 for the space joining the two lines
+        for(let li=0;li<l2.items.length;li++){
+          const item=l2.items[li];
+          const itemStart=pos;
+          const itemEnd=pos+item.str.length;
+          if(itemEnd>matchStart && itemStart<matchEnd){
+            itemsToRedact.push(item);
+          }
+          pos=itemEnd+1;
+        }
+        // Skip if same-line match already produced positions for this — avoid double redaction.
+        // We push one rectangle per item to handle the geometry correctly.
+        const padding=2;
+        for(const item of itemsToRedact){
           positions.push({
-            pageNum:startItem.pageNum,
-            x:startItem.x-padding,
-            y:startItem.y-padding,
-            w:(endItem.x+endItem.w)-(startItem.x)+(padding*2),
-            h:Math.max(startItem.h,endItem.h)+(padding*2),
+            pageNum:item.pageNum,
+            x:item.x-padding,
+            y:item.y-padding,
+            w:item.w+padding*2,
+            h:item.h+padding*2,
             piiVal,
           });
         }
@@ -598,9 +678,14 @@ function scanForPII(text,activeKeys){
   for(const pattern of PII_PATTERNS){
     if(!activeKeys[pattern.key])continue;
     const re=new RegExp(pattern.re.source,pattern.re.flags);
+    // Some patterns (e.g. multi-line name) are restricted to the start of the document
+    const searchSpace = pattern.limit ? text.slice(0, pattern.limit) : text;
     let match;
-    while((match=re.exec(text))!==null){
-      const val=match[0].trim();
+    while((match=re.exec(searchSpace))!==null){
+      // For multi-line matches, replace the newline with a space so the position
+      // finder treats it as a phrase (it scans line-by-line and across-2-lines).
+      let val=match[0].trim();
+      if(val.includes('\n'))val=val.replace(/\n+/g,' ');
       if(val.length<2)continue;
       const dk=pattern.type+':'+val.toLowerCase();
       if(seen.has(dk))continue;
@@ -783,7 +868,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.2.0',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.2.1',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
