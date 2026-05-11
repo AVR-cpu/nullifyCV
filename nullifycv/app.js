@@ -683,7 +683,31 @@ function findPIIPositions(items, piiValues){
         // from line 2 that don't contain any part of the matched value.
         const startsInLine1 = itemMap[matchStart] && itemMap[matchStart].line === 1;
         const endsInLine2 = itemMap[matchEnd] && itemMap[matchEnd].line === 2;
-        if(!(startsInLine1 && endsInLine2))continue;
+        if(!(startsInLine1 && endsInLine2)){
+          // Debug: record the rejection so we can see what's happening
+          diagnostics._mlRejected = diagnostics._mlRejected || [];
+          if(diagnostics._mlRejected.length < 20){
+            diagnostics._mlRejected.push({
+              value: piiVal,
+              line1_text: l1.items.map(it=>it.str).join(' '),
+              line2_text: l2.items.map(it=>it.str).join(' '),
+              match_start_line: itemMap[matchStart]?.line,
+              match_end_line: itemMap[matchEnd]?.line,
+            });
+          }
+          continue;
+        }
+        // Debug: record the multi-line match details
+        diagnostics._mlMatched = diagnostics._mlMatched || [];
+        if(diagnostics._mlMatched.length < 20){
+          diagnostics._mlMatched.push({
+            value: piiVal,
+            line1_text: l1.items.map(it=>it.str).join(' '),
+            line2_text: l2.items.map(it=>it.str).join(' '),
+            line1_y: l1.y,
+            line2_y: l2.y,
+          });
+        }
         // Collect unique items touched by the matched range
         const seen=new Set();
         const itemsToRedact=[];
