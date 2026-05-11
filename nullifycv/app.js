@@ -676,6 +676,14 @@ function findPIIPositions(items, piiValues){
         if(!lower.includes(valStripped))continue;
         const matchStart=lower.indexOf(valStripped);
         const matchEnd=matchStart+valStripped.length-1;
+        // CRITICAL: only emit multi-line redactions if the match actually STRADDLES
+        // both lines. If the entire match is within line 1 (or entirely within line 2),
+        // it's a same-line match — already handled in the previous block. Without this
+        // guard, the multi-line code falsely expands the redaction to include items
+        // from line 2 that don't contain any part of the matched value.
+        const startsInLine1 = itemMap[matchStart] && itemMap[matchStart].line === 1;
+        const endsInLine2 = itemMap[matchEnd] && itemMap[matchEnd].line === 2;
+        if(!(startsInLine1 && endsInLine2))continue;
         // Collect unique items touched by the matched range
         const seen=new Set();
         const itemsToRedact=[];
