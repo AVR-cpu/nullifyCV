@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-7aaa8a?style=flat-square)](LICENSE)
 [![Processing: Client-side only](https://img.shields.io/badge/processing-client--side%20only-a8c5b0?style=flat-square)](#privacy-architecture)
 [![Security Headers: A](https://img.shields.io/badge/security%20headers-A-2d6b4a?style=flat-square)](https://securityheaders.com/?q=nullifycv.com)
-[![No tracking](https://img.shields.io/badge/no-tracking-7aaa8a?style=flat-square)](https://nullifycv.com/privacy.html)
+[![No third-party fingerprinting](https://img.shields.io/badge/no-fingerprinting-7aaa8a?style=flat-square)](https://nullifycv.com/privacy.html)
 
 [**Try it now →**](https://nullifycv.com) · [About](https://nullifycv.com/about.html) · [Pricing](https://nullifycv.com/pro.html) · [Blog](https://nullifycv.com/blog/)
 
@@ -233,7 +233,7 @@ nullifycv/
 - pdf-lib black-bar redaction preserving original layout
 - **Embedded photo detection and redaction in PDFs** (May 2026)
 - Dutch CV support — 06 numbers, postcodes, cities, BSN
-- Six-tier pricing (free → $1.99 single file → $49 Pro → $149 Team)
+- Four-tier pricing (free → $4.99 Week Pass → $49 Pro → $149 Team)
 - Stripe payment integration with localStorage licence activation
 - 10 international SEO landing pages
 - Globe language switcher across all pages

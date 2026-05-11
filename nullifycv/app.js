@@ -1272,11 +1272,11 @@ document.addEventListener('DOMContentLoaded',()=>{
 const UPGRADE_COPY = {
   mode: {
     title: 'Unlock advanced redaction modes',
-    desc:  'Bias Strip removes school names, graduation years and pronouns. Client Sub. protects candidate contact details before forwarding to clients. EEOC mode applies full blind review redaction. All available from $1.99.'
+    desc:  'Bias Strip removes school names, graduation years and pronouns. Client Sub. protects candidate contact details before forwarding to clients. EEOC mode applies full blind review redaction. Unlock with the $4.99 Week Pass — unlimited use for 7 days.'
   },
   target: {
     title: 'Unlock additional redaction targets',
-    desc:  'School names, gender pronouns, LinkedIn URLs and file metadata are paid targets. They remove prestige bias, gender signals and hidden author data from your CV. Available from $1.99 — one-time, no subscription.'
+    desc:  'School names, gender pronouns, LinkedIn URLs and file metadata are paid targets. They remove prestige bias, gender signals and hidden author data from your CV. Unlock with the $4.99 Week Pass — one-time, no subscription, no auto-renewal.'
   }
 };
 
