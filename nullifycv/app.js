@@ -1,4 +1,4 @@
-/* ── NullifyCV · app.js v2.3.0 ───────────────────────────────────────────── */
+/* ── NullifyCV · app.js v2.3.1-debug ───────────────────────────────────────────── */
 /* Real PDF redaction: pdf.js finds PII positions, pdf-lib draws black bars   */
 /* mammoth.js handles DOCX → clean text output                                */
 'use strict';
@@ -521,6 +521,8 @@ function showImagePicker(images, pageCanvases, suggestedRedactions) {
 /* ── Find which text items contain PII ──────────────────────────────────────*/
 function findPIIPositions(items, piiValues){
   const positions=[];
+  // Diagnostic tracking: which PII values found positions, which were dropped
+  const diagnostics = { located: [], dropped: [] };
   // Group items by page and approximate y once (avoids rebuilding per pii value)
   const allByPageY={};
   for(const item of items){
@@ -543,6 +545,8 @@ function findPIIPositions(items, piiValues){
   });
 
   for (const entry of normalized) {
+    const positionsBefore = positions.length;
+
     // Prelocated items: emit one redaction rectangle per item — no string search.
     if (entry.prelocated && entry.prelocated.length > 0) {
       const padding = 2;
@@ -556,30 +560,66 @@ function findPIIPositions(items, piiValues){
           piiVal: entry.value,
         });
       }
+      diagnostics.located.push({ value: entry.value, method: 'prelocated', boxes: positions.length - positionsBefore });
       continue;
     }
 
     const piiVal = entry.value;
     const valLower=piiVal.toLowerCase();
     const valTrim=valLower.trim();
-    if(!valTrim)continue;
+    if(!valTrim){
+      diagnostics.dropped.push({ value: entry.value, reason: 'empty_after_trim' });
+      continue;
+    }
 
     // Try same-line match first
+    let sameLineMatches = 0;
+    // The PII value may have been extracted from text where pdf.js joined adjacent
+    // items without spaces (e.g., "0627963113" was found in "06 27 96 31 13" because
+    // pageText collapses small-x-gap items). When we look for the substring in the
+    // line, we must do it whitespace-insensitively, otherwise we silently drop the
+    // redaction.
+    //
+    // We also strip parentheses, hyphens, and other punctuation that pdf.js may
+    // render differently from how the scanner detected the value. For example,
+    // a phone "+(31) 6 83266364" extracted as a single phrase still matches the
+    // scanner's "+31 6 83266364" because we compare after stripping non-essentials.
+    //
+    // Email addresses are special: we keep @ and . since those are the key
+    // delimiters distinguishing emails from random adjacent digits.
+    const stripForCompare = (s, keepDots) => {
+      // Keep letters, digits, @ — and dots only for email-like values
+      const allowed = keepDots ? /[a-zA-Z0-9@.]/ : /[a-zA-Z0-9@]/;
+      let out = '';
+      for (const c of s) if (allowed.test(c)) out += c;
+      return out;
+    };
+    const isEmailLike = /@/.test(valTrim);
+    const valStripped = stripForCompare(valTrim, isEmailLike).toLowerCase();
+    if (!valStripped) {
+      diagnostics.dropped.push({ value: piiVal, reason: 'empty_after_strip' });
+      continue;
+    }
     for(const key of Object.keys(allByPageY)){
       const lineItems=allByPageY[key];
-      // Build a flat index: for each char in the joined line, which item it belongs to
-      let joined='';
+      // Build a parallel index: for each "kept" char in the joined line,
+      // remember which item it came from.
+      let stripped='';
       const charToItem=[];
       for(let i=0;i<lineItems.length;i++){
-        if(joined.length>0){joined+=' ';charToItem.push(i);} // separator belongs to next item
-        for(const c of lineItems[i].str){joined+=c;charToItem.push(i);}
+        for(const c of lineItems[i].str){
+          const allowed = isEmailLike ? /[a-zA-Z0-9@.]/ : /[a-zA-Z0-9@]/;
+          if(!allowed.test(c))continue;
+          stripped+=c;
+          charToItem.push(i);
+        }
       }
-      const lower=joined.toLowerCase();
+      const lower = stripped.toLowerCase();
       let searchFrom=0;
       while(true){
-        const idx=lower.indexOf(valTrim,searchFrom);
+        const idx=lower.indexOf(valStripped,searchFrom);
         if(idx===-1)break;
-        const endIdx=idx+valTrim.length-1;
+        const endIdx=idx+valStripped.length-1;
         const startItem=lineItems[charToItem[idx]];
         const endItem=lineItems[charToItem[endIdx]];
         const padding=2;
@@ -591,6 +631,7 @@ function findPIIPositions(items, piiValues){
           h:Math.max(startItem.h,endItem.h)+(padding*2),
           piiVal,
         });
+        sameLineMatches++;
         searchFrom=endIdx+1;
       }
     }
@@ -598,11 +639,12 @@ function findPIIPositions(items, piiValues){
     // Multi-line match: try matching across two adjacent lines on the same page.
     // Common case: "Kevin\nNlandu" or "Bijlmerdreef 173C 1102\nBP Amsterdam".
     // We only try 2-line spans (3+ lines is rare for PII).
-    if(!valTrim.includes(' '))continue; // single-word PII won't span lines
-    const linesByPage={};
-    for(const key of Object.keys(allByPageY)){
-      const [page,y]=key.split('_');
-      if(!linesByPage[page])linesByPage[page]=[];
+    let multiLineMatches = 0;
+    if(valTrim.includes(' ')){
+      const linesByPage={};
+      for(const key of Object.keys(allByPageY)){
+        const [page,y]=key.split('_');
+        if(!linesByPage[page])linesByPage[page]=[];
       linesByPage[page].push({y:parseFloat(y),items:allByPageY[key]});
     }
     for(const page of Object.keys(linesByPage)){
@@ -612,37 +654,36 @@ function findPIIPositions(items, piiValues){
         // Only consider lines that are vertically adjacent (within ~2× line height)
         const l1h=l1.items[0]?.h||10;
         if(Math.abs(l1.y-l2.y)>l1h*3)continue;
-        const t1=l1.items.map(it=>it.str).join(' ');
-        const t2=l2.items.map(it=>it.str).join(' ');
-        const combined=(t1+' '+t2).toLowerCase();
-        if(!combined.includes(valTrim))continue;
-        // Match found across the boundary. Mark items from BOTH lines that are
-        // part of the matched substring. We do this by checking if removing each
-        // line's contribution still satisfies the match. Simpler: redact items
-        // on l1 starting from where the match begins, and items on l2 up to where match ends.
-        const matchStart=combined.indexOf(valTrim);
-        const matchEnd=matchStart+valTrim.length;
-        // Find which items on each line are within the matched span
-        let pos=0;
-        const itemsToRedact=[];
-        for(let li=0;li<l1.items.length;li++){
-          const item=l1.items[li];
-          const itemStart=pos;
-          const itemEnd=pos+item.str.length;
-          if(itemEnd>matchStart && itemStart<matchEnd){
-            itemsToRedact.push(item);
+        // Build punctuation-stripped combined string with char-to-item mapping
+        const allowed = isEmailLike ? /[a-zA-Z0-9@.]/ : /[a-zA-Z0-9@]/;
+        let combined = '';
+        const itemMap = [];
+        for(const it of l1.items){
+          for(const c of it.str){
+            if(!allowed.test(c))continue;
+            combined+=c;
+            itemMap.push({item:it,line:1});
           }
-          pos=itemEnd+1; // +1 for the joining space
         }
-        // l1 ends; +1 for the space joining the two lines
-        for(let li=0;li<l2.items.length;li++){
-          const item=l2.items[li];
-          const itemStart=pos;
-          const itemEnd=pos+item.str.length;
-          if(itemEnd>matchStart && itemStart<matchEnd){
-            itemsToRedact.push(item);
+        for(const it of l2.items){
+          for(const c of it.str){
+            if(!allowed.test(c))continue;
+            combined+=c;
+            itemMap.push({item:it,line:2});
           }
-          pos=itemEnd+1;
+        }
+        const lower=combined.toLowerCase();
+        if(!lower.includes(valStripped))continue;
+        const matchStart=lower.indexOf(valStripped);
+        const matchEnd=matchStart+valStripped.length-1;
+        // Collect unique items touched by the matched range
+        const seen=new Set();
+        const itemsToRedact=[];
+        for(let pos=matchStart;pos<=matchEnd;pos++){
+          const ref=itemMap[pos];
+          if(!ref||seen.has(ref.item))continue;
+          seen.add(ref.item);
+          itemsToRedact.push(ref.item);
         }
         // Skip if same-line match already produced positions for this — avoid double redaction.
         // We push one rectangle per item to handle the geometry correctly.
@@ -656,10 +697,31 @@ function findPIIPositions(items, piiValues){
             h:item.h+padding*2,
             piiVal,
           });
+          multiLineMatches++;
         }
       }
     }
+    } // end if(valTrim.includes(' '))
+
+    // Record what happened to this PII value
+    const totalMatches = sameLineMatches + multiLineMatches;
+    if (totalMatches > 0) {
+      diagnostics.located.push({
+        value: piiVal,
+        method: sameLineMatches > 0 ? 'same-line' : 'multi-line',
+        same_line: sameLineMatches,
+        multi_line: multiLineMatches,
+      });
+    } else {
+      diagnostics.dropped.push({
+        value: piiVal,
+        reason: 'no_match_in_any_line',
+      });
+    }
   }
+  // Stash diagnostics on the positions array so callers can access without
+  // breaking the existing return contract.
+  positions._diagnostics = diagnostics;
   return positions;
 }
 
@@ -981,7 +1043,7 @@ function downloadRedactedText(){
 }
 
 function dlAudit(){
-  const data=auditData||{tool:'NullifyCV v2.3.0',site:'nullifycv.com',
+  const data=auditData||{tool:'NullifyCV v2.3.1-debug',site:'nullifycv.com',
     timestamp:new Date().toISOString(),file:currentFile?currentFile.name:'none',
     server_transmissions:0,items_nullified:detectedPII.length,
     disclaimer:'Consistent with GDPR Article 5. Not legal advice.'};
@@ -1088,7 +1150,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.3.0',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.3.1-debug',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
@@ -1107,6 +1169,7 @@ async function go(){
           filter_rejection_reasons: imageFilterReasons,
         },
         redaction_positions:positions.length,
+        position_finder_diagnostics: positions._diagnostics || null,
         active_redaction_keys:Object.keys(activeKeys),
         items:detectedPII.map(p=>({type:p.type,label:p.label,confidence:p.conf})),
         disclaimer:'Consistent with GDPR Article 5. Not legal advice.'};
@@ -1146,7 +1209,7 @@ async function go(){
         items_nullified: detectedPII.length,
       });
 
-      auditData={tool:'NullifyCV v2.3.0',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.3.1-debug',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,processing_engine:'mammoth@1.6.0',
         server_transmissions:0,items_nullified:detectedPII.length,
@@ -1485,6 +1548,7 @@ async function batchProcessFile(file, activeKeys) {
       piiCount: pii.length,
       imagesNullified,
       imagesDetected: images ? images.length : 0,
+      positionFinderDiagnostics: positions._diagnostics || null,
       type: 'pdf'
     };
 
@@ -1547,6 +1611,9 @@ async function batchRun() {
         auditEntry.images_nullified = result.imagesNullified;
         auditEntry.images_detected = result.imagesDetected;
       }
+      if (result.positionFinderDiagnostics) {
+        auditEntry.position_finder = result.positionFinderDiagnostics;
+      }
       auditItems.push(auditEntry);
       if (statEl) {
         const photoNote = result.imagesNullified > 0
@@ -1599,7 +1666,7 @@ async function batchRun() {
       })();
 
       const auditLog = {
-        tool: 'NullifyCV v2.3.0',
+        tool: 'NullifyCV v2.3.1-debug',
         site: 'nullifycv.com',
         batch_id: 'BATCH-' + Date.now(),
         timestamp: new Date().toISOString(),
