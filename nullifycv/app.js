@@ -1,4 +1,4 @@
-/* ── NullifyCV · app.js v2.3.1-debug ───────────────────────────────────────────── */
+/* ── NullifyCV · app.js v2.3.1 ───────────────────────────────────────────── */
 /* Real PDF redaction: pdf.js finds PII positions, pdf-lib draws black bars   */
 /* mammoth.js handles DOCX → clean text output                                */
 'use strict';
@@ -683,31 +683,7 @@ function findPIIPositions(items, piiValues){
         // from line 2 that don't contain any part of the matched value.
         const startsInLine1 = itemMap[matchStart] && itemMap[matchStart].line === 1;
         const endsInLine2 = itemMap[matchEnd] && itemMap[matchEnd].line === 2;
-        if(!(startsInLine1 && endsInLine2)){
-          // Debug: record the rejection so we can see what's happening
-          diagnostics._mlRejected = diagnostics._mlRejected || [];
-          if(diagnostics._mlRejected.length < 20){
-            diagnostics._mlRejected.push({
-              value: piiVal,
-              line1_text: l1.items.map(it=>it.str).join(' '),
-              line2_text: l2.items.map(it=>it.str).join(' '),
-              match_start_line: itemMap[matchStart]?.line,
-              match_end_line: itemMap[matchEnd]?.line,
-            });
-          }
-          continue;
-        }
-        // Debug: record the multi-line match details
-        diagnostics._mlMatched = diagnostics._mlMatched || [];
-        if(diagnostics._mlMatched.length < 20){
-          diagnostics._mlMatched.push({
-            value: piiVal,
-            line1_text: l1.items.map(it=>it.str).join(' '),
-            line2_text: l2.items.map(it=>it.str).join(' '),
-            line1_y: l1.y,
-            line2_y: l2.y,
-          });
-        }
+        if(!(startsInLine1 && endsInLine2))continue;
         // Collect unique items touched by the matched range
         const seen=new Set();
         const itemsToRedact=[];
@@ -1075,7 +1051,7 @@ function downloadRedactedText(){
 }
 
 function dlAudit(){
-  const data=auditData||{tool:'NullifyCV v2.3.1-debug',site:'nullifycv.com',
+  const data=auditData||{tool:'NullifyCV v2.3.1',site:'nullifycv.com',
     timestamp:new Date().toISOString(),file:currentFile?currentFile.name:'none',
     server_transmissions:0,items_nullified:detectedPII.length,
     disclaimer:'Consistent with GDPR Article 5. Not legal advice.'};
@@ -1182,7 +1158,7 @@ async function go(){
         hidePhotoWarning();
       }
 
-      auditData={tool:'NullifyCV v2.3.1-debug',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.3.1',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,file_size_bytes:currentFile.size,
         processing_engine:'pdf.js@3.11.174 + pdf-lib@1.17.1',
@@ -1241,7 +1217,7 @@ async function go(){
         items_nullified: detectedPII.length,
       });
 
-      auditData={tool:'NullifyCV v2.3.1-debug',site:'nullifycv.com',
+      auditData={tool:'NullifyCV v2.3.1',site:'nullifycv.com',
         report_id:'NCV-'+Date.now(),timestamp:new Date().toISOString(),
         file:currentFile.name,processing_engine:'mammoth@1.6.0',
         server_transmissions:0,items_nullified:detectedPII.length,
@@ -1698,7 +1674,7 @@ async function batchRun() {
       })();
 
       const auditLog = {
-        tool: 'NullifyCV v2.3.1-debug',
+        tool: 'NullifyCV v2.3.1',
         site: 'nullifycv.com',
         batch_id: 'BATCH-' + Date.now(),
         timestamp: new Date().toISOString(),
