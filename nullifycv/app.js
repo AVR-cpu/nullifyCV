@@ -93,6 +93,7 @@ function getActiveKeys(){
 }
 
 function setMode(mode,btn){
+  const previousMode = currentMode;
   currentMode = mode;
   document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('on');t.setAttribute('aria-selected','false');});
   btn.classList.add('on');btn.setAttribute('aria-selected','true');
@@ -104,6 +105,12 @@ function setMode(mode,btn){
     card.querySelector('.tbox').textContent=on?'✓':'';
   });
   updateBatchModeBanner();
+  // Analytics: which modes do users actually explore?
+  // Helps answer: should Bias Strip be the default? Is EEOC ever used?
+  // Only fire when user actually changed mode (not initial setup).
+  if (window.va && previousMode && previousMode !== mode) {
+    window.va('event', { name: 'mode_changed', from: previousMode, to: mode });
+  }
 }
 
 /* Updates the mode-indicator banner in the batch section so users always see
@@ -1059,6 +1066,13 @@ function dlAudit(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='nullifycv_audit_'+Date.now()+'.json';a.click();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
+  // Analytics: who downloads the audit log? These are trust-conscious users —
+  // the ones who care about verification. Key signal for our differentiation.
+  if (window.va) window.va('event', {
+    name: 'audit_downloaded',
+    mode: currentMode,
+    items_nullified: (detectedPII && detectedPII.length) || 0,
+  });
 }
 
 /* ── Main processing flow ────────────────────────────────────────────────── */
@@ -1280,17 +1294,34 @@ const UPGRADE_COPY = {
   }
 };
 
+// Track whether the most recently shown upgrade modal led to a checkout click.
+// If the modal closes without a click on a Stripe link, we record dismissal.
+// The flag is window-scoped because the checkout_click handler lives in
+// index.html (it runs on every link site-wide, not just from the modal).
+let _upgradeModalOpenTrigger = null;
+
 function showUpgrade(type) {
   const copy = UPGRADE_COPY[type] || UPGRADE_COPY.mode;
   document.getElementById('upgrade-title').textContent = copy.title;
   document.getElementById('upgrade-desc').textContent  = copy.desc;
   document.getElementById('upgrade-overlay').style.display = 'block';
   document.getElementById('upgrade-modal').style.display   = 'block';
+  // Analytics: how often does the upgrade modal appear?
+  // Pairs with checkout_click to measure modal → checkout conversion.
+  _upgradeModalOpenTrigger = type;
+  window._upgradeModalCheckoutClicked = false;
+  if (window.va) window.va('event', { name: 'upgrade_modal_shown', trigger: type });
 }
 
 function closeUpgrade() {
   document.getElementById('upgrade-overlay').style.display = 'none';
   document.getElementById('upgrade-modal').style.display   = 'none';
+  // Analytics: modal dismissed without checkout click — the implicit "no thanks".
+  // If most modals get dismissed, the offer or copy needs work.
+  if (window.va && _upgradeModalOpenTrigger && !window._upgradeModalCheckoutClicked) {
+    window.va('event', { name: 'upgrade_modal_dismissed', trigger: _upgradeModalOpenTrigger });
+  }
+  _upgradeModalOpenTrigger = null;
 }
 
 document.addEventListener('keydown', e => {

@@ -550,6 +550,9 @@
     var match = link.href.match(/(c0[4-9])(?:\?|$)/);
     var plan = match ? PLAN_BY_STRIPE_ID[match[1]] : 'unknown';
     var location = window.location.pathname.replace(/^\//, '') || 'home';
+    // Flag for the upgrade modal so we know the close that follows isn't a dismissal.
+    // app.js reads this to distinguish "user clicked through" vs "user closed without clicking".
+    window._upgradeModalCheckoutClicked = true;
     if (window.va) {
       window.va('event', { name: 'checkout_click', plan: plan, source: location });
     }
